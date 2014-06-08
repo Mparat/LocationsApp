@@ -7,15 +7,29 @@
 //
 
 #import "AppDelegate.h"
+#import <CoreLocation/CoreLocation.h>
+#import "HomepageTVC.h"
+#import "MessageVC.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [self.window setRootViewController:[self navigationController]];
+    [self.window makeKeyAndVisible];
     return YES;
 }
-							
+
+-(UINavigationController *)navigationController
+{
+//    HomepageTVC *homeTVC = [[HomepageTVC alloc] initWithStyle:UITableViewStyleGrouped];
+//    return [[UINavigationController alloc] initWithRootViewController:homeTVC];
+    MessageVC *messageVC = [[MessageVC alloc] init];
+    return [[UINavigationController alloc] initWithRootViewController:messageVC];
+}
+
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

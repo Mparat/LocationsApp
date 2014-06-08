@@ -15,7 +15,6 @@
 		14AB33131942816400B8E20D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB33121942816400B8E20D /* AppDelegate.m */; };
 		14AB33161942816400B8E20D /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14AB33141942816400B8E20D /* Main_iPhone.storyboard */; };
 		14AB33191942816400B8E20D /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14AB33171942816400B8E20D /* Main_iPad.storyboard */; };
-		14AB331C1942816400B8E20D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB331B1942816400B8E20D /* ViewController.m */; };
 		14AB331E1942816400B8E20D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14AB331D1942816400B8E20D /* Images.xcassets */; };
 		14AB33251942816400B8E20D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33241942816400B8E20D /* XCTest.framework */; };
 		14AB33261942816400B8E20D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33021942816400B8E20D /* Foundation.framework */; };
@@ -23,6 +22,8 @@
 		14AB332F1942816400B8E20D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 14AB332D1942816400B8E20D /* InfoPlist.strings */; };
 		14AB33311942816400B8E20D /* LocationsAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB33301942816400B8E20D /* LocationsAppTests.m */; };
 		14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB333B194281D500B8E20D /* HomepageTVC.m */; };
+		14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB333E1942930600B8E20D /* HomepageChatCell.m */; };
+		14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB33461942ECAB00B8E20D /* MessageVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,8 +49,6 @@
 		14AB33121942816400B8E20D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		14AB33151942816400B8E20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		14AB33181942816400B8E20D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		14AB331A1942816400B8E20D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		14AB331B1942816400B8E20D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		14AB331D1942816400B8E20D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		14AB33231942816400B8E20D /* LocationsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocationsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		14AB33241942816400B8E20D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -58,6 +57,10 @@
 		14AB33301942816400B8E20D /* LocationsAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationsAppTests.m; sourceTree = "<group>"; };
 		14AB333A194281D400B8E20D /* HomepageTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomepageTVC.h; sourceTree = "<group>"; };
 		14AB333B194281D500B8E20D /* HomepageTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomepageTVC.m; sourceTree = "<group>"; };
+		14AB333D1942930600B8E20D /* HomepageChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomepageChatCell.h; sourceTree = "<group>"; };
+		14AB333E1942930600B8E20D /* HomepageChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomepageChatCell.m; sourceTree = "<group>"; };
+		14AB33451942ECAB00B8E20D /* MessageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageVC.h; sourceTree = "<group>"; };
+		14AB33461942ECAB00B8E20D /* MessageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,10 +124,8 @@
 				14AB33121942816400B8E20D /* AppDelegate.m */,
 				14AB33141942816400B8E20D /* Main_iPhone.storyboard */,
 				14AB33171942816400B8E20D /* Main_iPad.storyboard */,
-				14AB331A1942816400B8E20D /* ViewController.h */,
-				14AB331B1942816400B8E20D /* ViewController.m */,
-				14AB333A194281D400B8E20D /* HomepageTVC.h */,
-				14AB333B194281D500B8E20D /* HomepageTVC.m */,
+				14AB33411942931C00B8E20D /* TableViews */,
+				14AB33401942930F00B8E20D /* TableViewCells */,
 				14AB331D1942816400B8E20D /* Images.xcassets */,
 				14AB33091942816400B8E20D /* Supporting Files */,
 			);
@@ -158,6 +159,26 @@
 				14AB332D1942816400B8E20D /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		14AB33401942930F00B8E20D /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				14AB333D1942930600B8E20D /* HomepageChatCell.h */,
+				14AB333E1942930600B8E20D /* HomepageChatCell.m */,
+			);
+			name = TableViewCells;
+			sourceTree = "<group>";
+		};
+		14AB33411942931C00B8E20D /* TableViews */ = {
+			isa = PBXGroup;
+			children = (
+				14AB333A194281D400B8E20D /* HomepageTVC.h */,
+				14AB333B194281D500B8E20D /* HomepageTVC.m */,
+				14AB33451942ECAB00B8E20D /* MessageVC.h */,
+				14AB33461942ECAB00B8E20D /* MessageVC.m */,
+			);
+			name = TableViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,10 +279,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14AB331C1942816400B8E20D /* ViewController.m in Sources */,
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
+				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */,
+				14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

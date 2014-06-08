@@ -9,5 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface HomepageTVC : UITableViewController
+{
+    UIButton *findFriends;
+}
+
+@property (nonatomic, strong) UITextField *searchBar;
 
 @end
