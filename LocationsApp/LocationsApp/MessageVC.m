@@ -8,6 +8,7 @@
 
 #import "MessageVC.h"
 #import "HomepageChatCell.h"
+#import "HomepageTVC.h"
 
 @interface MessageVC ()
 
@@ -32,6 +33,7 @@
 {
     [super viewDidLoad];
     [self initializeTextField];
+    [self addNavBarButton];
 //    [self loadView];
 //    [self.tableView reloadData];
 
@@ -51,6 +53,33 @@
 //    [self.view addSubview:tableView];
 //    tableView.delegate = self;
 //}
+
+-(void) addNavBarButton
+{
+    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [logout setTitle:@"<" forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [logout addTarget:self action:@selector(backToHomepage) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *viewMap = [[UIButton alloc] initWithFrame:CGRectMake(8*self.view.frame.size.width/10, 5, 2*self.view.frame.size.width/10, 20)];
+    [viewMap setTitle:@"Map" forState:UIControlStateNormal];
+    [viewMap setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [viewMap addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
+    self.navigationItem.leftBarButtonItem = logoutButton;
+
+    UIBarButtonItem *viewMapButton = [[UIBarButtonItem alloc] initWithCustomView:viewMap];
+    self.navigationItem.rightBarButtonItem = viewMapButton;
+}
+
+-(void)backToHomepage
+{
+    HomepageTVC *homepage = [[HomepageTVC alloc] init];
+    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
+        //
+    }];
+}
 
 -(void)viewMap
 {
@@ -84,15 +113,28 @@
     [send addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
     
     tellLocationButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    tellLocationButton.frame = CGRectMake(2*self.view.frame.size.width/10, self.textField.frame.origin.y - 30, 6*self.view.frame.size.width/10, 20);
+    tellLocationButton.frame = CGRectMake(1*self.view.frame.size.width/10, self.textField.frame.origin.y - 33, 6*self.view.frame.size.width/10, 25);
     [tellLocationButton setTitle:@"Tell Location" forState:UIControlStateNormal];
     tellLocationButton.backgroundColor = [UIColor blueColor];
     tellLocationButton.layer.cornerRadius = 10;
     [self.view addSubview:tellLocationButton];
     [tellLocationButton addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
+    
+    ask = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    ask.frame = CGRectMake(7.5*self.view.frame.size.width/10, self.textField.frame.origin.y - 33, 1.5*self.view.frame.size.width/10, 25);
+    [ask setTitle:@"Ask" forState:UIControlStateNormal];
+    ask.backgroundColor = [UIColor blueColor];
+    ask.layer.cornerRadius = 10;
+    [self.view addSubview:ask];
+    [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)sendLocation
+{
+    return;
+}
+
+-(void)askLocation
 {
     return;
 }
@@ -104,23 +146,23 @@
 
 #pragma mark - Table View data source
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 30;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
-    viewMap = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    viewMap.frame = CGRectMake(8*header.frame.size.width/10, 5, 2*header.frame.size.width/10, 20);
-    [viewMap setTitle:@"Map" forState:UIControlStateNormal];
-    [header addSubview:viewMap];
-    [viewMap addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
-    
-    return header;
-}
-
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return 30;
+//}
+//
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
+//    viewMap = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    viewMap.frame = CGRectMake(8*header.frame.size.width/10, 5, 2*header.frame.size.width/10, 20);
+//    [viewMap setTitle:@"Map" forState:UIControlStateNormal];
+//    [header addSubview:viewMap];
+//    [viewMap addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    return header;
+//}
+//
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
     return 1;

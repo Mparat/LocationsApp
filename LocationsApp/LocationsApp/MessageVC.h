@@ -11,8 +11,8 @@
 @interface MessageVC : UIViewController <UITableViewDelegate>
 {
     UIButton *tellLocationButton;
+    UIButton *ask;
     UIButton *send;
-    UIButton *viewMap;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
