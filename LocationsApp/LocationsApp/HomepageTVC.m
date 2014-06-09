@@ -9,6 +9,7 @@
 #import "HomepageTVC.h"
 #import "HomepageChatCell.h"
 #import "MessageVC.h"
+#import "User.h"
 
 @interface HomepageTVC ()
 
@@ -16,6 +17,7 @@
 
 @implementation HomepageTVC
 
+@synthesize signedInUser = _signedInUser;
 #define chatCell @"chatCell"
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -31,7 +33,7 @@
 {
     [super viewDidLoad];
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
-
+    [self addNavBar];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -43,6 +45,35 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)addNavBar
+{
+    UIButton *findFriends = [[UIButton alloc] initWithFrame:CGRectMake(8*self.navigationController.navigationBar.frame.size.width/10, 10, 40, 30)];
+    [findFriends setTitle:@"Add" forState:UIControlStateNormal];
+    [findFriends setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [findFriends addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [logout setTitle:@"Logout" forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [logout addTarget:self action:@selector(logoutUser) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
+    UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
+    self.navigationItem.leftBarButtonItem = logoutButton;
+    self.navigationItem.rightBarButtonItem = addFriendsButton;
+    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.name];
+}
+
+-(void)logoutUser
+{
+    ;
+}
+
+-(void)addFriends
+{
+    return;
 }
 
 #pragma mark - Text field delegates
@@ -64,7 +95,7 @@
     header.backgroundColor = [UIColor whiteColor];
     self.searchBar = [[UITextField alloc] init];
     self.searchBar.placeholder = [NSString stringWithFormat:@"Search"];
-    self.searchBar.frame = CGRectMake(1*header.frame.size.width/10, 5, 7*header.frame.size.width/10, 20);
+    self.searchBar.frame = CGRectMake(0.5*header.frame.size.width/10, 5, 9*header.frame.size.width/10, 25);
     self.searchBar.borderStyle = UITextBorderStyleRoundedRect;
     self.searchBar.backgroundColor = [UIColor clearColor];
     self.searchBar.textAlignment = NSTextAlignmentNatural;
@@ -72,19 +103,7 @@
 //    self.searchBar.layer.borderColor = [UIColor grayColor].CGColor;
     self.searchBar.delegate = self;
     [header addSubview:self.searchBar];
-    
-    findFriends = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    findFriends.frame = CGRectMake(8*header.frame.size.width/10, 5, 2*header.frame.size.width/10, 20);
-    [findFriends setTitle:@"Add" forState:UIControlStateNormal];
-    [header addSubview:findFriends];
-    [findFriends addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
-    
     return header;
-}
-
--(void)addFriends
-{
-    return;
 }
 
 #pragma mark - Table view data source

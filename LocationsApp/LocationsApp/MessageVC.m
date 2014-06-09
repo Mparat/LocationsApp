@@ -56,18 +56,18 @@
 
 -(void) addNavBarButton
 {
-    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-    [logout setTitle:@"<" forState:UIControlStateNormal];
-    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [logout addTarget:self action:@selector(backToHomepage) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [back setTitle:@"<" forState:UIControlStateNormal];
+    [back setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [back addTarget:self action:@selector(backToHomepage) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *viewMap = [[UIButton alloc] initWithFrame:CGRectMake(8*self.view.frame.size.width/10, 5, 2*self.view.frame.size.width/10, 20)];
     [viewMap setTitle:@"Map" forState:UIControlStateNormal];
     [viewMap setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [viewMap addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
 
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
-    self.navigationItem.leftBarButtonItem = logoutButton;
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:back];
+    self.navigationItem.leftBarButtonItem = backButton;
 
     UIBarButtonItem *viewMapButton = [[UIBarButtonItem alloc] initWithCustomView:viewMap];
     self.navigationItem.rightBarButtonItem = viewMapButton;

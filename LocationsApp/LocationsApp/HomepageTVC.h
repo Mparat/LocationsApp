@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "User.h"
 
 @interface HomepageTVC : UITableViewController
-{
-    UIButton *findFriends;
-}
 
 @property (nonatomic, strong) UITextField *searchBar;
+@property (nonatomic, strong) User *signedInUser;
 
 @end

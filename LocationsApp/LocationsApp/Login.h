@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import "User.h"
+#import <Parse/Parse.h>
 
 @interface Login : UIViewController <FBLoginViewDelegate>
+
+@property (nonatomic, strong) User *signedInUser;
 
 @end

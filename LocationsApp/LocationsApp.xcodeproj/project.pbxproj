@@ -36,6 +36,8 @@
 		14C66660194636CB00341F0D /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C6665F194636CB00341F0D /* Parse.framework */; };
 		14C66662194647C900341F0D /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C66661194647C900341F0D /* FacebookSDK.framework */; };
 		14C6666519464A4800341F0D /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C6666419464A4800341F0D /* Login.m */; };
+		14C66668194669FF00341F0D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C66667194669FF00341F0D /* User.m */; };
+		14C6666C19466B3B00341F0D /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C6666B19466B3B00341F0D /* Contact.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +88,10 @@
 		14C66661194647C900341F0D /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		14C6666319464A4800341F0D /* Login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Login.h; sourceTree = "<group>"; };
 		14C6666419464A4800341F0D /* Login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Login.m; sourceTree = "<group>"; };
+		14C66666194669FF00341F0D /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		14C66667194669FF00341F0D /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		14C6666A19466B3B00341F0D /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		14C6666B19466B3B00341F0D /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +177,7 @@
 				14AB33121942816400B8E20D /* AppDelegate.m */,
 				14AB33141942816400B8E20D /* Main_iPhone.storyboard */,
 				14AB33171942816400B8E20D /* Main_iPad.storyboard */,
+				14C6666919466B2000341F0D /* People */,
 				14AB33411942931C00B8E20D /* TableViews */,
 				14AB33401942930F00B8E20D /* TableViewCells */,
 				14AB331D1942816400B8E20D /* Images.xcassets */,
@@ -228,6 +235,17 @@
 				14AB33461942ECAB00B8E20D /* MessageVC.m */,
 			);
 			name = TableViews;
+			sourceTree = "<group>";
+		};
+		14C6666919466B2000341F0D /* People */ = {
+			isa = PBXGroup;
+			children = (
+				14C66666194669FF00341F0D /* User.h */,
+				14C66667194669FF00341F0D /* User.m */,
+				14C6666A19466B3B00341F0D /* Contact.h */,
+				14C6666B19466B3B00341F0D /* Contact.m */,
+			);
+			name = People;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -328,7 +346,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14C6666C19466B3B00341F0D /* Contact.m in Sources */,
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
+				14C66668194669FF00341F0D /* User.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6666519464A4800341F0D /* Login.m in Sources */,

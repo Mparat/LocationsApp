@@ -8,6 +8,9 @@
 
 #import "Login.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "HomepageTVC.h"
+#import "User.h"
+#import <Parse/Parse.h>
 
 @interface Login ()
 
@@ -17,6 +20,8 @@
 
 
 @implementation Login
+
+@synthesize signedInUser;
 
 @synthesize fbLoginView;
 
@@ -34,28 +39,23 @@
     [super viewDidLoad];
     [self addNavBar];
     [self addFBLoginButton];
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void)addNavBar
 {
-    UIView *title = [[UIView alloc] initWithFrame:CGRectMake(100, 10, 100, 30)];
-    UILabel *text = [[UILabel alloc] init];
-    [text setText:@"Login"];
-    [title addSubview:text];
-    self.navigationItem.titleView = title;
+    self.navigationItem.title = @"Login";
 }
 
 -(void)addFBLoginButton
 {
     fbLoginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile", @"user_friends"]];
     fbLoginView.frame = CGRectMake((self.view.center.x - (fbLoginView.frame.size.width / 2)), self.view.frame.size.height/2, fbLoginView.frame.size.width, fbLoginView.frame.size.height);
+    fbLoginView.delegate = self; // this allows me to call delegate methods on my FBLoginView reference
     [self.view addSubview:fbLoginView];
 }
 
@@ -64,11 +64,21 @@
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView
 {
     NSLog(@"User is logged in");
+
 }
 
 -(void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
     NSLog(@"User info is now fetched");
+    signedInUser = [[User alloc] init];
+    signedInUser.name = [user first_name];
+    HomepageTVC *homepage = [[HomepageTVC alloc] init];
+    homepage.signedInUser = self.signedInUser;
+    PFUser *currentUser = [PFUser currentUser];
+    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
+        //
+    }];
+
 }
 
 -(void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView
