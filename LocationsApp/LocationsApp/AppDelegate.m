@@ -7,9 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import <Parse/Parse.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import <CoreLocation/CoreLocation.h>
 #import "HomepageTVC.h"
 #import "MessageVC.h"
+#import "Login.h"
 
 @implementation AppDelegate
 
@@ -18,17 +21,38 @@
     // Override point for customization after application launch.
     [self.window setRootViewController:[self navigationController]];
     [self.window makeKeyAndVisible];
+    [Parse setApplicationId:@"WJyPfvSQq1rKoGMlyTp13xNliwIiPyZz8RyaRXwy"
+                  clientKey:@"r46J9MvgvF6pbnmO7PUsatJbseIbWJM2zqBjSvC4"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    [PFFacebookUtils initializeFacebook];
     return YES;
 }
 
 -(UINavigationController *)navigationController
 {
+    Login *login = [[Login alloc] init];
+    return [[UINavigationController alloc] initWithRootViewController:login];
 //    HomepageTVC *homeTVC = [[HomepageTVC alloc] initWithStyle:UITableViewStyleGrouped];
 //    return [[UINavigationController alloc] initWithRootViewController:homeTVC];
-    MessageVC *messageVC = [[MessageVC alloc] init];
-    return [[UINavigationController alloc] initWithRootViewController:messageVC];
+//    MessageVC *messageVC = [[MessageVC alloc] init];
+//    return [[UINavigationController alloc] initWithRootViewController:messageVC];
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return [FBAppCall handleOpenURL:url
+                  sourceApplication:sourceApplication
+                        withSession:[PFFacebookUtils session]];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -45,11 +69,6 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
