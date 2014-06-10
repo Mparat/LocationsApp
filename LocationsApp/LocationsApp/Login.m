@@ -24,6 +24,8 @@
 @synthesize parseUser;
 @synthesize fbLoginView;
 
+@synthesize loggedIn;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -38,6 +40,7 @@
     [super viewDidLoad];
     [self addNavBar];
     [self addFBLoginButton];
+//    [self addLoginButon];
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,12 +58,38 @@
     fbLoginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile", @"user_friends"]];
     fbLoginView.frame = CGRectMake((self.view.center.x - (fbLoginView.frame.size.width / 2)), self.view.frame.size.height/2, fbLoginView.frame.size.width, fbLoginView.frame.size.height);
     fbLoginView.delegate = self; // this allows me to call delegate methods on my FBLoginView reference
-    
-//    UIButton *parseButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.center.x - (fbLoginView.frame.size.width / 2)), self.view.frame.size.height/2, fbLoginView.frame.size.width, fbLoginView.frame.size.height)];
-//    [parseButton addTarget:self action:@selector(parseLogin) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self.view addSubview:parseButton];
+
     [self.view addSubview:fbLoginView];
+}
+
+-(void)addLoginButon
+{
+    UIButton *parseButton = [[UIButton alloc] initWithFrame:CGRectMake(100, 200, 60, 30)];
+    [parseButton setTitle:@"Login" forState:UIControlStateNormal];
+    [parseButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [parseButton addTarget:self action:@selector(parseLogin) forControlEvents:UIControlEventTouchUpInside];
+
+    [self.view addSubview:parseButton];
+}
+
+-(void)parseLogin
+{
+    [PFFacebookUtils logInWithPermissions:@[@"public_profile", @"user_friends"] block:^(PFUser *user, NSError *error) {
+        if (!user) {
+            NSLog(@"Uh oh. The user cancelled the Facebook login.");
+        } else if (user.isNew) {
+            NSLog(@"User signed up and logged in through Facebook!");
+        } else {
+            NSLog(@"User logged in through Facebook!");
+            HomepageTVC *homepage = [[HomepageTVC alloc] init];
+            homepage.parseUser = user;
+            homepage.signedInUser = self.signedInUser;
+            [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
+                //
+            }];
+        }
+        NSLog(@"user? %@", user);
+    }];
 }
 
 #pragma mark - FBLogin View Delegate methods
@@ -68,25 +97,28 @@
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView
 {
     NSLog(@"User is logged in");
-//    [self parseLogin];
 }
 
 -(void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
 {
     NSLog(@"User info is now fetched");
-    signedInUser = [[User alloc] init];
-    signedInUser.name = [user first_name];
-    HomepageTVC *homepage = [[HomepageTVC alloc] init];
-    homepage.signedInUser = self.signedInUser;
-    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
-        //
-    }];
 
+    if (loggedIn == NO) {
+        signedInUser = [[User alloc] init];
+        signedInUser.name = [user first_name];
+        HomepageTVC *homepage = [[HomepageTVC alloc] init];
+        homepage.signedInUser = self.signedInUser;
+        loggedIn = YES;
+        [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
+            //
+        }];
+    }
 }
 
 -(void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView
 {
     NSLog(@"User is logged out");
+    loggedIn = NO;
 }
 
 @end

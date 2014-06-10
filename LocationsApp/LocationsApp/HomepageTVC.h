@@ -16,4 +16,6 @@
 @property (nonatomic, strong) User *signedInUser;
 @property (nonatomic, strong) PFUser *parseUser;
 
+@property BOOL loggedIn;
+
 @end

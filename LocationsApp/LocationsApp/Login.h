@@ -17,4 +17,6 @@
 @property (nonatomic, strong) NSString *loginOrOut;
 @property (nonatomic, strong) PFUser *parseUser;
 
+@property BOOL loggedIn;
+
 @end

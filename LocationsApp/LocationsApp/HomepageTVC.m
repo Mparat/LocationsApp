@@ -10,6 +10,7 @@
 #import "HomepageChatCell.h"
 #import "MessageVC.h"
 #import "User.h"
+#import "Login.h"
 
 @interface HomepageTVC ()
 
@@ -19,6 +20,8 @@
 
 @synthesize signedInUser = _signedInUser;
 @synthesize parseUser;
+
+@synthesize loggedIn;
 #define chatCell @"chatCell"
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -69,7 +72,14 @@
 
 -(void)logoutUser
 {
-    return;
+    [PFUser logOut];
+    NSLog(@"user? %@", parseUser);
+    Login *loginpage = [[Login alloc] init];
+    loginpage.loggedIn = self.loggedIn;
+    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:loginpage] animated:TRUE completion:^{
+        //
+    }];
+
 }
 
 -(void)addFriends

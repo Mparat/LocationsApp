@@ -31,6 +31,7 @@
 -(UINavigationController *)navigationController
 {
     Login *login = [[Login alloc] init];
+    login.loggedIn = NO;
     return [[UINavigationController alloc] initWithRootViewController:login];
 //    HomepageTVC *homeTVC = [[HomepageTVC alloc] initWithStyle:UITableViewStyleGrouped];
 //    return [[UINavigationController alloc] initWithRootViewController:homeTVC];
