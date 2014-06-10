@@ -10,7 +10,6 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "HomepageTVC.h"
 #import "User.h"
-#import <Parse/Parse.h>
 
 @interface Login ()
 
@@ -22,7 +21,7 @@
 @implementation Login
 
 @synthesize signedInUser;
-
+@synthesize parseUser;
 @synthesize fbLoginView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -56,6 +55,11 @@
     fbLoginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile", @"user_friends"]];
     fbLoginView.frame = CGRectMake((self.view.center.x - (fbLoginView.frame.size.width / 2)), self.view.frame.size.height/2, fbLoginView.frame.size.width, fbLoginView.frame.size.height);
     fbLoginView.delegate = self; // this allows me to call delegate methods on my FBLoginView reference
+    
+//    UIButton *parseButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.center.x - (fbLoginView.frame.size.width / 2)), self.view.frame.size.height/2, fbLoginView.frame.size.width, fbLoginView.frame.size.height)];
+//    [parseButton addTarget:self action:@selector(parseLogin) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    [self.view addSubview:parseButton];
     [self.view addSubview:fbLoginView];
 }
 
@@ -64,7 +68,7 @@
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView
 {
     NSLog(@"User is logged in");
-
+//    [self parseLogin];
 }
 
 -(void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user
@@ -74,7 +78,6 @@
     signedInUser.name = [user first_name];
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     homepage.signedInUser = self.signedInUser;
-    PFUser *currentUser = [PFUser currentUser];
     [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
         //
     }];

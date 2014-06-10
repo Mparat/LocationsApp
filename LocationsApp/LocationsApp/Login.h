@@ -14,5 +14,7 @@
 @interface Login : UIViewController <FBLoginViewDelegate>
 
 @property (nonatomic, strong) User *signedInUser;
+@property (nonatomic, strong) NSString *loginOrOut;
+@property (nonatomic, strong) PFUser *parseUser;
 
 @end

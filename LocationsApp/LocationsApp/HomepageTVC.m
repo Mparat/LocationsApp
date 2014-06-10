@@ -18,6 +18,7 @@
 @implementation HomepageTVC
 
 @synthesize signedInUser = _signedInUser;
+@synthesize parseUser;
 #define chatCell @"chatCell"
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -68,7 +69,7 @@
 
 -(void)logoutUser
 {
-    ;
+    return;
 }
 
 -(void)addFriends
