@@ -7,6 +7,7 @@
 //
 
 #import "HomepageChatCell.h"
+#import "LocationManagerController.h"
 
 @interface HomepageChatCell()
 
@@ -20,6 +21,7 @@
 @implementation HomepageChatCell
 
 //@synthesize contact = _contact;
+@synthesize locationManager = _locationManager;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -81,9 +83,11 @@
     self.username.textColor = [UIColor blackColor];
     [self addSubview:self.username];
     
-
+//    CLLocation *current = [self.locationManager fetchCurrentLocation];
+//    NSArray *locations = [self.locationManager locations];
+    NSString *text = @"Location";
     self.location = [[UILabel alloc] init];
-    self.location.text = @"Location";
+    self.location.text = [NSString stringWithFormat:@"%@", text];
     NSDictionary *dict2 = [NSDictionary dictionaryWithObjectsAndKeys:self.location.font, NSFontAttributeName, nil];
     self.location.frame = CGRectMake(self.location.frame.origin.x,
                                      self.location.frame.origin.y,

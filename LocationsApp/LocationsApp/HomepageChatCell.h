@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LocationManagerController.h"
+
 
 @interface HomepageChatCell : UITableViewCell
 {
     UIButton *ask;
 }
+
+@property (nonatomic, strong) LocationManagerController *locationManager;
 
 -(void)placeSubviewsForCell;
 

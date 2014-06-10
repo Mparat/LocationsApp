@@ -11,6 +11,7 @@
 #import "MessageVC.h"
 #import "User.h"
 #import "Login.h"
+#import "FBFriendListTableViewController.h"
 
 @interface HomepageTVC ()
 
@@ -43,7 +44,7 @@
     [self addNavBar];
     parseUser = [PFUser currentUser];
     FBRequest *request = [FBRequest requestForMe];
-    NSLog(@"current user %@", [PFUser currentUser]);
+//    NSLog(@"current user %@", [PFUser currentUser]);
 
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         NSDictionary *userData = (NSDictionary *)result;
@@ -102,6 +103,9 @@
 -(void)addFriends
 {
     return;
+//    FBFriendListTableViewController *fbFriendList = [[FBFriendListTableViewController alloc] init];
+//    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:fbFriendList] animated:TRUE completion:^{
+//    }];
 }
 
 #pragma mark - Text field delegates

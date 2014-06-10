@@ -7,113 +7,96 @@
 //
 
 #import "FBFriendListTableViewController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface FBFriendListTableViewController ()
+
+@property (nonatomic, strong) FBFriendPickerViewController *friendPickerController;
+@property (nonatomic, strong) UITextView *selectedFriendsView;
+-(void)fillTextBoxAndDismiss:(NSString *)text;
 
 @end
 
 @implementation FBFriendListTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self pickFriendsButtonClick:self];
+}
+
+-(void)viewDidUnload{
+    self.selectedFriendsView = nil;
+    self.friendPickerController = nil;
+    [super viewDidUnload];
+}
+
+-(void)createSelectedFriendsView
+{
+    self.selectedFriendsView = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50)];
+    self.selectedFriendsView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.selectedFriendsView];
+}
+
+#pragma mark - UI handlers
+
+-(void)pickFriendsButtonClick:(id)sender{
+    if (!FBSession.activeSession.isOpen) {
+        [FBSession openActiveSessionWithReadPermissions:@[@"public_profile", @"user_friends"]
+                                           allowLoginUI:YES
+                                      completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                          if (error) {
+                                              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                              [alertView show];
+                                          }
+                                          else if (session.isOpen){
+                                              [self pickFriendsButtonClick:sender];
+                                          }
+                                      }];
+        return;
+    }
+    if (self.friendPickerController == nil){
+        self.friendPickerController = [[FBFriendPickerViewController alloc] init];
+        self.friendPickerController.title = @"Pick Friends";
+        self.friendPickerController.delegate = self;
+    }
+    [self.friendPickerController loadData];
+    [self.friendPickerController clearSelection];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:self.friendPickerController] animated:TRUE completion:^{
+        //
+    }];
 }
 
-- (void)didReceiveMemoryWarning
+-(void)facebookViewControllerDoneWasPressed:(id)sender
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    NSMutableString *text = [[NSMutableString alloc] init];
+    for (id<FBGraphUser> user in self.friendPickerController.selection) {
+        if ([text length]) {
+            [text appendString:@", "];
+        }
+        [text appendString:user.name];
+    }
+    [self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+-(void)facebookViewControllerCancelWasPressed:(id)sender{
+    [self fillTextBoxAndDismiss:@"<Cancelled>"];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+-(void)fillTextBoxAndDismiss:(NSString *)text
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    self.selectedFriendsView.text = text;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

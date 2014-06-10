@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 
-@interface FBFriendListTableViewController : UITableViewController
+@interface FBFriendListTableViewController : UIViewController <FBFriendPickerDelegate>
+
+-(void)pickFriendsButtonClick:(id)sender;
 
 @end

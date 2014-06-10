@@ -13,12 +13,19 @@
 #import "HomepageTVC.h"
 #import "MessageVC.h"
 #import "Login.h"
+#import "LocationManagerController.h"
 
 @implementation AppDelegate
+
+@synthesize locationManager = _locationManager;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    self.locationManager = [[LocationManagerController alloc] init];
+    [self.locationManager launchLocationManager];
+    
     [self.window setRootViewController:[self navigationController]];
     [self.window makeKeyAndVisible];
     [Parse setApplicationId:@"WJyPfvSQq1rKoGMlyTp13xNliwIiPyZz8RyaRXwy"

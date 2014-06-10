@@ -41,6 +41,8 @@
     [self addNavBar];
 //    [self addFBLoginButton];
     [self addLoginButon];
+//    NSLog(@"current user %@", [PFUser currentUser]);
+
 //    [self checkForCachedUser];
 }
 
@@ -51,7 +53,18 @@
 
 -(void)checkForCachedUser
 {
-    // problem with [PFUser curentUser]
+    if (![PFFacebookUtils isLinkedWithUser:parseUser]) {
+        [PFFacebookUtils linkUser:parseUser permissions:nil block:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                NSLog(@"current user %@", [PFUser currentUser]);
+                NSLog(@"Woohoo, user logged in with Facebook!");
+            }
+        }];
+    }
+    else{
+        NSLog(@"current user %@", [PFUser currentUser]);
+        NSLog(@"User is already linked with Facebook");
+    }
     NSLog(@"current user %@", [PFUser currentUser]);
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         HomepageTVC *homepage = [[HomepageTVC alloc] init];
@@ -90,18 +103,18 @@
 
 -(void)parseLogin
 {
-    if (![PFFacebookUtils isLinkedWithUser:self.parseUser]) {
-        [PFFacebookUtils linkUser:self.parseUser permissions:nil block:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSLog(@"current user %@", [PFUser currentUser]);
-                NSLog(@"Woohoo, user logged in with Facebook!");
-            }
-        }];
-    }
-    else{
-        NSLog(@"current user %@", [PFUser currentUser]);
-        NSLog(@"User is already linked with Facebook");
-    }
+//    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+//        [PFFacebookUtils linkUser:[PFUser currentUser] permissions:nil block:^(BOOL succeeded, NSError *error) {
+//            if (succeeded) {
+//                NSLog(@"current user %@", [PFUser currentUser]);
+//                NSLog(@"Woohoo, user logged in with Facebook!");
+//            }
+//        }];
+//    }
+//    else{
+//        NSLog(@"current user %@", [PFUser currentUser]);
+//        NSLog(@"User is already linked with Facebook");
+//    }
 
     [PFFacebookUtils logInWithPermissions:@[@"public_profile", @"user_friends"] block:^(PFUser *user, NSError *error) {
         if (!user) {
@@ -135,6 +148,7 @@
                 //
             }];
         }
+        NSLog(@"parseUser? %@", parseUser);
         NSLog(@"user? %@", user);
     }];
 }
