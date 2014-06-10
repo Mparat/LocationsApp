@@ -37,7 +37,8 @@
 		14C66662194647C900341F0D /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C66661194647C900341F0D /* FacebookSDK.framework */; };
 		14C6666519464A4800341F0D /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C6666419464A4800341F0D /* Login.m */; };
 		14C66668194669FF00341F0D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C66667194669FF00341F0D /* User.m */; };
-		14C6666C19466B3B00341F0D /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C6666B19466B3B00341F0D /* Contact.m */; };
+		14C666741946B76D00341F0D /* FBFriendPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C666731946B76D00341F0D /* FBFriendPickerController.m */; };
+		14C666771946B8C300341F0D /* FBFriendListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C666761946B8C300341F0D /* FBFriendListTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,8 +91,10 @@
 		14C6666419464A4800341F0D /* Login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Login.m; sourceTree = "<group>"; };
 		14C66666194669FF00341F0D /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		14C66667194669FF00341F0D /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		14C6666A19466B3B00341F0D /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
-		14C6666B19466B3B00341F0D /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		14C666721946B76D00341F0D /* FBFriendPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBFriendPickerController.h; sourceTree = "<group>"; };
+		14C666731946B76D00341F0D /* FBFriendPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBFriendPickerController.m; sourceTree = "<group>"; };
+		14C666751946B8C300341F0D /* FBFriendListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBFriendListTableViewController.h; sourceTree = "<group>"; };
+		14C666761946B8C300341F0D /* FBFriendListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBFriendListTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +180,7 @@
 				14AB33121942816400B8E20D /* AppDelegate.m */,
 				14AB33141942816400B8E20D /* Main_iPhone.storyboard */,
 				14AB33171942816400B8E20D /* Main_iPad.storyboard */,
+				14C666711946B4D800341F0D /* Controllers */,
 				14C6666919466B2000341F0D /* People */,
 				14AB33411942931C00B8E20D /* TableViews */,
 				14AB33401942930F00B8E20D /* TableViewCells */,
@@ -233,6 +237,8 @@
 				14AB333B194281D500B8E20D /* HomepageTVC.m */,
 				14AB33451942ECAB00B8E20D /* MessageVC.h */,
 				14AB33461942ECAB00B8E20D /* MessageVC.m */,
+				14C666751946B8C300341F0D /* FBFriendListTableViewController.h */,
+				14C666761946B8C300341F0D /* FBFriendListTableViewController.m */,
 			);
 			name = TableViews;
 			sourceTree = "<group>";
@@ -242,10 +248,17 @@
 			children = (
 				14C66666194669FF00341F0D /* User.h */,
 				14C66667194669FF00341F0D /* User.m */,
-				14C6666A19466B3B00341F0D /* Contact.h */,
-				14C6666B19466B3B00341F0D /* Contact.m */,
 			);
 			name = People;
+			sourceTree = "<group>";
+		};
+		14C666711946B4D800341F0D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				14C666721946B76D00341F0D /* FBFriendPickerController.h */,
+				14C666731946B76D00341F0D /* FBFriendPickerController.m */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,12 +359,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14C6666C19466B3B00341F0D /* Contact.m in Sources */,
+				14C666741946B76D00341F0D /* FBFriendPickerController.m in Sources */,
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
 				14C66668194669FF00341F0D /* User.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6666519464A4800341F0D /* Login.m in Sources */,
+				14C666771946B8C300341F0D /* FBFriendListTableViewController.m in Sources */,
 				14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */,
 				14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */,
 			);

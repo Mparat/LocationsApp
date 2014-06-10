@@ -39,8 +39,9 @@
 {
     [super viewDidLoad];
     [self addNavBar];
-    [self addFBLoginButton];
-//    [self addLoginButon];
+//    [self addFBLoginButton];
+    [self addLoginButon];
+//    [self checkForCachedUser];
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,9 +49,24 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void)checkForCachedUser
+{
+    // problem with [PFUser curentUser]
+    NSLog(@"current user %@", [PFUser currentUser]);
+    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        HomepageTVC *homepage = [[HomepageTVC alloc] init];
+        self.parseUser = [PFUser currentUser]; // necessary?
+        homepage.parseUser = [PFUser currentUser];
+        //            homepage.signedInUser = self.signedInUser;
+        [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:NO completion:^{
+            //
+        }];
+    }
+}
+
 -(void)addNavBar
 {
-    self.navigationItem.title = @"Login";
+    self.navigationItem.title = @"";
 }
 
 -(void)addFBLoginButton
@@ -64,7 +80,7 @@
 
 -(void)addLoginButon
 {
-    UIButton *parseButton = [[UIButton alloc] initWithFrame:CGRectMake(100, 200, 60, 30)];
+    UIButton *parseButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 30, 300, 60, 30)];
     [parseButton setTitle:@"Login" forState:UIControlStateNormal];
     [parseButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [parseButton addTarget:self action:@selector(parseLogin) forControlEvents:UIControlEventTouchUpInside];
@@ -74,16 +90,47 @@
 
 -(void)parseLogin
 {
+    if (![PFFacebookUtils isLinkedWithUser:self.parseUser]) {
+        [PFFacebookUtils linkUser:self.parseUser permissions:nil block:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                NSLog(@"current user %@", [PFUser currentUser]);
+                NSLog(@"Woohoo, user logged in with Facebook!");
+            }
+        }];
+    }
+    else{
+        NSLog(@"current user %@", [PFUser currentUser]);
+        NSLog(@"User is already linked with Facebook");
+    }
+
     [PFFacebookUtils logInWithPermissions:@[@"public_profile", @"user_friends"] block:^(PFUser *user, NSError *error) {
         if (!user) {
-            NSLog(@"Uh oh. The user cancelled the Facebook login.");
+            if (!error) {
+                NSLog(@"Uh oh. The user cancelled the Facebook login.");
+            } else {
+                NSLog(@"Uh oh. An error occurred: %@", error);
+            }
         } else if (user.isNew) {
             NSLog(@"User signed up and logged in through Facebook!");
         } else {
             NSLog(@"User logged in through Facebook!");
             HomepageTVC *homepage = [[HomepageTVC alloc] init];
+            self.parseUser = user; // necessary?
+            self.parseUser = [PFUser currentUser];
             homepage.parseUser = user;
-            homepage.signedInUser = self.signedInUser;
+//            if (![PFFacebookUtils isLinkedWithUser:user]) {
+//                [PFFacebookUtils linkUser:user permissions:nil block:^(BOOL succeeded, NSError *error) {
+//                    if (succeeded) {
+//                        NSLog(@"current user %@", [PFUser currentUser]);
+//                        NSLog(@"Woohoo, user logged in with Facebook!");
+//                    }
+//                }];
+//            }
+//            else{
+//                NSLog(@"current user %@", [PFUser currentUser]);
+//                NSLog(@"User is already linked with Facebook");
+//            }
+//            homepage.signedInUser = self.signedInUser;
             [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
                 //
             }];
@@ -104,13 +151,18 @@
     NSLog(@"User info is now fetched");
 
     if (loggedIn == NO) {
+        self.parseUser = [PFUser user];
+        self.parseUser.username = [user first_name];
+        
         signedInUser = [[User alloc] init];
         signedInUser.name = [user first_name];
         HomepageTVC *homepage = [[HomepageTVC alloc] init];
         homepage.signedInUser = self.signedInUser;
         loggedIn = YES;
         [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
-            //
+//            [PFFacebookUtils logInWithPermissions:@[@"public_profile", @"user_friends"] block:^(PFUser *user, NSError *error) {
+//                self.parseUser = user;
+//            }];
         }];
     }
 }

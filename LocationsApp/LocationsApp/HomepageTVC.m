@@ -14,12 +14,15 @@
 
 @interface HomepageTVC ()
 
+@property (nonatomic, strong) NSString *username;
+
 @end
 
 @implementation HomepageTVC
 
 @synthesize signedInUser = _signedInUser;
 @synthesize parseUser;
+@synthesize username;
 
 @synthesize loggedIn;
 #define chatCell @"chatCell"
@@ -38,11 +41,24 @@
     [super viewDidLoad];
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    parseUser = [PFUser currentUser];
+    FBRequest *request = [FBRequest requestForMe];
+    NSLog(@"current user %@", [PFUser currentUser]);
+
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        NSDictionary *userData = (NSDictionary *)result;
+        
+        NSString *facebookID = userData[@"id"];
+        NSString *name = userData[@"name"];
+        NSString *location = userData[@"location"][@"name"];
+        NSString *gender = userData[@"gender"];
+        NSString *birthday = userData[@"birthday"];
+        NSString *relationship = userData[@"relationship_status"];
+        
+        NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
+        
+        self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", name];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,12 +83,13 @@
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
     self.navigationItem.leftBarButtonItem = logoutButton;
     self.navigationItem.rightBarButtonItem = addFriendsButton;
-    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.name];
+//    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.name];
 }
 
 -(void)logoutUser
 {
     [PFUser logOut];
+    parseUser = [PFUser currentUser];
     NSLog(@"user? %@", parseUser);
     Login *loginpage = [[Login alloc] init];
     loginpage.loggedIn = self.loggedIn;
