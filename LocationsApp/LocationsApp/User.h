@@ -16,4 +16,6 @@
 @property (nonatomic, strong) UIImage *picture;
 //@property (nonatomic, strong) NSMutableArray *fbFriends;
 
+-(User *)initWithName:(NSString *)text;
+
 @end

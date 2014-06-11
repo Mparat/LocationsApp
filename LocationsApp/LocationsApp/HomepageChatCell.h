@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "User.h"
 
 @interface HomepageChatCell : UITableViewCell
 {
     UIButton *ask;
 }
 
+@property (nonatomic, strong) User *user;
 -(void)placeSubviewsForCellWithLocation:(NSString *)text Date:(NSDate *)date;
 
 //@property (nonatomic, strong) Contact *contact;

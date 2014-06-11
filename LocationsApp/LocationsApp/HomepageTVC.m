@@ -13,6 +13,7 @@
 #import "Login.h"
 #import "FBFriendListTableViewController.h"
 #import "LocationManagerController.h"
+#import "Contact.h"
 
 @interface HomepageTVC ()
 
@@ -34,7 +35,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        //
     }
     return self;
 }
@@ -42,6 +43,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CLLocation *current = [self.locationManager fetchCurrentLocation];
+
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
     parseUser = [PFUser currentUser];
@@ -49,10 +52,12 @@
 //    NSLog(@"current user %@", [PFUser currentUser]);
 
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        //an <FBGraphUser> object representing the user's identity
         NSDictionary *userData = (NSDictionary *)result;
         
         NSString *facebookID = userData[@"id"];
         NSString *name = userData[@"name"];
+        NSString *firstName = userData[@"first_name"];
         NSString *location = userData[@"location"][@"name"];
         NSString *gender = userData[@"gender"];
         NSString *birthday = userData[@"birthday"];
@@ -60,7 +65,7 @@
         
         NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
         
-        self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", name];
+        self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", firstName];
     }];
 }
 
@@ -96,6 +101,7 @@
     NSLog(@"user? %@", parseUser);
     Login *loginpage = [[Login alloc] init];
     loginpage.loggedIn = self.loggedIn;
+    [loginpage setLocationManager:self.locationManager];
     [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:loginpage] animated:TRUE completion:^{
         //
     }];
@@ -169,9 +175,14 @@
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path
 {
     CLLocation *current = [self.locationManager fetchCurrentLocation];
+    NSLog(@"current location : %@", current);
+//    NSString *text = [self.locationManager returnLocationName:(CLLocation *)current];
+//    NSString *text = [self.locationManager returnLocationName:current];
     NSString *text = current.description;
     NSDate *date = current.timestamp;
-    NSLog(@"current location : %@", text);
+//    if (text != nil) {
+//        [cell placeSubviewsForCellWithLocation:text Date:date];
+//    }
     [cell placeSubviewsForCellWithLocation:text Date:date];
 }
 
@@ -183,7 +194,12 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return;
+    MessageVC *messageVC = [[MessageVC alloc] init];
+    [messageVC setLocationManager:self.locationManager];
+    messageVC.recipient = self.signedInUser;
+    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:messageVC] animated:YES completion:^{
+        //
+    }];
 }
 
 /*

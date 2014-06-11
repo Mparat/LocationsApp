@@ -134,6 +134,8 @@
             self.parseUser = [PFUser currentUser];
             homepage.parseUser = user;
             [homepage setLocationManager:self.locationManager];
+            signedInUser = [[User alloc] initWithName:@"Meera"];
+            homepage.signedInUser = signedInUser;
 
 //            if (![PFFacebookUtils isLinkedWithUser:user]) {
 //                [PFFacebookUtils linkUser:user permissions:nil block:^(BOOL succeeded, NSError *error) {
@@ -147,7 +149,7 @@
 //                NSLog(@"current user %@", [PFUser currentUser]);
 //                NSLog(@"User is already linked with Facebook");
 //            }
-//            homepage.signedInUser = self.signedInUser;
+
             [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
                 //
             }];

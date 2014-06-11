@@ -10,14 +10,15 @@
 #import <CoreLocation/CoreLocation.h>
 
 @interface LocationManagerController : NSObject <CLLocationManagerDelegate>
-//{
-//    CLLocationManager *manager;
-//}
+
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSArray *locations;
 @property (nonatomic, strong) CLLocation *current;
+@property (nonatomic, strong) CLGeocoder *geocoder;
+@property (nonatomic, strong) CLPlacemark *placemark;
 
 -(void)launchLocationManager;
 -(CLLocation *)fetchCurrentLocation;
+-(NSString *)returnLocationName:(CLLocation *)location;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "HomepageChatCell.h"
+#import "LocationManagerController.h"
 
 @interface HomepageChatCell()
 
@@ -19,12 +20,13 @@
 
 @implementation HomepageChatCell
 
-//@synthesize contact = _contact;
+@synthesize user = _user;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        //
     }
     return self;
 }
@@ -69,7 +71,7 @@
     // picture: 50 x 50, 10 buffer all around
     
     self.username = [[UILabel alloc] init];
-    self.username.text = @"First Last";
+    self.username.text = @"Sam";
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.username.font, NSFontAttributeName, nil];
     self.username.frame = CGRectMake(self.username.frame.origin.x,
                                      self.username.frame.origin.y,

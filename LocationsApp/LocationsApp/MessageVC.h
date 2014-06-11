@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "LocationManagerController.h"
+#import "User.h"
 
 @interface MessageVC : UIViewController <UITableViewDelegate>
 {
@@ -18,5 +20,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) LocationManagerController *locationManager;
+@property (nonatomic, strong) User *recipient;
 
 @end

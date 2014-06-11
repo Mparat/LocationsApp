@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14315C4D19490A0400378EA5 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C4C19490A0400378EA5 /* Contact.m */; };
 		14AB33031942816400B8E20D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33021942816400B8E20D /* Foundation.framework */; };
 		14AB33051942816400B8E20D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33041942816400B8E20D /* CoreGraphics.framework */; };
 		14AB33071942816400B8E20D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33061942816400B8E20D /* UIKit.framework */; };
@@ -52,6 +53,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14315C4B19490A0400378EA5 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		14315C4C19490A0400378EA5 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		14AB32FF1942816400B8E20D /* LocationsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14AB33021942816400B8E20D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		14AB33041942816400B8E20D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -246,6 +249,8 @@
 			children = (
 				14C66666194669FF00341F0D /* User.h */,
 				14C66667194669FF00341F0D /* User.m */,
+				14315C4B19490A0400378EA5 /* Contact.h */,
+				14315C4C19490A0400378EA5 /* Contact.m */,
 			);
 			name = People;
 			sourceTree = "<group>";
@@ -361,6 +366,7 @@
 			files = (
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
 				14C66668194669FF00341F0D /* User.m in Sources */,
+				14315C4D19490A0400378EA5 /* Contact.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6666519464A4800341F0D /* Login.m in Sources */,

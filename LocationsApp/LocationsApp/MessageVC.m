@@ -17,6 +17,9 @@
 @implementation MessageVC
 
 @synthesize tableView;
+@synthesize locationManager = _locationManager;
+@synthesize recipient = _recipient;
+
 #define userCellIdentifier @"userCell"
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -71,11 +74,18 @@
 
     UIBarButtonItem *viewMapButton = [[UIBarButtonItem alloc] initWithCustomView:viewMap];
     self.navigationItem.rightBarButtonItem = viewMapButton;
+    self.recipient = [[User alloc] initWithName:self.recipient.name];
 }
 
 -(void)backToHomepage
 {
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
+//    self.parseUser = user; // necessary?
+//    self.parseUser = [PFUser currentUser];
+//    homepage.parseUser = user;
+    [homepage setLocationManager:self.locationManager];
+//    signedInUser = [[User alloc] initWithName:@"Meera"];
+//    homepage.signedInUser = signedInUser;
     [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
         //
     }];
@@ -146,23 +156,6 @@
 
 #pragma mark - Table View data source
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    return 30;
-//}
-//
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
-//    viewMap = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    viewMap.frame = CGRectMake(8*header.frame.size.width/10, 5, 2*header.frame.size.width/10, 20);
-//    [viewMap setTitle:@"Map" forState:UIControlStateNormal];
-//    [header addSubview:viewMap];
-//    [viewMap addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    return header;
-//}
-//
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
     return 1;

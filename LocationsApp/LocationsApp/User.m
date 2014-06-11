@@ -16,4 +16,10 @@
 @synthesize picture = _picture;
 //@synthesize fbFriends = _fbFriends;
 
+-(User *)initWithName:(NSString *)text
+{
+    self.name = text;
+    return self;
+}
+
 @end
