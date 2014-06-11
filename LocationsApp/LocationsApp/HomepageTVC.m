@@ -168,8 +168,11 @@
 
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path
 {
-    NSString *text = [self.locationManager fetchCurrentLocation].description;
-    [cell placeSubviewsForCell:text];
+    CLLocation *current = [self.locationManager fetchCurrentLocation];
+    NSString *text = current.description;
+    NSDate *date = current.timestamp;
+    NSLog(@"current location : %@", text);
+    [cell placeSubviewsForCellWithLocation:text Date:date];
 }
 
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

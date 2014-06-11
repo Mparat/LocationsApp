@@ -42,10 +42,10 @@
 }
 
 
--(void)placeSubviewsForCell:(NSString *)text
+-(void)placeSubviewsForCellWithLocation:(NSString *)text Date:(NSDate *)date
 {
     [self addAskButton];
-    [self setContactInfo:text];
+    [self setContactInfoWithLocation:text Date:date];
 }
 
 -(void)addAskButton
@@ -64,7 +64,7 @@
     return;
 }
 
--(void)setContactInfo:(NSString *)text
+-(void)setContactInfoWithLocation:(NSString *)text Date:(NSDate *)date
 {
     // picture: 50 x 50, 10 buffer all around
     
@@ -96,7 +96,7 @@
     
     
     self.time = [[UILabel alloc] init];
-    self.time.text = @"Time";
+    self.time.text = [NSString stringWithFormat:@"%@", date];
     NSDictionary *dict3 = [NSDictionary dictionaryWithObjectsAndKeys:self.time.font, NSFontAttributeName, nil];
     self.time.frame = CGRectMake(self.time.frame.origin.x,
                                      self.time.frame.origin.y,

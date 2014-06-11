@@ -13,7 +13,7 @@
     UIButton *ask;
 }
 
--(void)placeSubviewsForCell:(NSString *)text;
+-(void)placeSubviewsForCellWithLocation:(NSString *)text Date:(NSDate *)date;
 
 //@property (nonatomic, strong) Contact *contact;
 
