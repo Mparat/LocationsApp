@@ -13,6 +13,7 @@
 
 @synthesize locationManager;
 @synthesize locations = _locations;
+@synthesize current;
 
 #pragma mark - location manager delegate methods
 
@@ -23,6 +24,7 @@
     //UIBackgroundMode required
     NSLog(@"Locations updated");
     self.locations = [[NSArray alloc] initWithArray:locations];
+    current = [self fetchCurrentLocation];
     // most recent location update is at the end of the locations array
 }
 
@@ -53,8 +55,7 @@
 
 -(CLLocation *)fetchCurrentLocation
 {
-    NSLog(@"location: %@", [self.locations objectAtIndex:([self.locations count]-1)]);
-    return [self.locations objectAtIndex:([self.locations count]-1)];
+    return (CLLocation *)[self.locations objectAtIndex:([self.locations count]-1)];
 }
 
 

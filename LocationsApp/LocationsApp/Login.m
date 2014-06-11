@@ -10,6 +10,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "HomepageTVC.h"
 #import "User.h"
+#import "LocationManagerController.h"
 
 @interface Login ()
 
@@ -23,7 +24,7 @@
 @synthesize signedInUser;
 @synthesize parseUser;
 @synthesize fbLoginView;
-
+@synthesize locationManager = _locationManager;
 @synthesize loggedIn;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -69,6 +70,7 @@
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         HomepageTVC *homepage = [[HomepageTVC alloc] init];
         self.parseUser = [PFUser currentUser]; // necessary?
+//        [homepage setLocationManager:self.locationManager];
         homepage.parseUser = [PFUser currentUser];
         //            homepage.signedInUser = self.signedInUser;
         [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:NO completion:^{
@@ -131,6 +133,8 @@
             self.parseUser = user; // necessary?
             self.parseUser = [PFUser currentUser];
             homepage.parseUser = user;
+            [homepage setLocationManager:self.locationManager];
+
 //            if (![PFFacebookUtils isLinkedWithUser:user]) {
 //                [PFFacebookUtils linkUser:user permissions:nil block:^(BOOL succeeded, NSError *error) {
 //                    if (succeeded) {

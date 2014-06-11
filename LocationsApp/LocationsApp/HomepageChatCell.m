@@ -7,7 +7,6 @@
 //
 
 #import "HomepageChatCell.h"
-#import "LocationManagerController.h"
 
 @interface HomepageChatCell()
 
@@ -21,13 +20,11 @@
 @implementation HomepageChatCell
 
 //@synthesize contact = _contact;
-@synthesize locationManager = _locationManager;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
     }
     return self;
 }
@@ -44,10 +41,11 @@
     // Configure the view for the selected state
 }
 
--(void)placeSubviewsForCell
+
+-(void)placeSubviewsForCell:(NSString *)text
 {
     [self addAskButton];
-    [self setContactInfo];
+    [self setContactInfo:text];
 }
 
 -(void)addAskButton
@@ -66,7 +64,7 @@
     return;
 }
 
--(void)setContactInfo
+-(void)setContactInfo:(NSString *)text
 {
     // picture: 50 x 50, 10 buffer all around
     
@@ -83,9 +81,6 @@
     self.username.textColor = [UIColor blackColor];
     [self addSubview:self.username];
     
-//    CLLocation *current = [self.locationManager fetchCurrentLocation];
-//    NSArray *locations = [self.locationManager locations];
-    NSString *text = @"Location";
     self.location = [[UILabel alloc] init];
     self.location.text = [NSString stringWithFormat:@"%@", text];
     NSDictionary *dict2 = [NSDictionary dictionaryWithObjectsAndKeys:self.location.font, NSFontAttributeName, nil];

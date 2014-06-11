@@ -25,7 +25,7 @@
                   symbolName = "-[FBFriendListTableViewController pickFriendsButtonClick:]"
                   moduleName = "LocationsApp"
                   urlString = "file://localhost/Users/Meera/Desktop/LocationsApp/LocationsApp/LocationsApp/FBFriendListTableViewController.m"
-                  timestampString = "424131356.179347"
+                  timestampString = "424136781.652842"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "68"
@@ -39,7 +39,7 @@
                   symbolName = "__58-[FBFriendListTableViewController pickFriendsButtonClick:]_block_invoke70"
                   moduleName = "LocationsApp"
                   urlString = "file://localhost/Users/Meera/Desktop/LocationsApp/LocationsApp/LocationsApp/FBFriendListTableViewController.m"
-                  timestampString = "424131356.179599"
+                  timestampString = "424136781.653144"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "70"
@@ -47,22 +47,6 @@
                   offsetFromSymbolStart = "8">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LocationManagerController.m"
-            timestampString = "424130812.803303"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
-            landmarkName = "-fetchCurrentLocation"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

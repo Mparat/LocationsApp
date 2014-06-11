@@ -12,6 +12,7 @@
 #import "User.h"
 #import "Login.h"
 #import "FBFriendListTableViewController.h"
+#import "LocationManagerController.h"
 
 @interface HomepageTVC ()
 
@@ -24,6 +25,7 @@
 @synthesize signedInUser = _signedInUser;
 @synthesize parseUser;
 @synthesize username;
+@synthesize locationManager = _locationManager;
 
 @synthesize loggedIn;
 #define chatCell @"chatCell"
@@ -159,20 +161,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HomepageChatCell *cell = [tableView dequeueReusableCellWithIdentifier:chatCell forIndexPath:indexPath];
-//    [self configureCell:cell atIndexPath:indexPath];
+    HomepageChatCell *cell = [tableView dequeueReusableCellWithIdentifier:chatCell];
+    [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path
 {
-    return;
+    NSString *text = [self.locationManager fetchCurrentLocation].description;
+    [cell placeSubviewsForCell:text];
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [(HomepageChatCell *)cell placeSubviewsForCell];
-}
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSString *text = [self.locationManager fetchCurrentLocation].description;
+//    [(HomepageChatCell *)cell placeSubviewsForCell:text];
+//}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

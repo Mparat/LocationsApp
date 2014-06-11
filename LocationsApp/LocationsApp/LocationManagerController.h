@@ -15,6 +15,7 @@
 //}
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSArray *locations;
+@property (nonatomic, strong) CLLocation *current;
 
 -(void)launchLocationManager;
 -(CLLocation *)fetchCurrentLocation;
