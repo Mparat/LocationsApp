@@ -25,7 +25,7 @@
     
     self.locationManager = [[LocationManagerController alloc] init];
     [self.locationManager launchLocationManager];
-    
+
     [self.window setRootViewController:[self navigationController]];
     [self.window makeKeyAndVisible];
     [Parse setApplicationId:@"WJyPfvSQq1rKoGMlyTp13xNliwIiPyZz8RyaRXwy"

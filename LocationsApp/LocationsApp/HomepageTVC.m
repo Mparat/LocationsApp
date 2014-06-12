@@ -67,6 +67,12 @@
         
         self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", firstName];
     }];
+    
+    FBRequest *friendsRequest = [FBRequest requestForMyFriends];
+    [friendsRequest startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        NSDictionary *myFriends = (NSDictionary *)result;
+        NSArray *array = myFriends[@"data"];
+    }];
 }
 
 - (void)didReceiveMemoryWarning

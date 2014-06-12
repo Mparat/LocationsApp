@@ -25,7 +25,7 @@
                   symbolName = "-[FBFriendListTableViewController pickFriendsButtonClick:]"
                   moduleName = "LocationsApp"
                   urlString = "file:///Users/Meera/Desktop/LocationsApp/LocationsApp/LocationsApp/FBFriendListTableViewController.m"
-                  timestampString = "424221076.654988"
+                  timestampString = "424227692.26184"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "68"
@@ -39,7 +39,7 @@
                   symbolName = "__58-[FBFriendListTableViewController pickFriendsButtonClick:]_block_invoke70"
                   moduleName = "LocationsApp"
                   urlString = "file:///Users/Meera/Desktop/LocationsApp/LocationsApp/LocationsApp/FBFriendListTableViewController.m"
-                  timestampString = "424221076.655384"
+                  timestampString = "424227692.262164"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "70"
@@ -56,11 +56,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/LocationManagerController.m"
-            timestampString = "424210517.016784"
+            timestampString = "424227012.053653"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
             landmarkName = "-returnLocationName:"
             landmarkType = "5">
             <Locations>
@@ -71,11 +71,11 @@
                   symbolName = "-[LocationManagerController returnLocationName:]"
                   moduleName = "LocationsApp"
                   urlString = "file:///Users/Meera/Desktop/LocationsApp/LocationsApp/LocationsApp/LocationManagerController.m"
-                  timestampString = "424221076.656712"
+                  timestampString = "424227692.26322"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
+                  startingLineNumber = "81"
+                  endingLineNumber = "81"
                   offsetFromSymbolStart = "248">
                </Location>
                <Location
@@ -85,11 +85,11 @@
                   symbolName = "__48-[LocationManagerController returnLocationName:]_block_invoke"
                   moduleName = "LocationsApp"
                   urlString = "file:///Users/Meera/Desktop/LocationsApp/LocationsApp/LocationsApp/LocationManagerController.m"
-                  timestampString = "424221076.656944"
+                  timestampString = "424227692.263532"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
+                  startingLineNumber = "81"
+                  endingLineNumber = "81"
                   offsetFromSymbolStart = "76">
                </Location>
             </Locations>
@@ -102,11 +102,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/LocationManagerController.m"
-            timestampString = "424210517.016784"
+            timestampString = "424227012.053653"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "-returnLocationName:"
             landmarkType = "5">
          </BreakpointContent>
@@ -118,11 +118,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/LocationManagerController.m"
-            timestampString = "424210517.016784"
+            timestampString = "424227012.053653"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "-returnLocationName:"
             landmarkType = "5">
          </BreakpointContent>
@@ -134,11 +134,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/LocationManagerController.m"
-            timestampString = "424210757.037509"
+            timestampString = "424227012.053653"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "-returnLocationName:"
             landmarkType = "5">
          </BreakpointContent>
@@ -146,16 +146,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocationsApp/HomepageTVC.m"
-            timestampString = "424219129.2506"
+            filePath = "LocationsApp/MapViewController.m"
+            timestampString = "424226178.982815"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "-mapView:didUpdateUserLocation:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LocationsApp/LocationManagerController.m"
+            timestampString = "424227039.354088"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "-mapView:didUpdateUserLocation:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

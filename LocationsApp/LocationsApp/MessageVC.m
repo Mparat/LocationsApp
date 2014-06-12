@@ -9,6 +9,7 @@
 #import "MessageVC.h"
 #import "HomepageChatCell.h"
 #import "HomepageTVC.h"
+#import "MapVC.h"
 
 @interface MessageVC ()
 
@@ -93,7 +94,11 @@
 
 -(void)viewMap
 {
-    return;
+    MapVC *mapView = [[MapVC alloc] init];
+    mapView.locationManager = self.locationManager;
+    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:mapView] animated:YES completion:^{
+        //
+    }];
 }
 
 #pragma mark - Text Field delegate

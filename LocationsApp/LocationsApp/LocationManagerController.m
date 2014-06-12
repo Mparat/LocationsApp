@@ -17,6 +17,9 @@
 @synthesize geocoder;
 @synthesize placemark;
 
+@synthesize mapViewController;
+
+
 #pragma mark - location manager delegate methods
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -44,6 +47,10 @@
     locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
     [self startCollectingLocations];
+    
+    mapViewController = [[MKMapView alloc] init];
+    [mapViewController setDelegate:self];
+
 }
 
 -(void)startCollectingLocations
@@ -84,5 +91,19 @@
 {
     return temp.name;
 }
+
+#pragma mark - MKMapView delegate methods
+
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    
+    MKCoordinateRegion mapRegion; // structure that defines which map region to display
+    mapRegion.center = mapView.userLocation.coordinate;
+    mapRegion.span.latitudeDelta = 0.2;
+    mapRegion.span.longitudeDelta = 0.2;
+    
+    [mapView setRegion:mapRegion animated:YES];
+}
+
 
 @end
