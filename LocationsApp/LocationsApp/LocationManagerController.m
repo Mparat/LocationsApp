@@ -105,5 +105,10 @@
     [mapView setRegion:mapRegion animated:YES];
 }
 
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
+{
+    return nil;
+}
+
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "MapVC.h"
+#import "MessageVC.h"
 
 @interface MapVC ()
 
@@ -30,6 +31,8 @@
 {
     [super viewDidLoad];
     [self createMap];
+    [self addNavBarButton];
+
     // Do any additional setup after loading the view.
 }
 
@@ -46,15 +49,34 @@
     
     MKCoordinateRegion mapRegion; // structure that defines which map region to display
     CLLocation *location = [self.locationManager fetchCurrentLocation];
-    
     mapRegion.center = location.coordinate;
     mapRegion.span.latitudeDelta = 0.2;
     mapRegion.span.longitudeDelta = 0.2;
-    
     [self.map setRegion:mapRegion animated:YES];
     
-    
     [self.view addSubview:self.map];
+}
+
+-(void) addNavBarButton
+{
+    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [back setTitle:@"<" forState:UIControlStateNormal];
+    [back setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [back addTarget:self action:@selector(backToMessage) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:back];
+    self.navigationItem.leftBarButtonItem = backButton;
+
+}
+
+-(void)backToMessage
+{
+    MessageVC *message = [[MessageVC alloc] init];
+    [message setLocationManager:self.locationManager];
+    message.locationManager = self.locationManager;
+    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:message] animated:TRUE completion:^{
+        //
+    }];
 }
 
 /*
