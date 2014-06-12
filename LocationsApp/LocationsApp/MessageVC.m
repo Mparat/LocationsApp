@@ -71,7 +71,7 @@
     [viewMap addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
 
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:back];
-    self.navigationItem.leftBarButtonItem = backButton;
+//    self.navigationItem.leftBarButtonItem = backButton;
 
     UIBarButtonItem *viewMapButton = [[UIBarButtonItem alloc] initWithCustomView:viewMap];
     self.navigationItem.rightBarButtonItem = viewMapButton;
@@ -96,9 +96,7 @@
 {
     MapVC *mapView = [[MapVC alloc] init];
     mapView.locationManager = self.locationManager;
-    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:mapView] animated:YES completion:^{
-        //
-    }];
+    [self.navigationController pushViewController:mapView animated:YES];
 }
 
 #pragma mark - Text Field delegate

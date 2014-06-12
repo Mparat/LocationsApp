@@ -46,6 +46,7 @@
 {
     locationManager = [[CLLocationManager alloc] init];
     [locationManager setDelegate:self];
+    [locationManager setDistanceFilter:100.f];
     [self startCollectingLocations];
     
     mapViewController = [[MKMapView alloc] init];
@@ -72,7 +73,7 @@
     return (CLLocation *)[self.locations objectAtIndex:([self.locations count]-1)];
 }
 
--(NSString *)returnLocationName:(CLLocation *)location
+-(NSString *)returnLocationName:(CLLocation *)location forIndexPath:(NSIndexPath *)path
 {
     if (!geocoder) {
         geocoder = [[CLGeocoder alloc] init];
@@ -81,6 +82,7 @@
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if ([placemarks count] > 0) {
             placemark = [placemarks lastObject];
+            [self.delegate placemarkUpdated:placemark.name forIndexPath:path];
         }
     }];
     NSLog(@"placemark? %@", placemark);
@@ -107,6 +109,10 @@
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
+    // default annotatoin view is the blue dot
+    // description of annotation = a callout
+    [self.mapViewController addAnnotation:annotation];
+ //   [annotation title] = @"YOU";
     return nil;
 }
 

@@ -44,7 +44,8 @@
 {
     [super viewDidLoad];
     CLLocation *current = [self.locationManager fetchCurrentLocation];
-
+    self.locationManager.delegate = self;
+    
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
     parseUser = [PFUser currentUser];
@@ -97,6 +98,7 @@
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
     self.navigationItem.leftBarButtonItem = logoutButton;
     self.navigationItem.rightBarButtonItem = addFriendsButton;
+    
 //    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.name];
 }
 
@@ -106,7 +108,6 @@
     parseUser = [PFUser currentUser];
     NSLog(@"user? %@", parseUser);
     Login *loginpage = [[Login alloc] init];
-    loginpage.loggedIn = self.loggedIn;
     [loginpage setLocationManager:self.locationManager];
     [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:loginpage] animated:TRUE completion:^{
         //
@@ -163,7 +164,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 1;
+    return 10;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -183,14 +184,20 @@
     CLLocation *current = [self.locationManager fetchCurrentLocation];
     NSLog(@"current location : %@", current);
 //    NSString *text = [self.locationManager returnLocationName:(CLLocation *)current];
-//    NSString *text = [self.locationManager returnLocationName:current];
-    NSString *text = current.description;
+    NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
+//    NSString *text = current.description;
     NSDate *date = current.timestamp;
 //    if (text != nil) {
 //        [cell placeSubviewsForCellWithLocation:text Date:date];
 //    }
     [cell placeSubviewsForCellWithLocation:text Date:date];
 }
+
+- (void) placemarkUpdated:(NSString *)location forIndexPath:(NSIndexPath *)path
+{
+    [self.tableView reloadData];
+}
+
 
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 //{
@@ -203,9 +210,7 @@
     MessageVC *messageVC = [[MessageVC alloc] init];
     [messageVC setLocationManager:self.locationManager];
     messageVC.recipient = self.signedInUser;
-    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:messageVC] animated:YES completion:^{
-        //
-    }];
+    [self.navigationController pushViewController:messageVC animated:YES];
 }
 
 /*

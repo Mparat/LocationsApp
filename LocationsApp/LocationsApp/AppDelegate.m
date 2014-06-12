@@ -14,10 +14,12 @@
 #import "MessageVC.h"
 #import "Login.h"
 #import "LocationManagerController.h"
+#import "ParseController.h"
 
 @implementation AppDelegate
 
 @synthesize locationManager = _locationManager;
+@synthesize parseController = _parseController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -25,6 +27,9 @@
     
     self.locationManager = [[LocationManagerController alloc] init];
     [self.locationManager launchLocationManager];
+    
+    self.parseController = [[ParseController alloc] init];
+    [self.parseController launchParse];
 
     [self.window setRootViewController:[self navigationController]];
     [self.window makeKeyAndVisible];
@@ -39,7 +44,7 @@
 {
     Login *login = [[Login alloc] init];
     [login setLocationManager:self.locationManager];
-    login.loggedIn = NO;
+    [login setParseController:self.parseController];
     return [[UINavigationController alloc] initWithRootViewController:login];
 //    HomepageTVC *homeTVC = [[HomepageTVC alloc] initWithStyle:UITableViewStyleGrouped];
 //    return [[UINavigationController alloc] initWithRootViewController:homeTVC];

@@ -11,7 +11,7 @@
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
 
-@interface HomepageTVC : UITableViewController
+@interface HomepageTVC : UITableViewController <LocationManagerControllerDelegate>
 
 @property (nonatomic, strong) UITextField *searchBar;
 @property (nonatomic, strong) User *signedInUser;

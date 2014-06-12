@@ -52,6 +52,7 @@
     mapRegion.center = location.coordinate;
     mapRegion.span.latitudeDelta = 0.2;
     mapRegion.span.longitudeDelta = 0.2;
+    
     [self.map setRegion:mapRegion animated:YES];
     
     [self.view addSubview:self.map];
@@ -65,7 +66,7 @@
     [back addTarget:self action:@selector(backToMessage) forControlEvents:UIControlEventTouchUpInside];
 
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:back];
-    self.navigationItem.leftBarButtonItem = backButton;
+//    self.navigationItem.leftBarButtonItem = backButton;
 
 }
 

@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
+#import "ParseController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) LocationManagerController *locationManager;
+@property (nonatomic, strong) ParseController *parseController;
 
 @end

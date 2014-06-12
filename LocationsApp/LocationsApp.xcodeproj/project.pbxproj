@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14035A37194A212200AEC543 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14035A36194A212200AEC543 /* Social.framework */; };
 		14315C4D19490A0400378EA5 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C4C19490A0400378EA5 /* Contact.m */; };
 		14315C4F194923DE00378EA5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14315C4E194923DE00378EA5 /* MapKit.framework */; };
 		14315C5C1949297E00378EA5 /* MapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C5B1949297E00378EA5 /* MapVC.m */; };
+		14315C62194A12D700378EA5 /* ParseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C61194A12D700378EA5 /* ParseController.m */; };
 		14AB33031942816400B8E20D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33021942816400B8E20D /* Foundation.framework */; };
 		14AB33051942816400B8E20D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33041942816400B8E20D /* CoreGraphics.framework */; };
 		14AB33071942816400B8E20D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33061942816400B8E20D /* UIKit.framework */; };
@@ -55,11 +57,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14035A36194A212200AEC543 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		14315C4B19490A0400378EA5 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		14315C4C19490A0400378EA5 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		14315C4E194923DE00378EA5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		14315C5A1949297E00378EA5 /* MapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapVC.h; sourceTree = "<group>"; };
 		14315C5B1949297E00378EA5 /* MapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapVC.m; sourceTree = "<group>"; };
+		14315C60194A12D700378EA5 /* ParseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseController.h; sourceTree = "<group>"; };
+		14315C61194A12D700378EA5 /* ParseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParseController.m; sourceTree = "<group>"; };
 		14AB32FF1942816400B8E20D /* LocationsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14AB33021942816400B8E20D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		14AB33041942816400B8E20D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -110,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14035A37194A212200AEC543 /* Social.framework in Frameworks */,
 				14C6665E194635A000341F0D /* SystemConfiguration.framework in Frameworks */,
 				14C6665C1946359A00341F0D /* StoreKit.framework in Frameworks */,
 				14C6665A1946358F00341F0D /* Security.framework in Frameworks */,
@@ -163,6 +169,7 @@
 		14AB33011942816400B8E20D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				14035A36194A212200AEC543 /* Social.framework */,
 				14315C4E194923DE00378EA5 /* MapKit.framework */,
 				14C66661194647C900341F0D /* FacebookSDK.framework */,
 				14C6665F194636CB00341F0D /* Parse.framework */,
@@ -271,6 +278,8 @@
 				14C666761946B8C300341F0D /* FBFriendListTableViewController.m */,
 				14C666781947A60A00341F0D /* LocationManagerController.h */,
 				14C666791947A60A00341F0D /* LocationManagerController.m */,
+				14315C60194A12D700378EA5 /* ParseController.h */,
+				14315C61194A12D700378EA5 /* ParseController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -391,6 +400,7 @@
 				14315C5C1949297E00378EA5 /* MapVC.m in Sources */,
 				14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */,
 				14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */,
+				14315C62194A12D700378EA5 /* ParseController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,7 +542,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LocationsApp/LocationsApp-Prefix.pch";
 				INFOPLIST_FILE = "LocationsApp/LocationsApp-Info.plist";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -550,7 +560,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LocationsApp/LocationsApp-Prefix.pch";
 				INFOPLIST_FILE = "LocationsApp/LocationsApp-Info.plist";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
