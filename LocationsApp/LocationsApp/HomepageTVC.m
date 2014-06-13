@@ -14,6 +14,7 @@
 #import "FBFriendListTableViewController.h"
 #import "LocationManagerController.h"
 #import "Contact.h"
+#import "AppDelegate.h"
 
 @interface HomepageTVC ()
 
@@ -107,7 +108,14 @@
 
 -(void)logoutSuccessful
 {
-    return;
+    [PFUser logOut];
+    UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] navigationController];
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+    [self.navigationController presentViewController:controller animated:YES completion:^{
+        //
+    }];
 }
 
 -(void)addFriends

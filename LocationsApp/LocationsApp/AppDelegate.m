@@ -48,7 +48,7 @@
     [parseSignupVC setDelegate:self];
     
     [parseLoginVC setSignUpController:parseSignupVC];
-
+    [parseLoginVC setFields:PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsSignUpButton | PFLogInFieldsUsernameAndPassword];
     
     return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
     

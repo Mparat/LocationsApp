@@ -17,4 +17,6 @@
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 
+-(UINavigationController *)navigationController;
+
 @end
