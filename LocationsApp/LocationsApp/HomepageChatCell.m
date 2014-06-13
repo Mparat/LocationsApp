@@ -26,7 +26,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        //
+        self.user = [[User alloc] initWithName:@"Sam"];
     }
     return self;
 }
@@ -71,7 +71,7 @@
     // picture: 50 x 50, 10 buffer all around
     
     self.username = [[UILabel alloc] init];
-    self.username.text = @"Sam";
+    self.username.text = self.user.name;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.username.font, NSFontAttributeName, nil];
     self.username.frame = CGRectMake(self.username.frame.origin.x,
                                      self.username.frame.origin.y,

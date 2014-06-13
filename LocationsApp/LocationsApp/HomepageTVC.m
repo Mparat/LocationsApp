@@ -17,16 +17,16 @@
 
 @interface HomepageTVC ()
 
-@property (nonatomic, strong) NSString *username;
-
 @end
 
 @implementation HomepageTVC
 
 @synthesize signedInUser = _signedInUser;
 @synthesize parseUser;
-@synthesize username;
 @synthesize locationManager = _locationManager;
+@synthesize parseController = _parseController;
+@synthesize recipient = _recipient;
+
 
 @synthesize loggedIn;
 #define chatCell @"chatCell"
@@ -43,15 +43,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    CLLocation *current = [self.locationManager fetchCurrentLocation];
+//    CLLocation *current = [self.locationManager fetchCurrentLocation];
     self.locationManager.delegate = self;
-    
+    self.parseController.delegate = self;
+
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
     parseUser = [PFUser currentUser];
     FBRequest *request = [FBRequest requestForMe];
-//    NSLog(@"current user %@", [PFUser currentUser]);
-
+    
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         //an <FBGraphUser> object representing the user's identity
         NSDictionary *userData = (NSDictionary *)result;
@@ -66,6 +66,10 @@
         
         NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
         
+//        self.signedInUser.name = name;
+//        self.signedInUser.firstName = firstName;
+//        self.signedInUser.picture = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+
         self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", firstName];
     }];
     
@@ -92,27 +96,29 @@
     UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
     [logout setTitle:@"Logout" forState:UIControlStateNormal];
     [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [logout addTarget:self action:@selector(logoutUser) forControlEvents:UIControlEventTouchUpInside];
+    [logout addTarget:self action:@selector(logoutWithParse) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
     self.navigationItem.leftBarButtonItem = logoutButton;
     self.navigationItem.rightBarButtonItem = addFriendsButton;
-    
-//    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.name];
 }
 
--(void)logoutUser
+-(void)logoutWithParse
 {
-    [PFUser logOut];
-    parseUser = [PFUser currentUser];
+    [self.parseController FBlogoutUser];
+}
+
+-(void)logoutSuccessful
+{
+//    parseUser = [PFUser currentUser];
     NSLog(@"user? %@", parseUser);
     Login *loginpage = [[Login alloc] init];
     [loginpage setLocationManager:self.locationManager];
+    [loginpage setParseController:self.parseController];
     [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:loginpage] animated:TRUE completion:^{
         //
     }];
-
 }
 
 -(void)addFriends
@@ -146,8 +152,7 @@
     self.searchBar.borderStyle = UITextBorderStyleRoundedRect;
     self.searchBar.backgroundColor = [UIColor clearColor];
     self.searchBar.textAlignment = NSTextAlignmentNatural;
-//    self.searchBar.layer.cornerRadius = 10;
-//    self.searchBar.layer.borderColor = [UIColor grayColor].CGColor;
+
     self.searchBar.delegate = self;
     [header addSubview:self.searchBar];
     return header;
@@ -182,15 +187,12 @@
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path
 {
     CLLocation *current = [self.locationManager fetchCurrentLocation];
-    NSLog(@"current location : %@", current);
-//    NSString *text = [self.locationManager returnLocationName:(CLLocation *)current];
     NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
 //    NSString *text = current.description;
     NSDate *date = current.timestamp;
-//    if (text != nil) {
-//        [cell placeSubviewsForCellWithLocation:text Date:date];
-//    }
     [cell placeSubviewsForCellWithLocation:text Date:date];
+    self.recipient = [[User alloc] init];
+    self.recipient.name = cell.user.name;
 }
 
 - (void) placemarkUpdated:(NSString *)location forIndexPath:(NSIndexPath *)path
@@ -198,18 +200,12 @@
     [self.tableView reloadData];
 }
 
-
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    NSString *text = [self.locationManager fetchCurrentLocation].description;
-//    [(HomepageChatCell *)cell placeSubviewsForCell:text];
-//}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MessageVC *messageVC = [[MessageVC alloc] init];
+    MessageVC *messageVC = [MessageVC alloc];
     [messageVC setLocationManager:self.locationManager];
-    messageVC.recipient = self.signedInUser;
+    messageVC.recipient = self.recipient;
+    messageVC = [messageVC init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }
 

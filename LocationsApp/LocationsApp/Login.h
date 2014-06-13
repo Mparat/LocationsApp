@@ -20,4 +20,12 @@
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 
+@property (nonatomic,strong) PFLogInViewController *parseLoginController;
+@property (nonatomic, strong) PFLogInView *parseLoginView;
+
+@property (nonatomic, strong) PFSignUpViewController *parseSignUpController;
+@property (nonatomic, strong) PFSignUpView *parseSignUpView;
+
+
+
 @end

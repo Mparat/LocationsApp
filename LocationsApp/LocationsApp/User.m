@@ -11,6 +11,7 @@
 @implementation User
 
 @synthesize name = _name;
+@synthesize firstName  = _firstName;
 @synthesize location = _location;
 @synthesize time = _time;
 @synthesize picture = _picture;

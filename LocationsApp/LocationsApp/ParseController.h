@@ -22,10 +22,23 @@
 
 @interface ParseController : NSObject <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 
-@property (nonatomic,strong) PFLogInViewController *parseLoginController;
 @property (nonatomic, weak) id<ParseControllerDelegate> delegate;
+@property (nonatomic, strong) User *signedInUser;
+
+@property (nonatomic,strong) PFLogInViewController *logInController;
+@property (nonatomic, strong) PFLogInView *parseLoginView;
+
+@property (nonatomic, strong) PFSignUpViewController *signUpController;
+@property (nonatomic, strong) PFSignUpView *parseSignUpView;
+
+@property (nonatomic, strong) PFUser *currentUser;
 
 -(void)launchParse;
--(void)loginUser;
+-(void)launchParseLogin:(UIView *)view;
+
+-(void)FBloginUser;
+-(void)FBlogoutUser;
+-(void)FBRequestMyInfo;
+
 
 @end

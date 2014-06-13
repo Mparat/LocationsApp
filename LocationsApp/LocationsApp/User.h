@@ -11,6 +11,7 @@
 @interface User : NSObject
 
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *firstName;
 @property (nonatomic, strong) NSString *location;
 @property (nonatomic, strong) NSDate *time;
 @property (nonatomic, strong) UIImage *picture;

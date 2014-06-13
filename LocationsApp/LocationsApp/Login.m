@@ -19,10 +19,17 @@
 
 @implementation Login
 
-@synthesize signedInUser;
+@synthesize signedInUser = _signedInUser;
 @synthesize parseUser;
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
+
+//@synthesize parseLoginController = _parseLoginController;
+//@synthesize parseSignUpController = _parseSignUpController;
+
+@synthesize parseLoginView = _parseLoginView;
+@synthesize parseSignUpView = _parseSignUpView;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,11 +43,53 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addNavBar];
     [self addLoginButon];
-    //    NSLog(@"current user %@", [PFUser currentUser]);
+//    [self createParseLoginView];
+//    NSLog(@"current user %@", [PFUser currentUser]);
 
 //    [self checkForCachedUser];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    self.parseLoginController = [[PFLogInViewController alloc] init];
+    [self.parseLoginController setDelegate:self.parseController];
+    
+    self.parseSignUpController = [[PFSignUpViewController alloc] init];
+    [self.parseSignUpController setDelegate:self.parseController];
+    
+    [self.parseLoginController setSignUpController:self.parseSignUpController];
+    
+    [self.parseLoginController setFields:PFLogInFieldsFacebook | PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten |PFLogInFieldsSignUpButton | PFLogInFieldsUsernameAndPassword];
+    
+//    self.parseLoginView = [[PFLogInView alloc] initWithFields:PFLogInFieldsDefault | PFLogInFieldsFacebook | PFLogInFieldsDismissButton];
+//    self.parseLoginView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+//    
+//    [self.view addSubview:self.parseLoginView];
+    
+    //    [self.parseController launchParseLogin:self.view];
+    [self presentViewController:self.parseLoginController animated:YES completion:NULL];
+
+}
+
+-(void)createParseLoginView
+{
+    self.parseLoginController = [[PFLogInViewController alloc] init];
+    [self.parseLoginController setDelegate:self];
+    
+    self.parseSignUpController = [[PFSignUpViewController alloc] init];
+    [self.parseSignUpController setDelegate:self];
+    
+    [self.parseLoginController setSignUpController:self.parseSignUpController];
+
+    
+    self.parseLoginView = [[PFLogInView alloc] initWithFields:PFLogInFieldsDefault | PFLogInFieldsFacebook | PFLogInFieldsDismissButton];
+    self.parseLoginView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    
+    [self.view addSubview:self.parseLoginView];
+    
+//    [self.parseController launchParseLogin:self.view];
+    [self presentViewController:self.parseLoginController animated:YES completion:NULL];
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,37 +124,35 @@
     }
 }
 
--(void)addNavBar
-{
-    self.navigationItem.title = @"";
-}
-
 
 -(void)addLoginButon
 {
+    
     UIButton *parseButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 30, 300, 60, 30)];
     [parseButton setTitle:@"Login" forState:UIControlStateNormal];
     [parseButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [parseButton addTarget:self action:@selector(loginWithParse) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:parseButton];
+//    [self.view addSubview:parseButton];
 }
 
 -(void)loginWithParse
 {
     self.parseController.delegate = self;
-    [self.parseController loginUser];
+    [self.parseController FBloginUser];
 }
 
 -(void)loginSuccessful
 {
+    self.signedInUser = self.parseController.signedInUser;
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
 //    self.parseUser = user; // necessary?
 //    self.parseUser = [PFUser currentUser];
 //    homepage.parseUser = user;
     [homepage setLocationManager:self.locationManager];
-    signedInUser = [[User alloc] initWithName:@"Meera"];
-    homepage.signedInUser = signedInUser;
+    [homepage setParseController:self.parseController];
+//    signedInUser = [[User alloc] initWithName:@"Meera"];
+    homepage.signedInUser = self.signedInUser;
     
     [self.navigationController pushViewController:homepage animated:YES];
 

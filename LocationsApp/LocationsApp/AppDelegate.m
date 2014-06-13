@@ -45,7 +45,8 @@
     Login *login = [[Login alloc] init];
     [login setLocationManager:self.locationManager];
     [login setParseController:self.parseController];
-    return [[UINavigationController alloc] initWithRootViewController:login];
+    UINavigationController *temp = [[UINavigationController alloc] initWithRootViewController:login];
+    return temp;
 //    HomepageTVC *homeTVC = [[HomepageTVC alloc] initWithStyle:UITableViewStyleGrouped];
 //    return [[UINavigationController alloc] initWithRootViewController:homeTVC];
 //    MessageVC *messageVC = [[MessageVC alloc] init];

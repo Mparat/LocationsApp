@@ -10,13 +10,17 @@
 #import "User.h"
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
+#import "ParseController.h"
 
-@interface HomepageTVC : UITableViewController <LocationManagerControllerDelegate>
+@interface HomepageTVC : UITableViewController <LocationManagerControllerDelegate, ParseControllerDelegate>
 
 @property (nonatomic, strong) UITextField *searchBar;
 @property (nonatomic, strong) User *signedInUser;
 @property (nonatomic, strong) PFUser *parseUser;
 @property (nonatomic, strong) LocationManagerController *locationManager;
+@property (nonatomic, strong) ParseController *parseController;
+@property (nonatomic, strong) User *recipient;
+
 
 @property BOOL loggedIn;
 
