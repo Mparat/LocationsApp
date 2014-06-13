@@ -19,17 +19,8 @@
 
 @implementation Login
 
-@synthesize signedInUser = _signedInUser;
-@synthesize parseUser;
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
-
-//@synthesize parseLoginController = _parseLoginController;
-//@synthesize parseSignUpController = _parseSignUpController;
-
-@synthesize parseLoginView = _parseLoginView;
-@synthesize parseSignUpView = _parseSignUpView;
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -43,53 +34,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addLoginButon];
-//    [self createParseLoginView];
-//    NSLog(@"current user %@", [PFUser currentUser]);
-
-//    [self checkForCachedUser];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    self.parseLoginController = [[PFLogInViewController alloc] init];
-    [self.parseLoginController setDelegate:self.parseController];
+    PFLogInViewController *parseLoginVC = [[PFLogInViewController alloc] init];
+    [parseLoginVC setDelegate:self];
     
-    self.parseSignUpController = [[PFSignUpViewController alloc] init];
-    [self.parseSignUpController setDelegate:self.parseController];
+    PFSignUpViewController *parseSignupVC = [[PFSignUpViewController alloc] init];
+    [parseSignupVC setDelegate:self];
     
-    [self.parseLoginController setSignUpController:self.parseSignUpController];
-    
-    [self.parseLoginController setFields:PFLogInFieldsFacebook | PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten |PFLogInFieldsSignUpButton | PFLogInFieldsUsernameAndPassword];
-    
-//    self.parseLoginView = [[PFLogInView alloc] initWithFields:PFLogInFieldsDefault | PFLogInFieldsFacebook | PFLogInFieldsDismissButton];
-//    self.parseLoginView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-//    
-//    [self.view addSubview:self.parseLoginView];
-    
-    //    [self.parseController launchParseLogin:self.view];
-    [self presentViewController:self.parseLoginController animated:YES completion:NULL];
-
-}
-
--(void)createParseLoginView
-{
-    self.parseLoginController = [[PFLogInViewController alloc] init];
-    [self.parseLoginController setDelegate:self];
-    
-    self.parseSignUpController = [[PFSignUpViewController alloc] init];
-    [self.parseSignUpController setDelegate:self];
-    
-    [self.parseLoginController setSignUpController:self.parseSignUpController];
-
-    
-    self.parseLoginView = [[PFLogInView alloc] initWithFields:PFLogInFieldsDefault | PFLogInFieldsFacebook | PFLogInFieldsDismissButton];
-    self.parseLoginView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    
-    [self.view addSubview:self.parseLoginView];
-    
-//    [self.parseController launchParseLogin:self.view];
-    [self presentViewController:self.parseLoginController animated:YES completion:NULL];
+    [parseLoginVC setSignUpController:parseSignupVC];
+    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
+    [self.navigationController presentViewController:controller animated:YES completion:^{
+        //
+    }];
+    //    return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,65 +53,61 @@
     [super didReceiveMemoryWarning];
 }
 
--(void)checkForCachedUser
+#pragma mark - Parse Login delegate methods
+
+// on click of "submit" button, i'm guessing
+// Sent to the delegate to determine whether the log in request should be submitted to the server.
+-(BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
 {
-    if (![PFFacebookUtils isLinkedWithUser:parseUser]) {
-        [PFFacebookUtils linkUser:parseUser permissions:nil block:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSLog(@"current user %@", [PFUser currentUser]);
-                NSLog(@"Woohoo, user logged in with Facebook!");
-            }
-        }];
+    if (username && password && username.length != 0 && password.length != 0) {
+        return YES;
+        // begin login process;
     }
-    else{
-        NSLog(@"current user %@", [PFUser currentUser]);
-        NSLog(@"User is already linked with Facebook");
-    }
-    NSLog(@"current user %@", [PFUser currentUser]);
-    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        HomepageTVC *homepage = [[HomepageTVC alloc] init];
-        self.parseUser = [PFUser currentUser]; // necessary?
-//        [homepage setLocationManager:self.locationManager];
-        homepage.parseUser = [PFUser currentUser];
-        //            homepage.signedInUser = self.signedInUser;
-        [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:NO completion:^{
-            //
-        }];
-    }
+    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                message:@"Make sure you fill out all of the information!"
+                               delegate:nil
+                      cancelButtonTitle:@"ok"
+                      otherButtonTitles:nil] show];
+    return NO; // Interrupt login process
 }
 
 
--(void)addLoginButon
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
+{
+    NSLog(@"Login successful");
+    [self loginSucessful];
+}
+
+-(void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
+{
+    NSLog(@"Login attempt failed with error: %@", error);
+    [[[UIAlertView alloc] initWithTitle:@"Error"
+                                message:@"Username or password incorrect"
+                               delegate:nil
+                      cancelButtonTitle:@"ok"
+                      otherButtonTitles:nil] show];
+}
+
+-(void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
+{
+    NSLog(@"Login was cancelled");
+}
+
+-(void)loginSucessful
 {
     
-    UIButton *parseButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 30, 300, 60, 30)];
-    [parseButton setTitle:@"Login" forState:UIControlStateNormal];
-    [parseButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [parseButton addTarget:self action:@selector(loginWithParse) forControlEvents:UIControlEventTouchUpInside];
-    
-//    [self.view addSubview:parseButton];
-}
-
--(void)loginWithParse
-{
-    self.parseController.delegate = self;
-    [self.parseController FBloginUser];
-}
-
--(void)loginSuccessful
-{
-    self.signedInUser = self.parseController.signedInUser;
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
-//    self.parseUser = user; // necessary?
-//    self.parseUser = [PFUser currentUser];
-//    homepage.parseUser = user;
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];
-//    signedInUser = [[User alloc] initWithName:@"Meera"];
-    homepage.signedInUser = self.signedInUser;
     
-    [self.navigationController pushViewController:homepage animated:YES];
-
+    //    Login *login = [[Login alloc] init];
+    //    [login setLocationManager:self.locationManager];
+    //    [login setParseController:self.parseController];
+    
+    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:homepage];
+    [self.navigationController pushViewController:controller animated:YES];
+//    [self.window setRootViewController:controller];
+    
 }
 
 @end

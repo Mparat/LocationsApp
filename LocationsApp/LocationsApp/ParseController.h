@@ -15,21 +15,12 @@
 
 @protocol ParseControllerDelegate <NSObject>
 
--(void) loginSuccessful;
--(void) logoutSuccessful;
-
 @end
 
 @interface ParseController : NSObject <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 
 @property (nonatomic, weak) id<ParseControllerDelegate> delegate;
 @property (nonatomic, strong) User *signedInUser;
-
-@property (nonatomic,strong) PFLogInViewController *logInController;
-@property (nonatomic, strong) PFLogInView *parseLoginView;
-
-@property (nonatomic, strong) PFSignUpViewController *signUpController;
-@property (nonatomic, strong) PFSignUpView *parseSignUpView;
 
 @property (nonatomic, strong) PFUser *currentUser;
 

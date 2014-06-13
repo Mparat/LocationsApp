@@ -20,6 +20,7 @@
 @synthesize tableView;
 @synthesize locationManager = _locationManager;
 @synthesize recipient = _recipient;
+@synthesize signedInUser = _signedInUser;
 
 #define userCellIdentifier @"userCell"
 

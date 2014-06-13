@@ -22,7 +22,6 @@
 @implementation HomepageTVC
 
 @synthesize signedInUser = _signedInUser;
-@synthesize parseUser;
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize recipient = _recipient;
@@ -43,13 +42,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    CLLocation *current = [self.locationManager fetchCurrentLocation];
     self.locationManager.delegate = self;
     self.parseController.delegate = self;
-
+    
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
-    parseUser = [PFUser currentUser];
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.username];
+
     FBRequest *request = [FBRequest requestForMe];
     
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -66,11 +66,11 @@
         
         NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
         
-//        self.signedInUser.name = name;
-//        self.signedInUser.firstName = firstName;
-//        self.signedInUser.picture = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-
-        self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", firstName];
+        //        self.signedInUser.name = name;
+        //        self.signedInUser.firstName = firstName;
+        //        self.signedInUser.picture = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+        
+//        self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", firstName];
     }];
     
     FBRequest *friendsRequest = [FBRequest requestForMyFriends];
@@ -96,7 +96,7 @@
     UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
     [logout setTitle:@"Logout" forState:UIControlStateNormal];
     [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [logout addTarget:self action:@selector(logoutWithParse) forControlEvents:UIControlEventTouchUpInside];
+    [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
@@ -104,29 +104,18 @@
     self.navigationItem.rightBarButtonItem = addFriendsButton;
 }
 
--(void)logoutWithParse
-{
-    [self.parseController FBlogoutUser];
-}
 
 -(void)logoutSuccessful
 {
-//    parseUser = [PFUser currentUser];
-    NSLog(@"user? %@", parseUser);
-    Login *loginpage = [[Login alloc] init];
-    [loginpage setLocationManager:self.locationManager];
-    [loginpage setParseController:self.parseController];
-    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:loginpage] animated:TRUE completion:^{
-        //
-    }];
+    return;
 }
 
 -(void)addFriends
 {
     return;
-//    FBFriendListTableViewController *fbFriendList = [[FBFriendListTableViewController alloc] init];
-//    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:fbFriendList] animated:TRUE completion:^{
-//    }];
+    //    FBFriendListTableViewController *fbFriendList = [[FBFriendListTableViewController alloc] init];
+    //    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:fbFriendList] animated:TRUE completion:^{
+    //    }];
 }
 
 #pragma mark - Text field delegates
@@ -152,7 +141,7 @@
     self.searchBar.borderStyle = UITextBorderStyleRoundedRect;
     self.searchBar.backgroundColor = [UIColor clearColor];
     self.searchBar.textAlignment = NSTextAlignmentNatural;
-
+    
     self.searchBar.delegate = self;
     [header addSubview:self.searchBar];
     return header;
@@ -188,7 +177,7 @@
 {
     CLLocation *current = [self.locationManager fetchCurrentLocation];
     NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
-//    NSString *text = current.description;
+    //    NSString *text = current.description;
     NSDate *date = current.timestamp;
     [cell placeSubviewsForCellWithLocation:text Date:date];
     self.recipient = [[User alloc] init];
@@ -210,52 +199,52 @@
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+ {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -22,5 +22,6 @@
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) User *recipient;
+@property (nonatomic, strong) PFUser *signedInUser;
 
 @end

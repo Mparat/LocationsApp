@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import <Parse/Parse.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import <CoreLocation/CoreLocation.h>
 #import "HomepageTVC.h"
@@ -30,7 +29,7 @@
     
     self.parseController = [[ParseController alloc] init];
     [self.parseController launchParse];
-
+    
     [self.window setRootViewController:[self navigationController]];
     [self.window makeKeyAndVisible];
     [Parse setApplicationId:@"WJyPfvSQq1rKoGMlyTp13xNliwIiPyZz8RyaRXwy"
@@ -42,15 +41,24 @@
 
 -(UINavigationController *)navigationController
 {
-    Login *login = [[Login alloc] init];
-    [login setLocationManager:self.locationManager];
-    [login setParseController:self.parseController];
-    UINavigationController *temp = [[UINavigationController alloc] initWithRootViewController:login];
-    return temp;
+    PFLogInViewController *parseLoginVC = [[PFLogInViewController alloc] init];
+    [parseLoginVC setDelegate:self];
+    
+    PFSignUpViewController *parseSignupVC = [[PFSignUpViewController alloc] init];
+    [parseSignupVC setDelegate:self];
+    
+    [parseLoginVC setSignUpController:parseSignupVC];
+
+    
+    return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
+    
 //    HomepageTVC *homeTVC = [[HomepageTVC alloc] initWithStyle:UITableViewStyleGrouped];
+//    [homeTVC setLocationManager:self.locationManager];
+//    [homeTVC setParseController:self.parseController];
 //    return [[UINavigationController alloc] initWithRootViewController:homeTVC];
-//    MessageVC *messageVC = [[MessageVC alloc] init];
-//    return [[UINavigationController alloc] initWithRootViewController:messageVC];
+
+    //    MessageVC *messageVC = [[MessageVC alloc] init];
+    //    return [[UINavigationController alloc] initWithRootViewController:messageVC];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -89,6 +97,64 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+#pragma mark - Parse Login delegate methods
+
+// on click of "submit" button, i'm guessing
+// Sent to the delegate to determine whether the log in request should be submitted to the server.
+-(BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
+{
+    if (username && password && username.length != 0 && password.length != 0) {
+        return YES;
+        // begin login process;
+    }
+    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                message:@"Make sure you fill out all of the information!"
+                               delegate:nil
+                      cancelButtonTitle:@"ok"
+                      otherButtonTitles:nil] show];
+    return NO; // Interrupt login process
+}
+
+
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
+{
+    NSLog(@"Login successful");
+    self.parseController.signedInUser = user;
+    [self loginSucessful];
+}
+
+-(void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
+{
+    NSLog(@"Login attempt failed with error: %@", error);
+    [[[UIAlertView alloc] initWithTitle:@"Error"
+                                message:@"Username or password incorrect"
+                               delegate:nil
+                      cancelButtonTitle:@"ok"
+                      otherButtonTitles:nil] show];
+}
+
+-(void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
+{
+    NSLog(@"Login was cancelled");
+}
+
+-(void)loginSucessful
+{
+    
+    HomepageTVC *homepage = [[HomepageTVC alloc] init];
+    [homepage setLocationManager:self.locationManager];
+    [homepage setParseController:self.parseController];
+    homepage.signedInUser = self.parseController.signedInUser;
+//    Login *login = [[Login alloc] init];
+//    [login setLocationManager:self.locationManager];
+//    [login setParseController:self.parseController];
+    
+    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:homepage];
+    [self.window setRootViewController:controller];
+
 }
 
 @end

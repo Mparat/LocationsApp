@@ -8,24 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
-#import "User.h"
 #import "LocationManagerController.h"
 #import "ParseController.h"
 
-@interface Login : UIViewController <ParseControllerDelegate>
+@interface Login : UIViewController <ParseControllerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 
-@property (nonatomic, strong) User *signedInUser;
-@property (nonatomic, strong) NSString *loginOrOut;
-@property (nonatomic, strong) PFUser *parseUser;
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
-
-@property (nonatomic,strong) PFLogInViewController *parseLoginController;
-@property (nonatomic, strong) PFLogInView *parseLoginView;
-
-@property (nonatomic, strong) PFSignUpViewController *parseSignUpController;
-@property (nonatomic, strong) PFSignUpView *parseSignUpView;
-
 
 
 @end
