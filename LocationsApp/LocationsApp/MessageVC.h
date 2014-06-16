@@ -11,8 +11,9 @@
 #import "LocationManagerController.h"
 #import "User.h"
 #import "Contact.h"
+#import "ParseController.h"
 
-@interface MessageVC : UIViewController <UITableViewDelegate>
+@interface MessageVC : UIViewController <UITableViewDelegate, UITextFieldDelegate>
 {
     UIButton *tellLocationButton;
     UIButton *ask;
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) LocationManagerController *locationManager;
+@property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) Contact *recipient;
 @property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) User *user;

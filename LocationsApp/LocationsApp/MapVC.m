@@ -16,6 +16,7 @@
 @implementation MapVC // Map shows user + recipients at most recent location update and time of that update, hence, may not all be the same time, but it's watever time came with the location message object.
 
 @synthesize locationManager = _locationManager;
+@synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
 
 

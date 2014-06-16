@@ -12,6 +12,8 @@
 		14315C4F194923DE00378EA5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14315C4E194923DE00378EA5 /* MapKit.framework */; };
 		14315C5C1949297E00378EA5 /* MapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C5B1949297E00378EA5 /* MapVC.m */; };
 		14315C62194A12D700378EA5 /* ParseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C61194A12D700378EA5 /* ParseController.m */; };
+		144BA0BE194F68A600977673 /* AddContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0BD194F68A600977673 /* AddContacts.m */; };
+		144BA0C4194F80A000977673 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0C3194F80A000977673 /* SearchCell.m */; };
 		14AB33031942816400B8E20D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33021942816400B8E20D /* Foundation.framework */; };
 		14AB33051942816400B8E20D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33041942816400B8E20D /* CoreGraphics.framework */; };
 		14AB33071942816400B8E20D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33061942816400B8E20D /* UIKit.framework */; };
@@ -65,6 +67,10 @@
 		14315C5B1949297E00378EA5 /* MapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapVC.m; sourceTree = "<group>"; };
 		14315C60194A12D700378EA5 /* ParseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseController.h; sourceTree = "<group>"; };
 		14315C61194A12D700378EA5 /* ParseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParseController.m; sourceTree = "<group>"; };
+		144BA0BC194F68A600977673 /* AddContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContacts.h; sourceTree = "<group>"; };
+		144BA0BD194F68A600977673 /* AddContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContacts.m; sourceTree = "<group>"; };
+		144BA0C2194F80A000977673 /* SearchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
+		144BA0C3194F80A000977673 /* SearchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
 		14AB32FF1942816400B8E20D /* LocationsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14AB33021942816400B8E20D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		14AB33041942816400B8E20D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -241,6 +247,8 @@
 			children = (
 				14AB333D1942930600B8E20D /* HomepageChatCell.h */,
 				14AB333E1942930600B8E20D /* HomepageChatCell.m */,
+				144BA0C2194F80A000977673 /* SearchCell.h */,
+				144BA0C3194F80A000977673 /* SearchCell.m */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -256,6 +264,8 @@
 				14AB33461942ECAB00B8E20D /* MessageVC.m */,
 				14315C5A1949297E00378EA5 /* MapVC.h */,
 				14315C5B1949297E00378EA5 /* MapVC.m */,
+				144BA0BC194F68A600977673 /* AddContacts.h */,
+				144BA0BD194F68A600977673 /* AddContacts.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -392,6 +402,8 @@
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
 				14C66668194669FF00341F0D /* User.m in Sources */,
 				14315C4D19490A0400378EA5 /* Contact.m in Sources */,
+				144BA0C4194F80A000977673 /* SearchCell.m in Sources */,
+				144BA0BE194F68A600977673 /* AddContacts.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6666519464A4800341F0D /* Login.m in Sources */,

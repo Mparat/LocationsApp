@@ -15,6 +15,7 @@
 #import "LocationManagerController.h"
 #import "Contact.h"
 #import "AppDelegate.h"
+#import "AddContacts.h"
 
 @interface HomepageTVC ()
 
@@ -120,10 +121,12 @@
 
 -(void)addFriends
 {
-    return;
-    //    FBFriendListTableViewController *fbFriendList = [[FBFriendListTableViewController alloc] init];
-    //    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:fbFriendList] animated:TRUE completion:^{
-    //    }];
+    AddContacts *add = [[AddContacts alloc] init];
+    add.locationManager = self.locationManager;
+    add.parseController = self.parseController;
+    add.signedInUser = self.signedInUser;
+    [self.navigationController pushViewController:add animated:YES];
+
 }
 
 #pragma mark - Text field delegates
@@ -199,8 +202,10 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MessageVC *messageVC = [MessageVC alloc];
-    [messageVC setLocationManager:self.locationManager];
+    messageVC.parseController = self.parseController;
+    messageVC.parseController = self.parseController;
     messageVC.recipient = self.recipient;
+    messageVC.signedInUser = self.signedInUser;
     messageVC = [messageVC init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }

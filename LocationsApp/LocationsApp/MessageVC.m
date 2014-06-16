@@ -19,6 +19,7 @@
 
 @synthesize tableView;
 @synthesize locationManager = _locationManager;
+@synthesize parseController = _parseController;
 @synthesize recipient = _recipient;
 @synthesize signedInUser = _signedInUser;
 @synthesize user = _user;
@@ -57,9 +58,6 @@
 
 -(void) addNavBarButton
 {
-//    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-//    [back addTarget:self action:@selector(backToHomepage) forControlEvents:UIControlEventTouchUpInside];
-    
     UIButton *viewMap = [[UIButton alloc] initWithFrame:CGRectMake(8*self.view.frame.size.width/10, 5, 2*self.view.frame.size.width/10, 20)];
     [viewMap setTitle:@"Map" forState:UIControlStateNormal];
     [viewMap setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
@@ -69,21 +67,13 @@
     self.navigationItem.rightBarButtonItem = viewMapButton;
     self.navigationItem.title= self.recipient.name;
 }
-//
-//-(void)backToHomepage
-//{
-//    HomepageTVC *homepage = [[HomepageTVC alloc] init];
-//    [homepage setLocationManager:self.locationManager];
-//    homepage.signedInUser = self.signedInUser;
-//    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
-//        //
-//    }];
-//}
+
 
 -(void)viewMap
 {
     MapVC *mapView = [[MapVC alloc] init];
     mapView.locationManager = self.locationManager;
+    mapView.parseController = self.parseController;
     mapView.signedInUser = self.signedInUser;
     [self.navigationController pushViewController:mapView animated:YES];
 }
@@ -139,7 +129,7 @@
 -(void)configureLocation
 {
     CLLocation *myLocation = [self.locationManager fetchCurrentLocation];
-    PFGeoPoint *parseGeoPoint = [PFGeoPoint geoPointWithLocation:myLocation];
+//    PFGeoPoint *parseGeoPoint = [PFGeoPoint geoPointWithLocation:myLocation];
     
     static NSDateFormatter *dateFormatter = nil;
     if (dateFormatter == nil) {
@@ -155,10 +145,16 @@
         [numberFormatter setMaximumFractionDigits:3];
     }
     
-    self.user.name = self.signedInUser.username;
-    self.user.location = [self.locationManager returnMyLocationName:myLocation];
-    self.user.time = [dateFormatter stringFromDate:myLocation.timestamp];
-    self.user.picture = NULL;
+    // NSDat *sentAt = property of LYRMessage
+    // sent message w/ 2 messageParts:
+    NSString *lat = [NSString stringWithFormat:@"%f", myLocation.coordinate.latitude];
+    NSString *lon = [NSString stringWithFormat:@"%f", myLocation.coordinate.longitude];
+
+    
+//    self.user.name = self.signedInUser.username;
+//    self.user.location = [self.locationManager returnMyLocationName:myLocation];
+//    self.user.time = [dateFormatter stringFromDate:myLocation.timestamp];
+//    self.user.picture = NULL;
     
 //    PFObject *myInfoObject = [PFObject objectWithClassName:@"myInfo"]; // Do I need to save the object to parse?
 //    [myInfoObject setObject:self.user forKey:@"myInfo"];

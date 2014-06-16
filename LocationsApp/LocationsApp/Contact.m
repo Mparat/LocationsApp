@@ -11,6 +11,5 @@
 @implementation Contact
 
 @synthesize name = _name;
-@synthesize location = _location;
 
 @end
