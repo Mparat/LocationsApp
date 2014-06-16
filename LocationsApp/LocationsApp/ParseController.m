@@ -14,14 +14,9 @@
 
 @synthesize signedInUser = _signedInUser;
 
-@synthesize currentUser = _currentUser;
-
 -(void)launchParse
 {
-    //    if (![PFUser currentUser]) {
-    //        parseLoginController = [[PFLogInViewController alloc] init];
-    //        [parseLoginController setDelegate:self];
-    //    }
+    return;
 }
 
 
@@ -38,7 +33,6 @@
             NSLog(@"User signed up and logged in through Facebook!");
         } else {
             NSLog(@"User logged in through Facebook!");
-//            [self.delegate loginSuccessful];
         }
     }];
 }

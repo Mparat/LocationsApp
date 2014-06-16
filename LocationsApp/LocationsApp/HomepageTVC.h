@@ -8,17 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "User.h"
+#import "Contact.h"
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
 
 @interface HomepageTVC : UITableViewController <UITextFieldDelegate, LocationManagerControllerDelegate, ParseControllerDelegate>
 
-@property (nonatomic, strong) UITextField *searchBar;
-@property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
-@property (nonatomic, strong) User *recipient;
+
+@property (nonatomic, strong) PFUser *signedInUser;
+@property (nonatomic, strong) UITextField *searchBar;
+
+@property (nonatomic, strong) Contact *recipient;
 
 
 @property BOOL loggedIn;

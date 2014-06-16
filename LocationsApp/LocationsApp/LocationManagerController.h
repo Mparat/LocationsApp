@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+#import <Parse/Parse.h>
 
 @class LocationManagerController;
 
@@ -26,12 +27,16 @@
 @property (nonatomic, strong) CLLocation *current;
 @property (nonatomic, strong) CLGeocoder *geocoder;
 @property (nonatomic, strong) CLPlacemark *placemark;
-@property (nonatomic, strong) MKMapView *mapViewController;
+@property (nonatomic, strong) MKMapView *map;
 @property (nonatomic, weak) id<LocationManagerControllerDelegate>delegate;
 
 -(void)launchLocationManager;
 -(CLLocation *)fetchCurrentLocation;
 -(NSString *)returnLocationName:(CLLocation *)location forIndexPath:(NSIndexPath *)path;
+-(NSString *)returnMyLocationName:(CLLocation *)location;
+
+-(MKMapView *)displayMap:(UIView *)view;
+
 
 
 @end

@@ -13,12 +13,32 @@
 
 @synthesize locationManager;
 @synthesize locations = _locations;
-@synthesize current;
-@synthesize geocoder;
-@synthesize placemark;
+@synthesize current = _current;
+@synthesize geocoder = _geocoder;
+@synthesize placemark = _placemark;
 
-@synthesize mapViewController;
+@synthesize map = _map;
 
+
+-(void)launchLocationManager
+{
+    locationManager = [[CLLocationManager alloc] init];
+    [locationManager setDelegate:self];
+    [locationManager setDistanceFilter:100.f];
+    [self startCollectingLocations];
+}
+
+-(void)startCollectingLocations
+{
+    NSLog(@"Starting locations update");
+    [locationManager startUpdatingLocation];
+}
+
+-(void)stopCollectingLocations
+{
+    NSLog(@"Stopped updating location");
+    [locationManager stopUpdatingLocation];
+}
 
 #pragma mark - location manager delegate methods
 
@@ -28,10 +48,7 @@
     //UIBackgroundMode required
     NSLog(@"Locations updated");
     self.locations = [[NSArray alloc] initWithArray:locations];
-    current = [self fetchCurrentLocation];
-//    if ([self.locations count] == 1){
-//        [self stopCollectingLocations];
-//    }
+    self.current = [self fetchCurrentLocation];
     
     // most recent location update is at the end of the locations array
 }
@@ -41,32 +58,7 @@
     NSLog(@"Updating locations failed with error: %@", error);
 }
 
-
--(void)launchLocationManager
-{
-    locationManager = [[CLLocationManager alloc] init];
-    [locationManager setDelegate:self];
-    [locationManager setDistanceFilter:100.f];
-    [self startCollectingLocations];
-    
-    mapViewController = [[MKMapView alloc] init];
-    [mapViewController setDelegate:self];
-
-}
-
--(void)startCollectingLocations
-{
-    NSLog(@"Starting locations update");
-    [locationManager startUpdatingLocation];
-//    [self stopCollectingLocations];
-
-}
-
--(void)stopCollectingLocations
-{
-    NSLog(@"Stopped updating location");
-    [locationManager stopUpdatingLocation];
-}
+// Location methods
 
 -(CLLocation *)fetchCurrentLocation
 {
@@ -75,44 +67,62 @@
 
 -(NSString *)returnLocationName:(CLLocation *)location forIndexPath:(NSIndexPath *)path
 {
-    if (!geocoder) {
-        geocoder = [[CLGeocoder alloc] init];
+    if (!self.geocoder) {
+        self.geocoder = [[CLGeocoder alloc] init];
     }
     NSLog(@"%d", kCLErrorGeocodeFoundNoResult);
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+    [self.geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if ([placemarks count] > 0) {
-            placemark = [placemarks lastObject];
-            [self.delegate placemarkUpdated:placemark.name forIndexPath:path];
+            self.placemark = [placemarks lastObject];
+            [self.delegate placemarkUpdated:self.placemark.name forIndexPath:path];
         }
     }];
-    NSLog(@"placemark? %@", placemark);
-    return placemark.name;
+    NSLog(@"placemark? %@", self.placemark);
+    return self.placemark.name;
 }
 
--(NSString *)returnName:(CLPlacemark *)temp
+-(NSString *)returnMyLocationName:(CLLocation *)location
 {
-    return temp.name;
+    if (!self.geocoder) {
+        self.geocoder = [[CLGeocoder alloc] init];
+    }
+    NSLog(@"%d", kCLErrorGeocodeFoundNoResult);
+    [self.geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        if ([placemarks count] > 0) {
+            self.placemark = [placemarks lastObject];
+        }
+    }];
+    NSLog(@"placemark? %@", self.placemark);
+    return self.placemark.name;
 }
 
 #pragma mark - MKMapView delegate methods
 
--(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+-(MKMapView *)displayMap:(UIView *)view
 {
+    self.map = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)];
+    [self.map setDelegate:self];
+
+    self.map.showsUserLocation = YES;
     
     MKCoordinateRegion mapRegion; // structure that defines which map region to display
-    mapRegion.center = mapView.userLocation.coordinate;
+    CLLocation *location = [self fetchCurrentLocation];
+    mapRegion.center = location.coordinate;
     mapRegion.span.latitudeDelta = 0.2;
     mapRegion.span.longitudeDelta = 0.2;
     
-    [mapView setRegion:mapRegion animated:YES];
+    [self.map setRegion:mapRegion animated:YES];
+    
+    return self.map;
+}
+
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    return; // not called?
 }
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
-    // default annotatoin view is the blue dot
-    // description of annotation = a callout
-    [self.mapViewController addAnnotation:annotation];
- //   [annotation title] = @"YOU";
     return nil;
 }
 

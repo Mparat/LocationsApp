@@ -185,7 +185,6 @@
 {
     CLLocation *current = [self.locationManager fetchCurrentLocation];
     NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
-    //    NSString *text = current.description;
     NSDate *date = current.timestamp;
     [cell placeSubviewsForCellWithLocation:text Date:date];
     self.recipient = [[User alloc] init];

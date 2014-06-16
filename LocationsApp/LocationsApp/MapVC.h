@@ -10,9 +10,9 @@
 #import <MapKit/MapKit.h>
 #import "LocationManagerController.h"
 
-@interface MapVC : UIViewController
+@interface MapVC : UIViewController 
 
-@property (nonatomic, strong) MKMapView *map;
 @property (nonatomic, strong) LocationManagerController *locationManager;
+@property (nonatomic, strong) PFUser *signedInUser;
 
 @end

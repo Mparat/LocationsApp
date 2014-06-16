@@ -21,6 +21,7 @@
 @synthesize locationManager = _locationManager;
 @synthesize recipient = _recipient;
 @synthesize signedInUser = _signedInUser;
+@synthesize user = _user;
 
 #define userCellIdentifier @"userCell"
 
@@ -39,11 +40,6 @@
     [super viewDidLoad];
     [self initializeTextField];
     [self addNavBarButton];
-//    [self loadView];
-//    [self.tableView reloadData];
-
-    
-    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,43 +57,34 @@
 
 -(void) addNavBarButton
 {
-    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-    [back setTitle:@"<" forState:UIControlStateNormal];
-    [back setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [back addTarget:self action:@selector(backToHomepage) forControlEvents:UIControlEventTouchUpInside];
+//    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+//    [back addTarget:self action:@selector(backToHomepage) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *viewMap = [[UIButton alloc] initWithFrame:CGRectMake(8*self.view.frame.size.width/10, 5, 2*self.view.frame.size.width/10, 20)];
     [viewMap setTitle:@"Map" forState:UIControlStateNormal];
     [viewMap setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [viewMap addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
 
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:back];
-//    self.navigationItem.leftBarButtonItem = backButton;
-
     UIBarButtonItem *viewMapButton = [[UIBarButtonItem alloc] initWithCustomView:viewMap];
     self.navigationItem.rightBarButtonItem = viewMapButton;
-//    self.recipient = [[User alloc] initWithName:self.recipient.name];
     self.navigationItem.title= self.recipient.name;
 }
-
--(void)backToHomepage
-{
-    HomepageTVC *homepage = [[HomepageTVC alloc] init];
-//    self.parseUser = user; // necessary?
-//    self.parseUser = [PFUser currentUser];
-//    homepage.parseUser = user;
-    [homepage setLocationManager:self.locationManager];
-//    signedInUser = [[User alloc] initWithName:@"Meera"];
-//    homepage.signedInUser = signedInUser;
-    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
-        //
-    }];
-}
+//
+//-(void)backToHomepage
+//{
+//    HomepageTVC *homepage = [[HomepageTVC alloc] init];
+//    [homepage setLocationManager:self.locationManager];
+//    homepage.signedInUser = self.signedInUser;
+//    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:homepage] animated:TRUE completion:^{
+//        //
+//    }];
+//}
 
 -(void)viewMap
 {
     MapVC *mapView = [[MapVC alloc] init];
     mapView.locationManager = self.locationManager;
+    mapView.signedInUser = self.signedInUser;
     [self.navigationController pushViewController:mapView animated:YES];
 }
 
@@ -144,9 +131,40 @@
     [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
 }
 
--(void)sendLocation
+-(void)sendLocation // Configure the location time, etc before sending, not upon recieving, because that's when it is sent and accurate...
 {
-    return;
+    [self configureLocation];
+}
+
+-(void)configureLocation
+{
+    CLLocation *myLocation = [self.locationManager fetchCurrentLocation];
+    PFGeoPoint *parseGeoPoint = [PFGeoPoint geoPointWithLocation:myLocation];
+    
+    static NSDateFormatter *dateFormatter = nil;
+    if (dateFormatter == nil) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+        [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    }
+    
+    static NSNumberFormatter *numberFormatter = nil;
+    if (numberFormatter == nil) {
+        numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        [numberFormatter setMaximumFractionDigits:3];
+    }
+    
+    self.user.name = self.signedInUser.username;
+    self.user.location = [self.locationManager returnMyLocationName:myLocation];
+    self.user.time = [dateFormatter stringFromDate:myLocation.timestamp];
+    self.user.picture = NULL;
+    
+//    PFObject *myInfoObject = [PFObject objectWithClassName:@"myInfo"]; // Do I need to save the object to parse?
+//    [myInfoObject setObject:self.user forKey:@"myInfo"];
+
+    
+    // send time, name, coordinates (for mapping)
 }
 
 -(void)askLocation

@@ -51,14 +51,6 @@
     [parseLoginVC setFields:PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsSignUpButton | PFLogInFieldsUsernameAndPassword];
     
     return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
-    
-//    HomepageTVC *homeTVC = [[HomepageTVC alloc] initWithStyle:UITableViewStyleGrouped];
-//    [homeTVC setLocationManager:self.locationManager];
-//    [homeTVC setParseController:self.parseController];
-//    return [[UINavigationController alloc] initWithRootViewController:homeTVC];
-
-    //    MessageVC *messageVC = [[MessageVC alloc] init];
-    //    return [[UINavigationController alloc] initWithRootViewController:messageVC];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -113,7 +105,7 @@
     [[[UIAlertView alloc] initWithTitle:@"Missing Information"
                                 message:@"Make sure you fill out all of the information!"
                                delegate:nil
-                      cancelButtonTitle:@"ok"
+                      cancelButtonTitle:@"Ok"
                       otherButtonTitles:nil] show];
     return NO; // Interrupt login process
 }
@@ -132,7 +124,7 @@
     [[[UIAlertView alloc] initWithTitle:@"Error"
                                 message:@"Username or password incorrect"
                                delegate:nil
-                      cancelButtonTitle:@"ok"
+                      cancelButtonTitle:@"Ok"
                       otherButtonTitles:nil] show];
 }
 
@@ -143,18 +135,31 @@
 
 -(void)loginSucessful
 {
-    
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];
     homepage.signedInUser = self.parseController.signedInUser;
-//    Login *login = [[Login alloc] init];
-//    [login setLocationManager:self.locationManager];
-//    [login setParseController:self.parseController];
-    
+    self.parseController.signedInUser = [PFUser currentUser];
     UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:homepage];
     [self.window setRootViewController:controller];
+}
 
+#pragma mark - Parse Sign up delegate methods
+
+-(void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
+{
+    NSLog(@"Sign up successful");
+    [self.window setRootViewController:[self navigationController]];
+}
+
+-(void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error
+{
+    NSLog(@"Sign up failed with error: %@", error);
+}
+
+-(void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController
+{
+    NSLog(@"User cancelled sign up");
 }
 
 @end

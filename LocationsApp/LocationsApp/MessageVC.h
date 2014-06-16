@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
 #import "User.h"
+#import "Contact.h"
 
 @interface MessageVC : UIViewController <UITableViewDelegate>
 {
@@ -21,7 +22,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) LocationManagerController *locationManager;
-@property (nonatomic, strong) User *recipient;
+@property (nonatomic, strong) Contact *recipient;
 @property (nonatomic, strong) PFUser *signedInUser;
+@property (nonatomic, strong) User *user;
 
 @end
