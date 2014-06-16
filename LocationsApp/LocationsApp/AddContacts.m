@@ -42,10 +42,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.allowsMultipleSelection = YES;
     [self.tableView reloadData];
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
     
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+//    [self.tableView addSubview:self.searchBar];
     self.tableView.tableHeaderView = self.searchBar;
     self.searchController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
     
@@ -55,7 +57,6 @@
     
     CGPoint offset = CGPointMake(0, self.view.frame.size.height);
     self.tableView.contentOffset = offset;
-    
     self.searchResults = [NSMutableArray array];
 }
 
@@ -128,6 +129,18 @@
 -(void)configureCell:(SearchCell *)cell atIndexPath:(NSIndexPath *)path
 {
     [(SearchCell *)cell placeSubviewsForCell:[[self.searchResults objectAtIndex:path.row] objectForKey:@"username"]];
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+}
+
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    cell.accessoryType = UITableViewCellAccessoryNone;
 }
 
 /*

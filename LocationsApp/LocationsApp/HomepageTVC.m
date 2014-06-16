@@ -186,10 +186,10 @@
 
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path
 {
-    CLLocation *current = [self.locationManager fetchCurrentLocation];
-    NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
-    NSDate *date = current.timestamp;
-    [cell placeSubviewsForCellWithLocation:text Date:date];
+//    CLLocation *current = [self.locationManager fetchCurrentLocation];
+//    NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
+//    NSDate *date = current.timestamp;
+    [cell placeSubviewsForCellWithLocation:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
     self.recipient = [[User alloc] init];
     self.recipient.name = cell.user.name;
 }
@@ -202,7 +202,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MessageVC *messageVC = [MessageVC alloc];
-    messageVC.parseController = self.parseController;
+    messageVC.locationManager = self.locationManager;
     messageVC.parseController = self.parseController;
     messageVC.recipient = self.recipient;
     messageVC.signedInUser = self.signedInUser;
