@@ -119,6 +119,7 @@
     if (cell == nil) {
         cell = [[SearchCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:searchCell];
     }
+    
     [cell placeSubviewsForCell:[[self.searchResults objectAtIndex:indexPath.row] objectForKey:@"username"]];
     
     return cell;
