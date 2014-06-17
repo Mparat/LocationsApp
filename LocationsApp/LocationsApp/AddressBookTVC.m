@@ -37,24 +37,20 @@
 {
     [super viewDidLoad];
     [self addNavBar];
+    [self addTabBar];
     
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
     
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     [self.signedInUser save];
-    
+
     [self.tableView reloadData];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    // Dispose of any resources that can be recreate
 }
 
 -(void)addNavBar
@@ -76,7 +72,28 @@
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
     
     self.navigationItem.rightBarButtonItem = addFriendsButton;
+}
 
+-(void)addTabBar
+{
+    HomepageTVC *home = [[HomepageTVC alloc] init];
+    home.locationManager = self.locationManager;
+    home.parseController = self.parseController;
+    home.signedInUser = self.signedInUser;
+    
+    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
+    addressBook.locationManager = self.locationManager;
+    addressBook.parseController = self.parseController;
+    addressBook.signedInUser = self.signedInUser;
+
+    NSArray *controllers = [NSArray arrayWithObjects:home, addressBook, nil];
+    self.tabBarController.viewControllers = controllers;
+    
+    UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:nil tag:0];
+    UITabBarItem *addresses = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:nil tag:1];
+    
+    self.tabBarItem = chats;
+    self.tabBarItem = addresses;
 }
 
 -(void)logoutSuccessful
