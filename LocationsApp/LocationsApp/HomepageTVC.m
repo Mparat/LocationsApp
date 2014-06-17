@@ -15,6 +15,7 @@
 #import "LocationManagerController.h"
 #import "Contact.h"
 #import "AppDelegate.h"
+#import "AddressBookTVC.h"
 #import "AddContacts.h"
 
 @interface HomepageTVC ()
@@ -122,6 +123,15 @@
     [self.navigationController pushViewController:home animated:NO];
 }
 
+-(void)viewAddressBook
+{
+    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
+    addressBook.locationManager = self.locationManager;
+    addressBook.parseController = self.parseController;
+    addressBook.signedInUser = self.signedInUser;
+    [self.navigationController pushViewController:addressBook animated:NO];
+}
+
 -(void)addFriends
 {
     AddContacts *add = [[AddContacts alloc] init];
@@ -129,7 +139,6 @@
     add.parseController = self.parseController;
     add.signedInUser = self.signedInUser;
     [self.navigationController pushViewController:add animated:NO];
-
 }
 
 #pragma mark - Text field delegates
@@ -177,9 +186,9 @@
     [footer addSubview:chatView];
     
     UIButton *addContacts = [[UIButton alloc] initWithFrame:CGRectMake(3*self.tableView.frame.size.width/5, 10, 100, 50)];
-    [addContacts setTitle:@"Add" forState:UIControlStateNormal];
+    [addContacts setTitle:@"Contacts" forState:UIControlStateNormal];
     [addContacts setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [addContacts addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
+    [addContacts addTarget:self action:@selector(viewAddressBook) forControlEvents:UIControlEventTouchUpInside];
     footer.userInteractionEnabled = YES;
     
     [footer addSubview:addContacts];

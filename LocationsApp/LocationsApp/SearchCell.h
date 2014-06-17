@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
 @interface SearchCell : UITableViewCell
 
+@property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) NSString *username;
 
 -(void)placeSubviewsForCell:(NSString *)name;

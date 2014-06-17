@@ -17,6 +17,7 @@
 
 @implementation SearchCell
 
+@synthesize signedInUser = _signedInUser;
 @synthesize name = _name;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -59,7 +60,14 @@
     self.name.font = [UIFont fontWithName:@"Helvetica" size:16];
     self.name.textColor = [UIColor blackColor];
     [self addSubview:self.name];
+    
     self.username = self.name.text;
+//    NSArray *temp = [self.signedInUser objectForKey:@"friendsArray"];
+//    for (int i = 0; i < [temp count]; i++) {
+//        if (self.username == [temp objectAtIndex:i]) {
+//            self.accessoryType = UITableViewCellAccessoryCheckmark;
+//        }
+//    }
 }
 
 @end
