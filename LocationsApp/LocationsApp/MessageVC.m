@@ -43,6 +43,7 @@
     [self addNavBarButton];
 }
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -196,6 +197,8 @@
 // Subscribe to keyboard show/hide notifications.
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self.tabBarController.tabBar setHidden:YES];
+    
     [[NSNotificationCenter defaultCenter]
      addObserver:self selector:@selector(keyboardWillShow:)
      name:UIKeyboardWillShowNotification object:nil];

@@ -46,7 +46,7 @@
     [super viewDidLoad];
     [self addNavBar];
     [self.tableView setDelegate:self];
-
+    
     [self.tableView reloadData];
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
     
@@ -66,6 +66,11 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.tabBarController.tabBar setHidden:YES];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -74,7 +79,7 @@
 
 -(void)addNavBar
 {
-    self.navigationController.title = @"Add Friends";
+//    self.navigationController.navigati.title = @"Add Friends";
 }
 
 -(void)add

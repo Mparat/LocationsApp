@@ -12,6 +12,7 @@
 #import "HomepageTVC.h"
 #import "MessageVC.h"
 #import "Login.h"
+#import "AddressBookTVC.h"
 #import "LocationManagerController.h"
 #import "ParseController.h"
 
@@ -135,13 +136,32 @@
 
 -(void)loginSucessful
 {
+    self.parseController.signedInUser = [PFUser currentUser];
+    
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];
     homepage.signedInUser = self.parseController.signedInUser;
-    self.parseController.signedInUser = [PFUser currentUser];
-    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:homepage];
-    [self.window setRootViewController:controller];
+    UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
+    
+    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
+    addressBook.locationManager = self.locationManager;
+    addressBook.parseController = self.parseController;
+    addressBook.signedInUser = self.parseController.signedInUser;
+    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addressBook];
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    
+    NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];
+    tabBarController.viewControllers = controllers;
+    
+    UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:nil tag:0];
+    UITabBarItem *addresses = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:nil tag:1];
+    
+    tabBarController.tabBarItem = chats;
+    tabBarController.tabBarItem = addresses;
+    
+    [self.window setRootViewController:tabBarController];
 }
 
 #pragma mark - Parse Sign up delegate methods

@@ -34,8 +34,11 @@
     [super viewDidLoad];
     [self.view addSubview:[self.locationManager displayMap:self.view]];
 //    [self addNavBarButton];
+}
 
-    // Do any additional setup after loading the view.
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.tabBarController.tabBar setHidden:YES];
 }
 
 - (void)didReceiveMemoryWarning

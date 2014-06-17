@@ -37,7 +37,7 @@
 {
     [super viewDidLoad];
     [self addNavBar];
-    [self addTabBar];
+//    [self addTabBar];
     
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
     
@@ -45,6 +45,16 @@
     [self.signedInUser save];
 
     [self.tableView reloadData];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.tabBarController.tabBar setHidden:NO];
+    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    [self.signedInUser save];
+    
+    [self.tableView reloadData];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,8 +102,8 @@
     UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:nil tag:0];
     UITabBarItem *addresses = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:nil tag:1];
     
-    self.tabBarItem = chats;
-    self.tabBarItem = addresses;
+    self.tabBarController.tabBarItem = chats;
+    self.tabBarController.tabBarItem = addresses;
 }
 
 -(void)logoutSuccessful
@@ -138,33 +148,33 @@
 
 #pragma mark - Table view data source
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *footer = [[UIView alloc] init];
-    footer.backgroundColor = [UIColor grayColor];
-    
-    UIButton *chatView = [[UIButton alloc] initWithFrame:CGRectMake(1*self.tableView.frame.size.width/5, 10, 100, 50)];
-    [chatView setTitle:@"Messages" forState:UIControlStateNormal];
-    [chatView setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [chatView addTarget:self action:@selector(toHomepage) forControlEvents:UIControlEventTouchUpInside];
-    footer.userInteractionEnabled = YES;
-    
-    [footer addSubview:chatView];
-    
-    UIButton *addContacts = [[UIButton alloc] initWithFrame:CGRectMake(3*self.tableView.frame.size.width/5, 10, 100, 50)];
-    [addContacts setTitle:@"Contacts" forState:UIControlStateNormal];
-    [addContacts setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [addContacts addTarget:self action:@selector(viewAddressBook) forControlEvents:UIControlEventTouchUpInside];
-    footer.userInteractionEnabled = YES;
-    
-    [footer addSubview:addContacts];
-    return footer;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 70;
-}
+//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView *footer = [[UIView alloc] init];
+//    footer.backgroundColor = [UIColor grayColor];
+//    
+//    UIButton *chatView = [[UIButton alloc] initWithFrame:CGRectMake(1*self.tableView.frame.size.width/5, 10, 100, 50)];
+//    [chatView setTitle:@"Messages" forState:UIControlStateNormal];
+//    [chatView setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+//    [chatView addTarget:self action:@selector(toHomepage) forControlEvents:UIControlEventTouchUpInside];
+//    footer.userInteractionEnabled = YES;
+//    
+//    [footer addSubview:chatView];
+//    
+//    UIButton *addContacts = [[UIButton alloc] initWithFrame:CGRectMake(3*self.tableView.frame.size.width/5, 10, 100, 50)];
+//    [addContacts setTitle:@"Contacts" forState:UIControlStateNormal];
+//    [addContacts setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+//    [addContacts addTarget:self action:@selector(viewAddressBook) forControlEvents:UIControlEventTouchUpInside];
+//    footer.userInteractionEnabled = YES;
+//    
+//    [footer addSubview:addContacts];
+//    return footer;
+//}
+//
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return 70;
+//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
