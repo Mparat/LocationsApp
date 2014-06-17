@@ -8,6 +8,8 @@
 
 #import "AddContacts.h"
 #import "SearchCell.h"
+#import "HomepageTVC.h"
+#import "AppDelegate.h"
 
 @interface AddContacts () <UISearchDisplayDelegate, UISearchBarDelegate>
 
@@ -27,6 +29,7 @@
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
 @synthesize className = _className;
+@synthesize addedFriends = _addedFriends;
 
 #define searchCell @"searchCell"
 
@@ -42,7 +45,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.allowsMultipleSelection = YES;
+    [self addNavBar];
+    [self.tableView setDelegate:self];
+
     [self.tableView reloadData];
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
     
@@ -58,12 +63,53 @@
     CGPoint offset = CGPointMake(0, self.view.frame.size.height);
     self.tableView.contentOffset = offset;
     self.searchResults = [NSMutableArray array];
+    
+    self.tableView.allowsMultipleSelection = YES;
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+    
+    self.addedFriends = [[NSMutableArray alloc] init];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)addNavBar
+{
+    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [logout setTitle:@"Logout" forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
+
+    UIButton *findFriends = [[UIButton alloc] initWithFrame:CGRectMake(8*self.navigationController.navigationBar.frame.size.width/10, 10, 40, 30)];
+    [findFriends setTitle:@"Add" forState:UIControlStateNormal];
+    [findFriends setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [findFriends addTarget:self action:@selector(add) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
+    UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
+   
+    self.navigationItem.leftBarButtonItem = logoutButton;
+    self.navigationItem.rightBarButtonItem = addFriendsButton;
+}
+
+-(void)logoutSuccessful
+{
+    [PFUser logOut];
+    UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] navigationController];
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+    [self.navigationController presentViewController:controller animated:YES completion:^{
+        //
+    }];
+}
+
+-(void)add
+{
+    [[self.signedInUser objectForKey:@"friends"] arrayByAddingObjectsFromArray:self.addedFriends];
 }
 
 -(void)filterResults:(NSString *)searchTerm
@@ -93,7 +139,54 @@
 }
 
 
+-(void)toHomepage
+{
+    HomepageTVC *home = [[HomepageTVC alloc] init];
+    home.locationManager = self.locationManager;
+    home.parseController = self.parseController;
+    home.signedInUser = self.signedInUser;
+    [self.navigationController pushViewController:home animated:NO];
+}
+
+-(void)addFriends
+{
+    AddContacts *add = [[AddContacts alloc] init];
+    add.locationManager = self.locationManager;
+    add.parseController = self.parseController;
+    add.signedInUser = self.signedInUser;
+    [self.navigationController pushViewController:add animated:NO];
+}
+
 #pragma mark - Table view data source
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footer = [[UIView alloc] init];
+    footer.backgroundColor = [UIColor grayColor];
+    
+    UIButton *chatView = [[UIButton alloc] initWithFrame:CGRectMake(1*self.tableView.frame.size.width/5, 10, 100, 50)];
+    [chatView setTitle:@"Messages" forState:UIControlStateNormal];
+    [chatView setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [chatView addTarget:self action:@selector(toHomepage) forControlEvents:UIControlEventTouchUpInside];
+    footer.userInteractionEnabled = YES;
+    
+    [footer addSubview:chatView];
+    
+    UIButton *addContacts = [[UIButton alloc] initWithFrame:CGRectMake(3*self.tableView.frame.size.width/5, 10, 100, 50)];
+    [addContacts setTitle:@"Add" forState:UIControlStateNormal];
+    [addContacts setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [addContacts addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
+    footer.userInteractionEnabled = YES;
+    
+    [footer addSubview:addContacts];
+    return footer;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 70;
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -134,14 +227,21 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if (cell.accessoryType == UITableViewCellAccessoryNone) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [self.addedFriends addObject:((SearchCell *)cell).username];
+        self.signedInUser = [PFUser currentUser];
+//        self.signedInUser[@"friend"] = ((SearchCell *)cell).username;
+        [self.signedInUser addObjectsFromArray:self.addedFriends forKey:@"friendsArray"];
+//        self.signedInUser[@"friendArray"] = self.addedFriends;
+        [self.signedInUser save];
+    }
+    else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [self.addedFriends removeObject:cell];
+    }
 }
 
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryNone;
-}
 
 /*
  // Override to support conditional editing of the table view.

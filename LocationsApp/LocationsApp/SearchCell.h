@@ -10,6 +10,8 @@
 
 @interface SearchCell : UITableViewCell
 
+@property (nonatomic, strong) NSString *username;
+
 -(void)placeSubviewsForCell:(NSString *)name;
 
 @end

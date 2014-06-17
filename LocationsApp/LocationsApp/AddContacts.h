@@ -11,13 +11,14 @@
 #import "LocationManagerController.h"
 #import "ParseController.h"
 
-@interface AddContacts : PFQueryTableViewController <UITableViewDelegate>
+@interface AddContacts : PFQueryTableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) PFUser *signedInUser;
 
 @property (nonatomic, strong) NSString *className;
+@property (nonatomic, strong) NSMutableArray *addedFriends;
 
 
 @end

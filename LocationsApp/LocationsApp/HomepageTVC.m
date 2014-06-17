@@ -52,34 +52,28 @@
     
     self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.username];
 
-    FBRequest *request = [FBRequest requestForMe];
-    
-    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        //an <FBGraphUser> object representing the user's identity
-        NSDictionary *userData = (NSDictionary *)result;
-        
-        NSString *facebookID = userData[@"id"];
-        NSString *name = userData[@"name"];
-        NSString *firstName = userData[@"first_name"];
-        NSString *location = userData[@"location"][@"name"];
-        NSString *gender = userData[@"gender"];
-        NSString *birthday = userData[@"birthday"];
-        NSString *relationship = userData[@"relationship_status"];
-        
-        NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
-        
-        //        self.signedInUser.name = name;
-        //        self.signedInUser.firstName = firstName;
-        //        self.signedInUser.picture = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-        
+//    FBRequest *request = [FBRequest requestForMe];
+//    
+//    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+//        //an <FBGraphUser> object representing the user's identity
+//        NSDictionary *userData = (NSDictionary *)result;
+//        
+//        NSString *facebookID = userData[@"id"];
+//        NSString *name = userData[@"name"];
+//        NSString *firstName = userData[@"first_name"];
+//        NSString *location = userData[@"location"][@"name"];
+//        NSString *gender = userData[@"gender"];
+//        NSString *birthday = userData[@"birthday"];
+//        NSString *relationship = userData[@"relationship_status"];
+//        
+//        NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
+//        
+//        self.signedInUser.name = name;
+//        self.signedInUser.firstName = firstName;
+//        self.signedInUser.picture = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+//        
 //        self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", firstName];
-    }];
-    
-    FBRequest *friendsRequest = [FBRequest requestForMyFriends];
-    [friendsRequest startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        NSDictionary *myFriends = (NSDictionary *)result;
-        NSArray *array = myFriends[@"data"];
-    }];
+//    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -103,7 +97,7 @@
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
     self.navigationItem.leftBarButtonItem = logoutButton;
-    self.navigationItem.rightBarButtonItem = addFriendsButton;
+//    self.navigationItem.rightBarButtonItem = addFriendsButton;
 }
 
 
@@ -119,13 +113,22 @@
     }];
 }
 
+-(void)toHomepage
+{
+    HomepageTVC *home = [[HomepageTVC alloc] init];
+    home.locationManager = self.locationManager;
+    home.parseController = self.parseController;
+    home.signedInUser = self.signedInUser;
+    [self.navigationController pushViewController:home animated:NO];
+}
+
 -(void)addFriends
 {
     AddContacts *add = [[AddContacts alloc] init];
     add.locationManager = self.locationManager;
     add.parseController = self.parseController;
     add.signedInUser = self.signedInUser;
-    [self.navigationController pushViewController:add animated:YES];
+    [self.navigationController pushViewController:add animated:NO];
 
 }
 
@@ -159,6 +162,34 @@
 }
 
 #pragma mark - Table view data source
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footer = [[UIView alloc] init];
+    footer.backgroundColor = [UIColor grayColor];
+    
+    UIButton *chatView = [[UIButton alloc] initWithFrame:CGRectMake(1*self.tableView.frame.size.width/5, 10, 100, 50)];
+    [chatView setTitle:@"Messages" forState:UIControlStateNormal];
+    [chatView setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [chatView addTarget:self action:@selector(toHomepage) forControlEvents:UIControlEventTouchUpInside];
+    footer.userInteractionEnabled = YES;
+    
+    [footer addSubview:chatView];
+    
+    UIButton *addContacts = [[UIButton alloc] initWithFrame:CGRectMake(3*self.tableView.frame.size.width/5, 10, 100, 50)];
+    [addContacts setTitle:@"Add" forState:UIControlStateNormal];
+    [addContacts setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [addContacts addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
+    footer.userInteractionEnabled = YES;
+    
+    [footer addSubview:addContacts];
+    return footer;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 70;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

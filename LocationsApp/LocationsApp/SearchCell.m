@@ -17,6 +17,8 @@
 
 @implementation SearchCell
 
+@synthesize name = _name;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -57,6 +59,7 @@
     self.name.font = [UIFont fontWithName:@"Helvetica" size:16];
     self.name.textColor = [UIColor blackColor];
     [self addSubview:self.name];
+    self.username = self.name.text;
 }
 
 @end
