@@ -79,13 +79,7 @@
 
 -(void)addNavBar
 {
-//    self.navigationController.navigati.title = @"Add Friends";
-}
-
--(void)add
-{
-//    [self.signedInUser addObjectsFromArray:self.addedFriends forKey:@"friendsArray"];
-//    [self.signedInUser save];
+//    self.navigationController.title = @"Add Friends";
 }
 
 -(void)filterResults:(NSString *)searchTerm
@@ -98,10 +92,15 @@
 
     NSArray *results = [query findObjects];
 
-    NSLog(@"%@", results);
-    NSLog(@"%lu",(unsigned long)[results count]);
+//    NSLog(@"%@", results);
+//    NSLog(@"%lu",(unsigned long)[results count]);
     
     [self.searchResults addObjectsFromArray:results];
+    for (int i = 0; i < [self.searchResults count]; i++) {
+        if ([[[self.searchResults objectAtIndex:i] objectForKey:@"username"] isEqualToString:self.signedInUser.username]) {
+            [self.searchResults removeObject:[self.searchResults objectAtIndex:i]];
+        }
+    }
 }
 
 -(void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller

@@ -90,20 +90,13 @@
 
 -(void)addNavBar
 {
-    UIButton *findFriends = [[UIButton alloc] initWithFrame:CGRectMake(8*self.navigationController.navigationBar.frame.size.width/10, 10, 40, 30)];
-    [findFriends setTitle:@"Add" forState:UIControlStateNormal];
-    [findFriends setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [findFriends addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
-    
     UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
     [logout setTitle:@"Logout" forState:UIControlStateNormal];
     [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
-    UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
     self.navigationItem.leftBarButtonItem = logoutButton;
-//    self.navigationItem.rightBarButtonItem = addFriendsButton;
 }
 
 
@@ -117,33 +110,6 @@
     [self.navigationController presentViewController:controller animated:YES completion:^{
         //
     }];
-}
-
--(void)toHomepage
-{
-    HomepageTVC *home = [[HomepageTVC alloc] init];
-    home.locationManager = self.locationManager;
-    home.parseController = self.parseController;
-    home.signedInUser = self.signedInUser;
-    [self.navigationController pushViewController:home animated:NO];
-}
-
--(void)viewAddressBook
-{
-    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
-    addressBook.locationManager = self.locationManager;
-    addressBook.parseController = self.parseController;
-    addressBook.signedInUser = self.signedInUser;
-    [self.navigationController pushViewController:addressBook animated:NO];
-}
-
--(void)addFriends
-{
-    AddContacts *add = [[AddContacts alloc] init];
-    add.locationManager = self.locationManager;
-    add.parseController = self.parseController;
-    add.signedInUser = self.signedInUser;
-    [self.navigationController pushViewController:add animated:NO];
 }
 
 #pragma mark - Text field delegates
@@ -177,43 +143,13 @@
 
 #pragma mark - Table view data source
 
-//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    UIView *footer = [[UIView alloc] init];
-//    footer.backgroundColor = [UIColor grayColor];
-//    
-//    UIButton *chatView = [[UIButton alloc] initWithFrame:CGRectMake(1*self.tableView.frame.size.width/5, 10, 100, 50)];
-//    [chatView setTitle:@"Messages" forState:UIControlStateNormal];
-//    [chatView setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//    [chatView addTarget:self action:@selector(toHomepage) forControlEvents:UIControlEventTouchUpInside];
-//    footer.userInteractionEnabled = YES;
-//    
-//    [footer addSubview:chatView];
-//    
-//    UIButton *addContacts = [[UIButton alloc] initWithFrame:CGRectMake(3*self.tableView.frame.size.width/5, 10, 100, 50)];
-//    [addContacts setTitle:@"Contacts" forState:UIControlStateNormal];
-//    [addContacts setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//    [addContacts addTarget:self action:@selector(viewAddressBook) forControlEvents:UIControlEventTouchUpInside];
-//    footer.userInteractionEnabled = YES;
-//    
-//    [footer addSubview:addContacts];
-//    return footer;
-//}
-//
-//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 70;
-//}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     return 10;
 }
 

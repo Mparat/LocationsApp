@@ -37,8 +37,7 @@
 {
     [super viewDidLoad];
     [self addNavBar];
-//    [self addTabBar];
-    
+
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
     
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
@@ -54,7 +53,6 @@
     [self.signedInUser save];
     
     [self.tableView reloadData];
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,28 +82,6 @@
     self.navigationItem.rightBarButtonItem = addFriendsButton;
 }
 
--(void)addTabBar
-{
-    HomepageTVC *home = [[HomepageTVC alloc] init];
-    home.locationManager = self.locationManager;
-    home.parseController = self.parseController;
-    home.signedInUser = self.signedInUser;
-    
-    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
-    addressBook.locationManager = self.locationManager;
-    addressBook.parseController = self.parseController;
-    addressBook.signedInUser = self.signedInUser;
-
-    NSArray *controllers = [NSArray arrayWithObjects:home, addressBook, nil];
-    self.tabBarController.viewControllers = controllers;
-    
-    UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:nil tag:0];
-    UITabBarItem *addresses = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:nil tag:1];
-    
-    self.tabBarController.tabBarItem = chats;
-    self.tabBarController.tabBarItem = addresses;
-}
-
 -(void)logoutSuccessful
 {
     [PFUser logOut];
@@ -116,24 +92,6 @@
     [self.navigationController presentViewController:controller animated:YES completion:^{
         //
     }];
-}
-
--(void)toHomepage
-{
-    HomepageTVC *home = [[HomepageTVC alloc] init];
-    home.locationManager = self.locationManager;
-    home.parseController = self.parseController;
-    home.signedInUser = self.signedInUser;
-    [self.navigationController pushViewController:home animated:NO];
-}
-
--(void)viewAddressBook
-{
-    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
-    addressBook.locationManager = self.locationManager;
-    addressBook.parseController = self.parseController;
-    addressBook.signedInUser = self.signedInUser;
-    [self.navigationController pushViewController:addressBook animated:NO];
 }
 
 -(void)addFriends
@@ -148,34 +106,6 @@
 
 #pragma mark - Table view data source
 
-//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    UIView *footer = [[UIView alloc] init];
-//    footer.backgroundColor = [UIColor grayColor];
-//    
-//    UIButton *chatView = [[UIButton alloc] initWithFrame:CGRectMake(1*self.tableView.frame.size.width/5, 10, 100, 50)];
-//    [chatView setTitle:@"Messages" forState:UIControlStateNormal];
-//    [chatView setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//    [chatView addTarget:self action:@selector(toHomepage) forControlEvents:UIControlEventTouchUpInside];
-//    footer.userInteractionEnabled = YES;
-//    
-//    [footer addSubview:chatView];
-//    
-//    UIButton *addContacts = [[UIButton alloc] initWithFrame:CGRectMake(3*self.tableView.frame.size.width/5, 10, 100, 50)];
-//    [addContacts setTitle:@"Contacts" forState:UIControlStateNormal];
-//    [addContacts setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//    [addContacts addTarget:self action:@selector(viewAddressBook) forControlEvents:UIControlEventTouchUpInside];
-//    footer.userInteractionEnabled = YES;
-//    
-//    [footer addSubview:addContacts];
-//    return footer;
-//}
-//
-//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 70;
-//}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -186,7 +116,6 @@
     return [[self.signedInUser objectForKey:@"friendsArray"] count];
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:searchCell];
@@ -195,7 +124,6 @@
         cell = [[SearchCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:searchCell];
     }
     
-    //    [cell placeSubviewsForCell:[[self.searchResults objectAtIndex:indexPath.row] objectForKey:@"username"]];
     [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
@@ -213,8 +141,6 @@
 {
     return YES;
 }
-
-
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
