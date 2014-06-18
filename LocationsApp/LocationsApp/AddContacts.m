@@ -10,6 +10,7 @@
 #import "SearchCell.h"
 #import "HomepageTVC.h"
 #import "AppDelegate.h"
+#import "AddressBookTVC.h"
 
 @interface AddContacts () <UISearchDisplayDelegate, UISearchBarDelegate>
 
@@ -69,6 +70,10 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden:YES];
+    UISwipeGestureRecognizer *swipeRecognizerRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toAddressBook)];
+    [swipeRecognizerRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:swipeRecognizerRight];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -80,6 +85,15 @@
 -(void)addNavBar
 {
     self.navigationItem.title = [NSString stringWithFormat:@"Add Friends"];
+}
+
+-(void)toAddressBook
+{
+    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
+    addressBook.locationManager = self.locationManager;
+    addressBook.parseController = self.parseController;
+    addressBook.signedInUser = self.parseController.signedInUser;
+    [self.navigationController pushViewController:addressBook animated:NO];
 }
 
 -(void)filterResults:(NSString *)searchTerm

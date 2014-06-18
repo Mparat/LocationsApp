@@ -12,7 +12,11 @@
 #import "HomepageTVC.h"
 #import "SearchCell.h"
 
-@interface AddressBookTVC ()
+@interface AddressBookTVC () <UISearchDisplayDelegate, UISearchBarDelegate>
+
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UISearchDisplayController *searchController;
+@property (nonatomic, strong) NSMutableArray *searchResults;
 
 @end
 
@@ -37,6 +41,7 @@
 {
     [super viewDidLoad];
     [self addNavBar];
+    [self addSearchBar];
 
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
     
@@ -51,6 +56,10 @@
     [self.tabBarController.tabBar setHidden:NO];
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     [self.signedInUser save];
+    
+    UISwipeGestureRecognizer *swipeRecognizerLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(addFriends)];
+    [swipeRecognizerLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:swipeRecognizerLeft];
     
     [self.tableView reloadData];
 }
@@ -83,6 +92,22 @@
     self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
 }
 
+-(void)addSearchBar
+{
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.tableView.tableHeaderView = self.searchBar;
+    self.searchController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
+    
+    self.searchController.searchResultsDataSource = self;
+    self.searchController.searchResultsDelegate = self;
+    self.searchController.delegate = self;
+    
+    //    CGPoint offset = CGPointMake(0, self.view.frame.size.height);
+    CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
+    self.tableView.contentOffset = offset;
+    self.searchResults = [NSMutableArray array];
+}
+
 -(void)logoutSuccessful
 {
     [PFUser logOut];
@@ -102,6 +127,9 @@
     add.parseController = self.parseController;
     add.signedInUser = self.signedInUser;
     [self.navigationController pushViewController:add animated:NO];
+//    [self.navigationController presentViewController:add animated:NO completion:^{
+//        //
+//    }];
 }
 
 
