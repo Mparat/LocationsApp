@@ -112,7 +112,7 @@
     mapRegion.span.longitudeDelta = 0.2;
     
     [self.map setRegion:mapRegion animated:YES];
-    
+
     return self.map;
 }
 
@@ -123,7 +123,21 @@
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
-    return nil;
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {
+        MKPinAnnotationView *userLocationPin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
+        userLocationPin.pinColor = MKPinAnnotationColorPurple;
+//        userLocationPin.animatesDrop = YES;
+        userLocationPin.canShowCallout = YES;
+        ((MKUserLocation *)annotation).title = @"My Location";
+        return userLocationPin;
+    }
+    else{ // for location of each participant...
+        MKPinAnnotationView *otherLocationPin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil]; // reuser Views when it's for all the other participants
+        otherLocationPin.pinColor = MKPinAnnotationColorRed;
+        otherLocationPin.canShowCallout = YES;
+        return otherLocationPin;
+    }
+//    [mapView selectAnnotation:annotation animated:false]; // doesn't do anything...
 }
 
 

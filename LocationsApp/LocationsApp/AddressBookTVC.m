@@ -102,8 +102,8 @@
     self.searchController.searchResultsDelegate = self;
     self.searchController.delegate = self;
     
-    //    CGPoint offset = CGPointMake(0, self.view.frame.size.height);
-    CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
+    CGPoint offset = CGPointMake(0, self.view.frame.size.height);
+    //CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
     self.tableView.contentOffset = offset;
     self.searchResults = [NSMutableArray array];
 }

@@ -3,6 +3,8 @@
 
 target "LocationsApp" do
 
+pod 'MCSwipeTableViewCell', '~> 2.1'
+
 end
 
 target "LocationsAppTests" do
