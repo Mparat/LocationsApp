@@ -31,12 +31,19 @@
     self.parseController = [[ParseController alloc] init];
     [self.parseController launchParse];
     
-    [self.window setRootViewController:[self navigationController]];
-    [self.window makeKeyAndVisible];
     [Parse setApplicationId:@"WJyPfvSQq1rKoGMlyTp13xNliwIiPyZz8RyaRXwy"
                   clientKey:@"r46J9MvgvF6pbnmO7PUsatJbseIbWJM2zqBjSvC4"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     [PFFacebookUtils initializeFacebook];
+
+    if (![PFUser currentUser]) {
+        [self.window setRootViewController:[self navigationController]];
+    }
+    else{
+        [self loginSucessful];
+    }
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
