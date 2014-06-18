@@ -78,8 +78,9 @@
     [findFriends addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
-    
     self.navigationItem.rightBarButtonItem = addFriendsButton;
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
 }
 
 -(void)logoutSuccessful

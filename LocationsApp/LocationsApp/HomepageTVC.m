@@ -18,7 +18,11 @@
 #import "AddressBookTVC.h"
 #import "AddContacts.h"
 
-@interface HomepageTVC ()
+@interface HomepageTVC () <UISearchDisplayDelegate, UISearchBarDelegate>
+
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UISearchDisplayController *searchController;
+@property (nonatomic, strong) NSMutableArray *searchResults;
 
 @end
 
@@ -50,6 +54,7 @@
     
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
+    [self addSearchBar];
     
     self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.username];
 
@@ -99,6 +104,21 @@
     self.navigationItem.leftBarButtonItem = logoutButton;
 }
 
+-(void)addSearchBar
+{
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.tableView.tableHeaderView = self.searchBar;
+    self.searchController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
+    
+    self.searchController.searchResultsDataSource = self;
+    self.searchController.searchResultsDelegate = self;
+    self.searchController.delegate = self;
+    
+//    CGPoint offset = CGPointMake(0, self.view.frame.size.height);
+    CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
+    self.tableView.contentOffset = offset;
+    self.searchResults = [NSMutableArray array];
+}
 
 -(void)logoutSuccessful
 {
@@ -114,33 +134,33 @@
 
 #pragma mark - Text field delegates
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 30;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-    header.backgroundColor = [UIColor whiteColor];
-    self.searchBar = [[UITextField alloc] init];
-    self.searchBar.placeholder = [NSString stringWithFormat:@"Search"];
-    self.searchBar.frame = CGRectMake(0.5*header.frame.size.width/10, 5, 9*header.frame.size.width/10, 25);
-    self.searchBar.borderStyle = UITextBorderStyleRoundedRect;
-    self.searchBar.backgroundColor = [UIColor clearColor];
-    self.searchBar.textAlignment = NSTextAlignmentNatural;
-    
-    self.searchBar.delegate = self;
-    [header addSubview:self.searchBar];
-    return header;
-}
-
+//-(BOOL)textFieldShouldReturn:(UITextField *)textField
+//{
+//    [textField resignFirstResponder];
+//    return YES;
+//}
+//
+//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return 30;
+//}
+//
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+//    header.backgroundColor = [UIColor whiteColor];
+//    self.searchBar = [[UITextField alloc] init];
+//    self.searchBar.placeholder = [NSString stringWithFormat:@"Search"];
+//    self.searchBar.frame = CGRectMake(0.5*header.frame.size.width/10, 5, 9*header.frame.size.width/10, 25);
+//    self.searchBar.borderStyle = UITextBorderStyleRoundedRect;
+//    self.searchBar.backgroundColor = [UIColor clearColor];
+//    self.searchBar.textAlignment = NSTextAlignmentNatural;
+//    
+//    self.searchBar.delegate = self;
+//    [header addSubview:self.searchBar];
+//    return header;
+//}
+//
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -229,15 +249,5 @@
  }
  */
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
- {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

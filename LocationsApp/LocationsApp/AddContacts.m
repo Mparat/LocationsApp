@@ -79,7 +79,7 @@
 
 -(void)addNavBar
 {
-//    self.navigationController.title = @"Add Friends";
+    self.navigationItem.title = [NSString stringWithFormat:@"Add Friends"];
 }
 
 -(void)filterResults:(NSString *)searchTerm
