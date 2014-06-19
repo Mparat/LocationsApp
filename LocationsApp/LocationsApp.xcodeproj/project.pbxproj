@@ -15,7 +15,6 @@
 		144BA0BE194F68A600977673 /* AddContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0BD194F68A600977673 /* AddContacts.m */; };
 		144BA0C4194F80A000977673 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0C3194F80A000977673 /* SearchCell.m */; };
 		1482D1FD1950C88200B8F957 /* AddressBookTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1482D1FC1950C88200B8F957 /* AddressBookTVC.m */; };
-		1482D20519526B0600B8F957 /* SwipedCellController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1482D20419526B0600B8F957 /* SwipedCellController.m */; };
 		14AB33031942816400B8E20D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33021942816400B8E20D /* Foundation.framework */; };
 		14AB33051942816400B8E20D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33041942816400B8E20D /* CoreGraphics.framework */; };
 		14AB33071942816400B8E20D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33061942816400B8E20D /* UIKit.framework */; };
@@ -76,8 +75,6 @@
 		1482D1FB1950C88200B8F957 /* AddressBookTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookTVC.h; sourceTree = "<group>"; };
 		1482D1FC1950C88200B8F957 /* AddressBookTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBookTVC.m; sourceTree = "<group>"; };
 		1482D1FE1952486000B8F957 /* libPods-LocationsApp-MCSwipeTableViewCell.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-LocationsApp-MCSwipeTableViewCell.a"; path = "Pods/build/Debug-iphoneos/libPods-LocationsApp-MCSwipeTableViewCell.a"; sourceTree = "<group>"; };
-		1482D20319526B0600B8F957 /* SwipedCellController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipedCellController.h; sourceTree = "<group>"; };
-		1482D20419526B0600B8F957 /* SwipedCellController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipedCellController.m; sourceTree = "<group>"; };
 		14AB32FF1942816400B8E20D /* LocationsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14AB33021942816400B8E20D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		14AB33041942816400B8E20D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -270,14 +267,14 @@
 				14C6666419464A4800341F0D /* Login.m */,
 				14AB333A194281D400B8E20D /* HomepageTVC.h */,
 				14AB333B194281D500B8E20D /* HomepageTVC.m */,
+				144BA0BC194F68A600977673 /* AddContacts.h */,
+				144BA0BD194F68A600977673 /* AddContacts.m */,
 				14AB33451942ECAB00B8E20D /* MessageVC.h */,
 				14AB33461942ECAB00B8E20D /* MessageVC.m */,
 				14315C5A1949297E00378EA5 /* MapVC.h */,
 				14315C5B1949297E00378EA5 /* MapVC.m */,
 				1482D1FB1950C88200B8F957 /* AddressBookTVC.h */,
 				1482D1FC1950C88200B8F957 /* AddressBookTVC.m */,
-				144BA0BC194F68A600977673 /* AddContacts.h */,
-				144BA0BD194F68A600977673 /* AddContacts.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -302,8 +299,6 @@
 				14C666791947A60A00341F0D /* LocationManagerController.m */,
 				14315C60194A12D700378EA5 /* ParseController.h */,
 				14315C61194A12D700378EA5 /* ParseController.m */,
-				1482D20319526B0600B8F957 /* SwipedCellController.h */,
-				1482D20419526B0600B8F957 /* SwipedCellController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -453,7 +448,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
-				1482D20519526B0600B8F957 /* SwipedCellController.m in Sources */,
 				14C66668194669FF00341F0D /* User.m in Sources */,
 				14315C4D19490A0400378EA5 /* Contact.m in Sources */,
 				144BA0C4194F80A000977673 /* SearchCell.m in Sources */,

@@ -59,7 +59,7 @@
     
     UISwipeGestureRecognizer *swipeRecognizerLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(addFriends)];
     [swipeRecognizerLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self.view addGestureRecognizer:swipeRecognizerLeft];
+//    [self.view addGestureRecognizer:swipeRecognizerLeft];
     
     [self.tableView reloadData];
 }

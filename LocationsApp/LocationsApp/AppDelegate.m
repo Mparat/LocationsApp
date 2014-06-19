@@ -13,6 +13,7 @@
 #import "MessageVC.h"
 #import "Login.h"
 #import "AddressBookTVC.h"
+#import "AddContacts.h"
 #import "LocationManagerController.h"
 #import "ParseController.h"
 
@@ -150,12 +151,17 @@
     [homepage setParseController:self.parseController];
     homepage.signedInUser = self.parseController.signedInUser;
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
-    
-    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
-    addressBook.locationManager = self.locationManager;
-    addressBook.parseController = self.parseController;
-    addressBook.signedInUser = self.parseController.signedInUser;
-    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addressBook];
+
+    AddContacts *addContacts = [[AddContacts alloc] init];
+    addContacts.locationManager = self.locationManager;
+    addContacts.parseController = self.parseController;
+    addContacts.signedInUser = self.parseController.signedInUser;
+    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addContacts];
+//    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
+//    addressBook.locationManager = self.locationManager;
+//    addressBook.parseController = self.parseController;
+//    addressBook.signedInUser = self.parseController.signedInUser;
+//    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addressBook];
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     
@@ -163,10 +169,10 @@
     tabBarController.viewControllers = controllers;
     
     UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:nil tag:0];
-    UITabBarItem *addresses = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:nil tag:1];
+    UITabBarItem *addNew = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:nil tag:1];
     
     tabBarController.tabBarItem = chats;
-    tabBarController.tabBarItem = addresses;
+    tabBarController.tabBarItem = addNew;
     
     [self.window setRootViewController:tabBarController];
 }

@@ -9,16 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "User.h"
 #import "MCSwipeTableViewCell.h"
-#import "SwipedCellController.h"
 
-@interface HomepageChatCell : MCSwipeTableViewCell <SwipedCellControllerDelegate>
+@interface HomepageChatCell : MCSwipeTableViewCell
 {
     UIButton *ask;
 }
 
-@property (nonatomic, strong) SwipedCellController *swipedCellController;
 @property (nonatomic, strong) User *user;
--(void)placeSubviewsForCellWithLocation:(NSString *)text Date:(NSDate *)date;
+-(void)placeSubviewsForCellWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date;
+
 
 //@property (nonatomic, strong) Contact *contact;
 

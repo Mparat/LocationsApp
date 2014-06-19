@@ -58,7 +58,12 @@
     [self addNavBar];
     [self addSearchBar];
     
+    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    [self.signedInUser save];
+    
     self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.username];
+    
+    [self.tableView reloadData];
 
 //    FBRequest *request = [FBRequest requestForMe];
 //    
@@ -87,7 +92,12 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden:NO];
+    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    [self.signedInUser save];
+    
+    [self.tableView reloadData];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -134,35 +144,39 @@
     }];
 }
 
-#pragma mark - Text field delegates
+#pragma mark - Search Bar Delegate controls
+-(void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
+{
+    UIButton *cancelButton;
+    UIView *topView = self.searchBar.subviews[0];
+    for (UIView *subView in topView.subviews) {
+        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
+            cancelButton = (UIButton*)subView;
+        }
+    }
+    if (cancelButton) {
+        [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
+    }
+}
 
-//-(BOOL)textFieldShouldReturn:(UITextField *)textField
-//{
-//    [textField resignFirstResponder];
-//    return YES;
-//}
-//
-//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    return 30;
-//}
-//
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-//    header.backgroundColor = [UIColor whiteColor];
-//    self.searchBar = [[UITextField alloc] init];
-//    self.searchBar.placeholder = [NSString stringWithFormat:@"Search"];
-//    self.searchBar.frame = CGRectMake(0.5*header.frame.size.width/10, 5, 9*header.frame.size.width/10, 25);
-//    self.searchBar.borderStyle = UITextBorderStyleRoundedRect;
-//    self.searchBar.backgroundColor = [UIColor clearColor];
-//    self.searchBar.textAlignment = NSTextAlignmentNatural;
-//    
-//    self.searchBar.delegate = self;
-//    [header addSubview:self.searchBar];
-//    return header;
-//}
-//
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterResults:searchString];
+    return YES;
+}
+
+-(void)filterResults:(NSString *)searchTerm
+{
+    [self.searchResults removeAllObjects];
+    [self.tableView reloadData];
+
+    NSArray *array = [self.signedInUser objectForKey:@"friendsArray"];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] %@", searchTerm];
+
+    [self.searchResults addObjectsFromArray:[array filteredArrayUsingPredicate:predicate]];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -172,7 +186,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    if (tableView == self.tableView) {
+        return [[self.signedInUser objectForKey:@"friendsArray"] count];
+    }
+    else{
+        return [self.searchResults count];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -184,20 +203,97 @@
 {
     HomepageChatCell *cell = [tableView dequeueReusableCellWithIdentifier:chatCell];
     cell.delegate = self;
-
-    [self configureCell:cell atIndexPath:indexPath];
+    cell = nil;
+    if (cell == nil) {
+        cell = [[HomepageChatCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:chatCell];
+    }
+    [self configureCell:cell atIndexPath:indexPath inTableView:tableView];
     return cell;
 }
 
--(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path
+-(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path inTableView:(UITableView *)tableView
 {
 //    CLLocation *current = [self.locationManager fetchCurrentLocation];
 //    NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
 //    NSDate *date = current.timestamp;
-    [cell placeSubviewsForCellWithLocation:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
+    
+    NSString *name = [[NSString alloc] init];
+    if (tableView == self.tableView) {
+        name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
+    }
+    else{
+        name = [self.searchResults objectAtIndex:path.row];
+    }
+
+    [(HomepageChatCell *)cell placeSubviewsForCellWithName:name Location:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
+    [self configureSwipeViews:cell];
     self.recipient = [[User alloc] init];
     self.recipient.name = cell.user.name;
 }
+
+-(void)configureSwipeViews:(HomepageChatCell *)cell
+{
+    UILabel *askText = [[UILabel alloc] init];
+    UIView *askView = [[UIView alloc] init];
+    askText.text = @"Ask";
+    askText.textColor = [UIColor blackColor];
+    [askView addSubview:askText];
+    UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
+    
+    
+    UILabel *tellText = [[UILabel alloc] init];
+    UIView *tellView = [[UIView alloc] init];
+    tellText.text = @"Ask";
+    tellText.textColor = [UIColor blackColor];
+    [tellView addSubview:tellText];
+    UIColor *yellowColor = [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0];
+    
+    
+    UILabel *mapText = [[UILabel alloc] init];
+    UIView *mapView = [[UIView alloc] init];
+    mapText.text = @"Ask";
+    mapText.textColor = [UIColor blackColor];
+    [mapView addSubview:mapText];
+    UIColor *redColor = [UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0];
+    //    UIColor *brownColor = [UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0];
+    
+    [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"Ask\" cell");
+        [cell swipeToOriginWithCompletion:^{
+            //
+        }];
+    }];
+    
+    [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState2 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"tell\" cell");
+        [cell swipeToOriginWithCompletion:^{
+            //
+        }];
+    }];
+    
+    [cell setSwipeGestureWithView:mapView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"map\" cell");
+        MapVC *mapPage = [[MapVC alloc] init];
+        mapPage.locationManager = self.locationManager;
+        mapPage.parseController = self.parseController;
+        mapPage.signedInUser = self.signedInUser;
+        [self.navigationController pushViewController:mapPage animated:YES];
+        [cell swipeToOriginWithCompletion:^{
+            //
+        }];
+    }];
+    
+    cell.firstTrigger = 0.1;
+    cell.secondTrigger = 0.6;    
+}
+
+- (UIView *)viewWithImageName:(NSString *)imageName {
+    UIImage *image = [UIImage imageNamed:imageName];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    imageView.contentMode = UIViewContentModeCenter;
+    return imageView;
+}
+
 
 - (void) placemarkUpdated:(NSString *)location forIndexPath:(NSIndexPath *)path
 {
@@ -233,27 +329,27 @@
     
 }
 
-/*
+
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
  {
- // Return NO if you do not want the specified item to be editable.
- return YES;
+     // Return NO if you do not want the specified item to be editable.
+     return YES;
  }
- */
 
-/*
+
+
  // Override to support editing the table view.
  - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
  {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- } else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+     if (editingStyle == UITableViewCellEditingStyleDelete) {
+         // Delete the row from the data source
+         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+     }
  }
- }
- */
+
 
 /*
  // Override to support rearranging the table view.

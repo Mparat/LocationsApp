@@ -69,10 +69,10 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self.tabBarController.tabBar setHidden:YES];
+    [self.tabBarController.tabBar setHidden:NO];
     UISwipeGestureRecognizer *swipeRecognizerRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toAddressBook)];
     [swipeRecognizerRight setDirection:UISwipeGestureRecognizerDirectionRight];
-    [self.view addGestureRecognizer:swipeRecognizerRight];
+//    [self.view addGestureRecognizer:swipeRecognizerRight];
 
 }
 
@@ -105,6 +105,9 @@
     [query whereKey:@"username" containsString:searchTerm];
 
     NSArray *results = [query findObjects];
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//        //
+//    }];
 
 //    NSLog(@"%@", results);
 //    NSLog(@"%lu",(unsigned long)[results count]);
