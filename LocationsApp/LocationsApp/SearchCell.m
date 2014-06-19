@@ -11,6 +11,7 @@
 @interface SearchCell ()
 
 @property (nonatomic, strong) UILabel *name;
+@property (nonatomic, strong) UILabel *actualName;
 
 @end
 
@@ -19,6 +20,7 @@
 
 @synthesize signedInUser = _signedInUser;
 @synthesize name = _name;
+@synthesize actualName = _actualName;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -62,12 +64,9 @@
     [self addSubview:self.name];
     
     self.username = self.name.text;
-//    NSArray *temp = [self.signedInUser objectForKey:@"friendsArray"];
-//    for (int i = 0; i < [temp count]; i++) {
-//        if (self.username == [temp objectAtIndex:i]) {
-//            self.accessoryType = UITableViewCellAccessoryCheckmark;
-//        }
-//    }
+
+
+
 }
 
 @end

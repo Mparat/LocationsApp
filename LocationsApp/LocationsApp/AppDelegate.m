@@ -59,6 +59,11 @@
     [parseLoginVC setSignUpController:parseSignupVC];
     [parseLoginVC setFields:PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsSignUpButton | PFLogInFieldsUsernameAndPassword];
     
+    [parseSignupVC setFields:PFSignUpFieldsDefault | PFSignUpFieldsAdditional];
+    [((PFSignUpView *)parseSignupVC.view).additionalField setPlaceholder:@"Name"];
+//    PFSignUpView *signupView = [[PFSignUpView alloc] initWithFields:PFSignUpFieldsDefault | PFSignUpFieldsAdditional];
+//    [signupView.additionalField setPlaceholder:@"Name"];
+    
     return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
 }
 

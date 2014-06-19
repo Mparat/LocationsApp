@@ -101,20 +101,17 @@
     [self.searchResults removeAllObjects];
     [self.tableView reloadData];
     PFQuery *query = [PFUser query];
-    [query whereKeyExists:@"username"];
-    [query whereKey:@"username" containsString:searchTerm];
+    [query whereKeyExists:@"username"]; // this is always goign to be true... so don't need to filter for this? All users will have a username and name
+    [query whereKey:@"username" hasPrefix:[searchTerm lowercaseString]];
+//    [query whereKey:@"additional" containsString:searchTerm];
 
     NSArray *results = [query findObjects];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        //
-//    }];
 
-//    NSLog(@"%@", results);
-//    NSLog(@"%lu",(unsigned long)[results count]);
-    
     [self.searchResults addObjectsFromArray:results];
+    
+    // if a search result's username is your username, then remove that search result (a PFUser) from the list.
     for (int i = 0; i < [self.searchResults count]; i++) {
-        if ([[[self.searchResults objectAtIndex:i] objectForKey:@"username"] isEqualToString:self.signedInUser.username]) {
+        if ([[[self.searchResults objectAtIndex:i] username] isEqualToString:self.signedInUser.username]) {
             [self.searchResults removeObject:[self.searchResults objectAtIndex:i]];
         }
     }
@@ -176,11 +173,17 @@
 
 -(void)configureCell:(SearchCell *)cell atIndexPath:(NSIndexPath *)path
 {
-    NSString *name = [[self.searchResults objectAtIndex:path.row] objectForKey:@"username"];
+    // configure all  cells with Name
+    NSString *name = [[self.searchResults objectAtIndex:path.row] objectForKey:@"additional"];
     [(SearchCell *)cell placeSubviewsForCell:name];
     NSArray *temp = [self.signedInUser objectForKey:@"friendsArray"];
+    
+    // check the current username result w/ all the usernames in your friendsArray
+    // if the cell in question is a user that you are already friends with, then marked them w/ a checmark.
     for (int i = 0; i < [temp count]; i++) {
-        if ([name isEqualToString:[temp objectAtIndex:i]]) {
+        NSString *searchUsername = [[self.searchResults objectAtIndex:path.row] username];
+        NSString *friendUsername = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:i];
+        if ([searchUsername isEqualToString:friendUsername]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
     }
@@ -191,12 +194,12 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        [self.signedInUser addObject:((SearchCell *)cell).username forKey:@"friendsArray"];
+        [self.signedInUser addObject:[[self.searchResults objectAtIndex:indexPath.row] username] forKey:@"friendsArray"];
         [self.signedInUser save];
     }
     else{
         cell.accessoryType = UITableViewCellAccessoryNone;
-        [self.signedInUser removeObject:((SearchCell *)cell).username forKey:@"friendsArray"];
+        [self.signedInUser removeObject:[[self.searchResults objectAtIndex:indexPath.row] username] forKey:@"friendsArray"];
         [self.signedInUser save];
     }
 }

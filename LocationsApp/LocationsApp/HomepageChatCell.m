@@ -68,9 +68,13 @@
 -(void)setContactInfoWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date
 {
     // picture: 50 x 50, 10 buffer all around
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"username" equalTo:name];
+    PFUser *recipient = (PFUser *)[query getFirstObject];
+    NSString *actualName = [recipient objectForKey:@"additional"];
     
     self.username = [[UILabel alloc] init];
-    self.username.text = name;
+    self.username.text = actualName;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.username.font, NSFontAttributeName, nil];
     self.username.frame = CGRectMake(self.username.frame.origin.x,
                                      self.username.frame.origin.y,

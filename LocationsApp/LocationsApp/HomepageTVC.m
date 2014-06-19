@@ -58,10 +58,10 @@
     [self addNavBar];
     [self addSearchBar];
     
-    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)]; // friendsArray is an array of usernames, only
     [self.signedInUser save];
     
-    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", self.signedInUser.username];
+    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", [self.signedInUser objectForKey:@"additional"]];
     
     [self.tableView reloadData];
 
@@ -170,10 +170,64 @@
     [self.searchResults removeAllObjects];
     [self.tableView reloadData];
 
+    // I don't think you can create a new PFUser field that includes the friends' actual Names, because they are not unique so you wouldn't know what usernames they correspond with
+//    NSMutableArray *usernamesArray = [self.signedInUser objectForKey:@"friendsArray"]; //array with user's friends usernames (to search through) because these are all the people in the homepageTVC.
+//    NSMutableArray *namesArray = [[NSMutableArray alloc] init]; // array with the user's friends (usernames from friendsArray turned into PFusers)
+//    for (int i = 0; i < [usernamesArray count]; i++) {
+//        PFQuery *query = [PFUser query];
+//        [query whereKey:@"username" equalTo:[usernamesArray objectAtIndex:i]];
+//        PFUser *recipient = (PFUser *)[query getFirstObject];
+//        [namesArray addObject:[recipient objectForKey:@"additional"]]; // array of friends Names
+//    }
+//    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] %@", searchTerm];
+//    [usernamesArray filterUsingPredicate:predicate]; // filtered usernames
+//    [namesArray filterUsingPredicate:predicate]; // filtered Names
+//    
+//    NSMutableArray *friends1 = [[NSMutableArray alloc] init];
+//    for (int i = 0; i < [usernamesArray count]; i++) {
+//        PFQuery *query = [PFUser query];
+//        [query whereKey:@"username" equalTo:[usernamesArray objectAtIndex:i]]; // filtered usernamesArray
+//        PFUser *recipient = (PFUser *)[query getFirstObject];
+//        [friends1 addObject:recipient]; // array of friends
+//    }
+//    
+//    NSMutableArray *friends2 = [[NSMutableArray alloc] init];
+//    for (int i = 0; i < [namesArray count]; i++) {
+//        PFQuery *query = [PFUser query];
+//        [query whereKey:@"additional" equalTo:[namesArray objectAtIndex:i]]; // filtered NamesArray
+//        PFUser *recipient = (PFUser *)[query getFirstObject];
+//        [friends2 addObject:recipient]; // array of friends
+//    }
+//    
+//    if ([friends1 count] < [friends2 count]) {
+//        [self.searchResults addObjectsFromArray:friends1];
+//        for (int i = 0; i < [friends1 count]; i++) {
+//            for (int j = 0; j < [friends2 count]; j++) {
+//                if (![[[friends1 objectAtIndex:i] username] isEqualToString:[[friends2 objectAtIndex:j] username]]) {
+//                    [self.searchResults addObject:[friends2 objectAtIndex:j]]; // add the extra from friends2 that don't overlap
+//                }
+//            }
+//        }
+//    }
+//    else {
+//        [self.searchResults addObjectsFromArray:friends2];
+//        for (int i = 0; i < [friends1 count]; i++) {
+//            for (int j = 0; j < [friends2 count]; j++) {
+//                if (![[[friends1 objectAtIndex:i] username] isEqualToString:[[friends2 objectAtIndex:j] username]]) {
+//                    [self.searchResults addObject:[friends1 objectAtIndex:i]]; // add the extra from friends1 that don't overlap
+//                }
+//            }
+//        }
+//    }
+    
+    // self.searchResults contains the PFUsers that match the searchTerm by username or Name
+    
+
     NSArray *array = [self.signedInUser objectForKey:@"friendsArray"];
-
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] %@", searchTerm];
-
+    
     [self.searchResults addObjectsFromArray:[array filteredArrayUsingPredicate:predicate]];
 }
 
@@ -224,11 +278,16 @@
     else{
         name = [self.searchResults objectAtIndex:path.row];
     }
-
+    
+    // find the name corresponding to the username that is in the friendsArray
+//    PFQuery *query = [PFUser query];
+//    [query whereKey:@"username" equalTo:name];
+//    PFUser *recipient = (PFUser *)[query getFirstObject];
+//    NSString *actualName = [recipient objectForKey:@"additional"];
+    
     [(HomepageChatCell *)cell placeSubviewsForCellWithName:name Location:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
     [self configureSwipeViews:cell];
-    self.recipient = [[User alloc] init];
-    self.recipient.name = cell.user.name;
+
 }
 
 -(void)configureSwipeViews:(HomepageChatCell *)cell
@@ -278,11 +337,11 @@
         mapPage.parseController = self.parseController;
         mapPage.signedInUser = self.signedInUser;
         [self.navigationController pushViewController:mapPage animated:YES];
-        [cell swipeToOriginWithCompletion:^{
-            //
-        }];
     }];
     
+    [cell swipeToOriginWithCompletion:^{
+        //
+    }];
     cell.firstTrigger = 0.1;
     cell.secondTrigger = 0.6;    
 }
@@ -309,24 +368,6 @@
     messageVC.signedInUser = self.signedInUser;
     messageVC = [messageVC init];
     [self.navigationController pushViewController:messageVC animated:YES];
-}
-
-
-#pragma mark - MCSwipeTableViewCellDelegate
-
-// Called when the user starts swiping the cell.
-- (void)swipeTableViewCellDidStartSwiping:(MCSwipeTableViewCell *)cell{
-    
-}
-
-// Called when the user ends swiping the cell.
-- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell{
-    
-}
-
-// Called during a swipe.
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipeWithPercentage:(CGFloat)percentage{
-    
 }
 
 
@@ -366,6 +407,26 @@
  return YES;
  }
  */
+
+
+
+#pragma mark - MCSwipeTableViewCellDelegate
+
+// Called when the user starts swiping the cell.
+- (void)swipeTableViewCellDidStartSwiping:(MCSwipeTableViewCell *)cell{
+    
+}
+
+// Called when the user ends swiping the cell.
+- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell{
+    
+}
+
+// Called during a swipe.
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipeWithPercentage:(CGFloat)percentage{
+    
+}
+
 
 
 @end

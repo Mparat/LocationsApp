@@ -21,12 +21,7 @@
 @property (nonatomic, strong) ParseController *parseController;
 
 @property (nonatomic, strong) PFUser *signedInUser;
-//@property (nonatomic, strong) UITextField *searchBar;
-
-@property (nonatomic, strong) Contact *recipient;
-
-//@property (nonatomic, strong) MCSwipeTableViewCell *swipeCell;
-
+@property (nonatomic, strong) PFUser *recipient;
 
 @property BOOL loggedIn;
 
