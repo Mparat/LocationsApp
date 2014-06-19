@@ -12,6 +12,8 @@
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
+#import "MCSwipeTableViewCell.h"
+
 
 @interface HomepageTVC : UITableViewController <UITextFieldDelegate, LocationManagerControllerDelegate, ParseControllerDelegate, UITableViewDataSource>
 
@@ -22,6 +24,8 @@
 //@property (nonatomic, strong) UITextField *searchBar;
 
 @property (nonatomic, strong) Contact *recipient;
+
+//@property (nonatomic, strong) MCSwipeTableViewCell *swipeCell;
 
 
 @property BOOL loggedIn;

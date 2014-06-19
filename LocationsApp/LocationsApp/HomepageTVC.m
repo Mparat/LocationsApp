@@ -17,8 +17,10 @@
 #import "AppDelegate.h"
 #import "AddressBookTVC.h"
 #import "AddContacts.h"
+#import "MCSwipeTableViewCell.h"
+#import "MapVC.h"
 
-@interface HomepageTVC () <UISearchDisplayDelegate, UISearchBarDelegate>
+@interface HomepageTVC () <UISearchDisplayDelegate, UISearchBarDelegate, MCSwipeTableViewCellDelegate>
 
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UISearchDisplayController *searchController;
@@ -32,7 +34,7 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize recipient = _recipient;
-
+//@synthesize swipeCell = _swipeCell;
 
 @synthesize loggedIn;
 #define chatCell @"chatCell"
@@ -181,6 +183,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HomepageChatCell *cell = [tableView dequeueReusableCellWithIdentifier:chatCell];
+    cell.delegate = self;
+
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
@@ -209,6 +213,24 @@
     messageVC.signedInUser = self.signedInUser;
     messageVC = [messageVC init];
     [self.navigationController pushViewController:messageVC animated:YES];
+}
+
+
+#pragma mark - MCSwipeTableViewCellDelegate
+
+// Called when the user starts swiping the cell.
+- (void)swipeTableViewCellDidStartSwiping:(MCSwipeTableViewCell *)cell{
+    
+}
+
+// Called when the user ends swiping the cell.
+- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell{
+    
+}
+
+// Called during a swipe.
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipeWithPercentage:(CGFloat)percentage{
+    
 }
 
 /*
