@@ -100,14 +100,31 @@
 {
     [self.searchResults removeAllObjects];
     [self.tableView reloadData];
+    
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username BEGINSWITH[cd] %@", searchTerm];
+//    PFQuery *query = [PFQuery queryWithClassName:@"_User" predicate:predicate];
+
     PFQuery *query = [PFUser query];
     [query whereKeyExists:@"username"]; // this is always goign to be true... so don't need to filter for this? All users will have a username and name
-    [query whereKey:@"username" hasPrefix:[searchTerm lowercaseString]];
-//    [query whereKey:@"additional" containsString:searchTerm];
+    [query whereKey:@"username" hasPrefix:searchTerm];
+
+    
+    PFQuery *query2 = [PFUser query];
+    [query2 whereKeyExists:@"additional"];
+    [query2 whereKey:@"additional" hasPrefix:searchTerm];
 
     NSArray *results = [query findObjects];
-
+    NSArray *results2 = [query2 findObjects];
     [self.searchResults addObjectsFromArray:results];
+    [self.searchResults addObjectsFromArray:results2];
+    
+    for (int i = 0; i < [results count]; i++) {
+        for (int j = 0; j < [results2 count]; j++) {
+            if ([[[results objectAtIndex:i] objectForKey:@"username"] isEqualToString:[[results2 objectAtIndex:j] objectForKey:@"username"]]) {
+                [self.searchResults removeObject:[results objectAtIndex:i]];
+            }
+        }
+    }
     
     // if a search result's username is your username, then remove that search result (a PFUser) from the list.
     for (int i = 0; i < [self.searchResults count]; i++) {
