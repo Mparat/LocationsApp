@@ -127,6 +127,7 @@
     PFQuery *query = [PFUser query];
     [query whereKeyExists:@"username"]; // this is always goign to be true... so don't need to filter for this? All users will have a username and name
     [query whereKey:@"username" hasPrefix:searchTerm];
+    [query whereKey:@"username" notEqualTo:self.signedInUser.username]; // don't include the signed In User in the search
 
     
     PFQuery *query2 = [PFUser query];
@@ -143,13 +144,6 @@
             if ([[[results objectAtIndex:i] objectForKey:@"username"] isEqualToString:[[results2 objectAtIndex:j] objectForKey:@"username"]]) {
                 [self.searchResults removeObject:[results objectAtIndex:i]];
             }
-        }
-    }
-    
-    // if a search result's username is your username, then remove that search result (a PFUser) from the list.
-    for (int i = 0; i < [self.searchResults count]; i++) {
-        if ([[[self.searchResults objectAtIndex:i] username] isEqualToString:self.signedInUser.username]) {
-            [self.searchResults removeObject:[self.searchResults objectAtIndex:i]];
         }
     }
 }
