@@ -84,7 +84,27 @@
 
 -(void)addNavBar
 {
+    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [logout setTitle:@"Logout" forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
+    self.navigationItem.leftBarButtonItem = logoutButton;
+
     self.navigationItem.title = [NSString stringWithFormat:@"Add Friends"];
+}
+
+-(void)logoutSuccessful
+{
+    [PFUser logOut];
+    UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] navigationController];
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+    [self.navigationController presentViewController:controller animated:YES completion:^{
+        //
+    }];
 }
 
 -(void)toAddressBook
