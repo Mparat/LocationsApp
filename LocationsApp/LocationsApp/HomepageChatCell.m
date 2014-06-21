@@ -45,19 +45,7 @@
 
 -(void)placeSubviewsForCellWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date
 {
-    [self addAskButton];
     [self setContactInfoWithName:name Location:text Date:date];
-}
-
--(void)addAskButton
-{
-    ask = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    // set cell height to be 70;
-    // individual chats..
-    ask.frame = CGRectMake(self.frame.size.width - 80, 15, 70, 40);
-    [ask setTitle:@"Ask" forState:UIControlStateNormal];
-    [self addSubview:ask];
-    [ask addTarget:self action:@selector(askForLocation) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)askForLocation

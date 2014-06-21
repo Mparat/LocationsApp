@@ -16,5 +16,6 @@
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) PFUser *signedInUser;
+@property (nonatomic, strong) PFUser *recipient;
 
 @end

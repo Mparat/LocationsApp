@@ -10,7 +10,7 @@
 #import "User.h"
 #import "MCSwipeTableViewCell.h"
 
-@interface HomepageChatCell : MCSwipeTableViewCell
+@interface HomepageChatCell : MCSwipeTableViewCell 
 {
     UIButton *ask;
 }

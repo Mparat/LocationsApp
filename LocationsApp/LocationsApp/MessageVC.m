@@ -41,6 +41,7 @@
     [super viewDidLoad];
     [self initializeTextField];
     [self addNavBarButton];
+//    [self.view sendSubviewToBack:[self.locationManager displayMap:self.view]];
 }
 
 
@@ -59,6 +60,14 @@
 
 -(void) addNavBarButton
 {
+    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [back setTitle:@"<" forState:UIControlStateNormal];
+    [back setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [back addTarget:self action:@selector(backToHomepage) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:back];
+    self.navigationItem.leftBarButtonItem = backButton;
+
     UIButton *viewMap = [[UIButton alloc] initWithFrame:CGRectMake(8*self.view.frame.size.width/10, 5, 2*self.view.frame.size.width/10, 20)];
     [viewMap setTitle:@"Map" forState:UIControlStateNormal];
     [viewMap setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
@@ -66,9 +75,24 @@
 
     UIBarButtonItem *viewMapButton = [[UIBarButtonItem alloc] initWithCustomView:viewMap];
     self.navigationItem.rightBarButtonItem = viewMapButton;
-    self.navigationItem.title= self.recipient.name;
+    self.navigationItem.title = [NSString stringWithFormat:@"%@", [self.recipient objectForKey:@"additional"]];
+
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0 green:205.0/255.0 blue:6.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+
 }
 
+-(void)backToHomepage
+{
+    HomepageTVC *homepage = [[HomepageTVC alloc] init];
+    homepage.locationManager = self.locationManager;
+    homepage.parseController = self.parseController;
+    homepage.signedInUser = self.parseController.signedInUser;
+
+    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:homepage] animated:YES completion:^{
+        //
+    }];
+}
 
 -(void)viewMap
 {
@@ -76,6 +100,10 @@
     mapView.locationManager = self.locationManager;
     mapView.parseController = self.parseController;
     mapView.signedInUser = self.signedInUser;
+    mapView.recipient = self.recipient;
+//    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:mapView] animated:YES completion:^{
+//        //
+//    }];
     [self.navigationController pushViewController:mapView animated:YES];
 }
 

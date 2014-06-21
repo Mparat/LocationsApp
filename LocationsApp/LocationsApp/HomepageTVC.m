@@ -48,6 +48,7 @@
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -60,8 +61,6 @@
     
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)]; // friendsArray is an array of usernames, only
     [self.signedInUser save];
-    
-    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", [self.signedInUser objectForKey:@"additional"]];
     
     [self.tableView reloadData];
 
@@ -109,11 +108,16 @@
 {
     UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
     [logout setTitle:@"Logout" forState:UIControlStateNormal];
-    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
     self.navigationItem.leftBarButtonItem = logoutButton;
+    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", [self.signedInUser objectForKey:@"additional"]];
+
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:68.0/255.0 green:212.0/255.0 blue:103.0/255.0 alpha:1.0];
+//    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:10.0]};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
 
 -(void)addSearchBar
@@ -296,9 +300,11 @@
         [query whereKey:@"username" equalTo:name];
         PFUser *recipient = (PFUser *)[query getFirstObject];
         name = [recipient objectForKey:@"additional"];
+        self.recipient = recipient;
     }
     else{
         name = [[self.searchResults objectAtIndex:path.row] objectForKey:@"additional"];
+        self.recipient = [self.searchResults objectAtIndex:path.row];
     }
     
     // find the name corresponding to the username that is in the friendsArray
@@ -358,13 +364,14 @@
         mapPage.locationManager = self.locationManager;
         mapPage.parseController = self.parseController;
         mapPage.signedInUser = self.signedInUser;
+        mapPage.recipient = self.recipient;
         [self.navigationController pushViewController:mapPage animated:YES];
     }];
     
     [cell swipeToOriginWithCompletion:^{
         //
     }];
-    cell.firstTrigger = 0.1;
+    cell.firstTrigger = 0.01;
     cell.secondTrigger = 0.6;    
 }
 
@@ -386,10 +393,14 @@
     MessageVC *messageVC = [MessageVC alloc];
     messageVC.locationManager = self.locationManager;
     messageVC.parseController = self.parseController;
-    messageVC.recipient = self.recipient;
     messageVC.signedInUser = self.signedInUser;
+    messageVC.recipient = self.recipient;
     messageVC = [messageVC init];
-    [self.navigationController pushViewController:messageVC animated:YES];
+    messageVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:messageVC] animated:YES completion:^{
+        //
+    }];
+//    [self.navigationController pushViewController:messageVC animated:YES];
 }
 
 

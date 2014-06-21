@@ -59,12 +59,34 @@
     [parseLoginVC setSignUpController:parseSignupVC];
     [parseLoginVC setFields:PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsSignUpButton | PFLogInFieldsUsernameAndPassword];
     
-    [parseSignupVC setFields:PFSignUpFieldsDefault | PFSignUpFieldsAdditional];
-    [((PFSignUpView *)parseSignupVC.view).additionalField setPlaceholder:@"Name"];
-//    PFSignUpView *signupView = [[PFSignUpView alloc] initWithFields:PFSignUpFieldsDefault | PFSignUpFieldsAdditional];
-//    [signupView.additionalField setPlaceholder:@"Name"];
-    
+    [parseSignupVC setFields:PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsAdditional | PFSignUpFieldsDismissButton | PFSignUpFieldsSignUpButton];
+
+    [self configureLoginView:parseLoginVC];
+    [self configureSignupView:parseSignupVC];
     return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
+}
+
+-(void)configureLoginView:(PFLogInViewController *)loginViewController
+{
+    PFLogInView *view = loginViewController.logInView;
+    view.backgroundColor = [UIColor whiteColor];
+    view.usernameField.backgroundColor = [UIColor grayColor];
+    view.passwordField.backgroundColor = [UIColor grayColor];
+    view.usernameField.borderStyle = UITextBorderStyleRoundedRect;
+    view.passwordField.borderStyle = UITextBorderStyleRoundedRect;
+    view.passwordField.textColor = [UIColor whiteColor];
+    view.usernameField.textColor = [UIColor whiteColor];
+    
+    UILabel *title = [[UILabel alloc] init];
+    title.text = @"Title";
+    [title sizeToFit];
+    view.logo = title;
+}
+
+-(void)configureSignupView:(PFSignUpViewController *)signupViewController
+{
+    PFSignUpView *view = signupViewController.signUpView;
+    [view.additionalField setPlaceholder:@"Name"];
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -162,11 +184,6 @@
     addContacts.parseController = self.parseController;
     addContacts.signedInUser = self.parseController.signedInUser;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addContacts];
-//    AddressBookTVC *addressBook = [[AddressBookTVC alloc] init];
-//    addressBook.locationManager = self.locationManager;
-//    addressBook.parseController = self.parseController;
-//    addressBook.signedInUser = self.parseController.signedInUser;
-//    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addressBook];
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     

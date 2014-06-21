@@ -86,13 +86,17 @@
 {
     UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
     [logout setTitle:@"Logout" forState:UIControlStateNormal];
-    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
     self.navigationItem.leftBarButtonItem = logoutButton;
 
     self.navigationItem.title = [NSString stringWithFormat:@"Add Friends"];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:210.0/255.0 green:75.0/255.0 blue:104.0/255.0 alpha:1.0];
+//    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:30]};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+
 }
 
 -(void)logoutSuccessful

@@ -14,6 +14,7 @@
 		14315C62194A12D700378EA5 /* ParseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C61194A12D700378EA5 /* ParseController.m */; };
 		144BA0BE194F68A600977673 /* AddContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0BD194F68A600977673 /* AddContacts.m */; };
 		144BA0C4194F80A000977673 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0C3194F80A000977673 /* SearchCell.m */; };
+		144F7B4C1954AC830038122E /* Homepage.m in Sources */ = {isa = PBXBuildFile; fileRef = 144F7B4B1954AC830038122E /* Homepage.m */; };
 		1482D1FD1950C88200B8F957 /* AddressBookTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1482D1FC1950C88200B8F957 /* AddressBookTVC.m */; };
 		14AB33031942816400B8E20D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33021942816400B8E20D /* Foundation.framework */; };
 		14AB33051942816400B8E20D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33041942816400B8E20D /* CoreGraphics.framework */; };
@@ -72,6 +73,8 @@
 		144BA0BD194F68A600977673 /* AddContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContacts.m; sourceTree = "<group>"; };
 		144BA0C2194F80A000977673 /* SearchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
 		144BA0C3194F80A000977673 /* SearchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
+		144F7B4A1954AC830038122E /* Homepage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Homepage.h; sourceTree = "<group>"; };
+		144F7B4B1954AC830038122E /* Homepage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Homepage.m; sourceTree = "<group>"; };
 		1482D1FB1950C88200B8F957 /* AddressBookTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookTVC.h; sourceTree = "<group>"; };
 		1482D1FC1950C88200B8F957 /* AddressBookTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBookTVC.m; sourceTree = "<group>"; };
 		1482D1FE1952486000B8F957 /* libPods-LocationsApp-MCSwipeTableViewCell.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-LocationsApp-MCSwipeTableViewCell.a"; path = "Pods/build/Debug-iphoneos/libPods-LocationsApp-MCSwipeTableViewCell.a"; sourceTree = "<group>"; };
@@ -275,6 +278,8 @@
 				14315C5B1949297E00378EA5 /* MapVC.m */,
 				1482D1FB1950C88200B8F957 /* AddressBookTVC.h */,
 				1482D1FC1950C88200B8F957 /* AddressBookTVC.m */,
+				144F7B4A1954AC830038122E /* Homepage.h */,
+				144F7B4B1954AC830038122E /* Homepage.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -458,6 +463,7 @@
 				14C666771946B8C300341F0D /* FBFriendListTableViewController.m in Sources */,
 				14C6667A1947A60A00341F0D /* LocationManagerController.m in Sources */,
 				1482D1FD1950C88200B8F957 /* AddressBookTVC.m in Sources */,
+				144F7B4C1954AC830038122E /* Homepage.m in Sources */,
 				14315C5C1949297E00378EA5 /* MapVC.m in Sources */,
 				14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */,
 				14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */,
