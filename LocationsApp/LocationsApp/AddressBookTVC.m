@@ -25,6 +25,8 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
+@synthesize addressBook = _addressBook;
+@synthesize contacts = _contacts;
 
 #define searchCell @"searchCell"
 
@@ -44,10 +46,9 @@
     [self addSearchBar];
 
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
-    
-    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    [self.signedInUser save];
-
+    [self getContacts];
+//    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+//    [self.signedInUser save];
     [self.tableView reloadData];
 }
 
@@ -70,11 +71,55 @@
     // Dispose of any resources that can be recreate
 }
 
+-(void)getContacts
+{
+    CFErrorRef error;
+    self.addressBook = ABAddressBookCreateWithOptions(NULL, &error);
+
+    __block BOOL accessGranted = NO;
+    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            @autoreleasepool {
+                // Write your code here...
+                // Fetch data from SQLite DB
+            }
+        });
+        
+        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
+            accessGranted = granted;
+            dispatch_semaphore_signal(sema);
+        });
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    }
+    else { // we're on iOS 5 or older
+        accessGranted = YES;
+    }
+    
+    if (accessGranted) {
+        // do your stuff
+        ABRecordRef source = ABAddressBookCopyDefaultSource(self.addressBook);
+        self.contacts = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(self.addressBook, source, kABPersonSortByFirstName);
+        
+        for (int i = 0; i < (CFArrayGetCount(self.contacts)); i++) {
+            ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, i);
+            NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
+            NSString *last = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
+            if (first == NULL && last == NULL){
+                ABAddressBookRemoveRecord(self.addressBook, person, &error);
+            }
+        }
+        
+        
+    }
+
+}
+
 -(void)addNavBar
 {
     UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
     [logout setTitle:@"Logout" forState:UIControlStateNormal];
-    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
@@ -83,12 +128,15 @@
     
     UIButton *findFriends = [[UIButton alloc] initWithFrame:CGRectMake(8*self.navigationController.navigationBar.frame.size.width/10, 10, 40, 30)];
     [findFriends setTitle:@"Add" forState:UIControlStateNormal];
-    [findFriends setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [findFriends setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [findFriends addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
     self.navigationItem.rightBarButtonItem = addFriendsButton;
     
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:210.0/255.0 green:75.0/255.0 blue:104.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+
     self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
 }
 
@@ -142,7 +190,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.signedInUser objectForKey:@"friendsArray"] count];
+//    return [[self.signedInUser objectForKey:@"friendsArray"] count];
+//    return CFArrayGetCount(self.contacts);
+    return 100;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -154,13 +204,25 @@
     }
     
     [self configureCell:cell atIndexPath:indexPath];
-    
+
     return cell;
 }
 
+
 -(void)configureCell:(SearchCell *)cell atIndexPath:(NSIndexPath *)path
 {
-    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
+//    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
+
+    ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, path.row);
+    NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
+    if (first == NULL) {
+        first = @"";
+    }
+    NSString *last = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
+    if (last == NULL) {
+        last = @"";
+    }
+    NSString *name = [NSString stringWithFormat:@"%@ %@",first,last];
     [(SearchCell *)cell placeSubviewsForCell:name];
 }
 

@@ -11,7 +11,6 @@
 #import "MessageVC.h"
 #import "User.h"
 #import "Login.h"
-#import "FBFriendListTableViewController.h"
 #import "LocationManagerController.h"
 #import "Contact.h"
 #import "AppDelegate.h"
@@ -19,6 +18,7 @@
 #import "AddContacts.h"
 #import "MCSwipeTableViewCell.h"
 #import "MapVC.h"
+#import "OptionsView.h"
 
 @interface HomepageTVC () <UISearchDisplayDelegate, UISearchBarDelegate, MCSwipeTableViewCellDelegate>
 
@@ -64,28 +64,6 @@
     
     [self.tableView reloadData];
 
-//    FBRequest *request = [FBRequest requestForMe];
-//    
-//    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-//        //an <FBGraphUser> object representing the user's identity
-//        NSDictionary *userData = (NSDictionary *)result;
-//        
-//        NSString *facebookID = userData[@"id"];
-//        NSString *name = userData[@"name"];
-//        NSString *firstName = userData[@"first_name"];
-//        NSString *location = userData[@"location"][@"name"];
-//        NSString *gender = userData[@"gender"];
-//        NSString *birthday = userData[@"birthday"];
-//        NSString *relationship = userData[@"relationship_status"];
-//        
-//        NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
-//        
-//        self.signedInUser.name = name;
-//        self.signedInUser.firstName = firstName;
-//        self.signedInUser.picture = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-//        
-//        self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", firstName];
-//    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -390,17 +368,24 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MessageVC *messageVC = [MessageVC alloc];
-    messageVC.locationManager = self.locationManager;
-    messageVC.parseController = self.parseController;
-    messageVC.signedInUser = self.signedInUser;
-    messageVC.recipient = self.recipient;
-    messageVC = [messageVC init];
-    messageVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:messageVC] animated:YES completion:^{
-        //
-    }];
-//    [self.navigationController pushViewController:messageVC animated:YES];
+
+    OptionsView *options = [[OptionsView alloc] init];
+    options.recipient = self.recipient;
+    options.parseController = self.parseController;
+    options.locationManager = self.locationManager;
+    [self.navigationController pushViewController:options animated:YES];
+    
+    //    MessageVC *messageVC = [MessageVC alloc];
+//    messageVC.locationManager = self.locationManager;
+//    messageVC.parseController = self.parseController;
+//    messageVC.signedInUser = self.signedInUser;
+//    messageVC.recipient = self.recipient;
+//    messageVC = [messageVC init];
+//    messageVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+//    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:messageVC] animated:YES completion:^{
+//        //
+//    }];
+////    [self.navigationController pushViewController:messageVC animated:YES];
 }
 
 

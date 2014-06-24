@@ -14,7 +14,6 @@
 @synthesize location = _location;
 @synthesize time = _time;
 @synthesize picture = _picture;
-//@synthesize fbFriends = _fbFriends;
 
 -(User *)initWithName:(NSString *)text
 {

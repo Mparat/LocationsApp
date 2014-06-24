@@ -69,7 +69,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self.tabBarController.tabBar setHidden:NO];
+    [self.tabBarController.tabBar setHidden:YES];
     UISwipeGestureRecognizer *swipeRecognizerRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toAddressBook)];
     [swipeRecognizerRight setDirection:UISwipeGestureRecognizerDirectionRight];
 //    [self.view addGestureRecognizer:swipeRecognizerRight];
@@ -90,7 +90,7 @@
     [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
-    self.navigationItem.leftBarButtonItem = logoutButton;
+//    self.navigationItem.leftBarButtonItem = logoutButton;
 
     self.navigationItem.title = [NSString stringWithFormat:@"Add Friends"];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:210.0/255.0 green:75.0/255.0 blue:104.0/255.0 alpha:1.0];

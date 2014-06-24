@@ -14,7 +14,6 @@
 		14315C62194A12D700378EA5 /* ParseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14315C61194A12D700378EA5 /* ParseController.m */; };
 		144BA0BE194F68A600977673 /* AddContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0BD194F68A600977673 /* AddContacts.m */; };
 		144BA0C4194F80A000977673 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 144BA0C3194F80A000977673 /* SearchCell.m */; };
-		144F7B4C1954AC830038122E /* Homepage.m in Sources */ = {isa = PBXBuildFile; fileRef = 144F7B4B1954AC830038122E /* Homepage.m */; };
 		1482D1FD1950C88200B8F957 /* AddressBookTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1482D1FC1950C88200B8F957 /* AddressBookTVC.m */; };
 		14AB33031942816400B8E20D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33021942816400B8E20D /* Foundation.framework */; };
 		14AB33051942816400B8E20D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AB33041942816400B8E20D /* CoreGraphics.framework */; };
@@ -45,9 +44,12 @@
 		14C66662194647C900341F0D /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C66661194647C900341F0D /* FacebookSDK.framework */; };
 		14C6666519464A4800341F0D /* Login.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C6666419464A4800341F0D /* Login.m */; };
 		14C66668194669FF00341F0D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C66667194669FF00341F0D /* User.m */; };
-		14C666771946B8C300341F0D /* FBFriendListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C666761946B8C300341F0D /* FBFriendListTableViewController.m */; };
 		14C6667A1947A60A00341F0D /* LocationManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C666791947A60A00341F0D /* LocationManagerController.m */; };
 		7A2B73C3108E4B03BA76408F /* libPods-LocationsApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D1535FBEDE949B4AA929E11 /* libPods-LocationsApp.a */; };
+		E0644B1E195A20590012CAF7 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0644B1C195A20590012CAF7 /* AddressBook.framework */; };
+		E0644B1F195A20590012CAF7 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0644B1D195A20590012CAF7 /* AddressBookUI.framework */; };
+		E0644B22195A3B0F0012CAF7 /* BlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B21195A3B0F0012CAF7 /* BlurredImage.m */; };
+		E0644B28195A3FC30012CAF7 /* OptionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B27195A3FC30012CAF7 /* OptionsView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +75,6 @@
 		144BA0BD194F68A600977673 /* AddContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContacts.m; sourceTree = "<group>"; };
 		144BA0C2194F80A000977673 /* SearchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
 		144BA0C3194F80A000977673 /* SearchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
-		144F7B4A1954AC830038122E /* Homepage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Homepage.h; sourceTree = "<group>"; };
-		144F7B4B1954AC830038122E /* Homepage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Homepage.m; sourceTree = "<group>"; };
 		1482D1FB1950C88200B8F957 /* AddressBookTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookTVC.h; sourceTree = "<group>"; };
 		1482D1FC1950C88200B8F957 /* AddressBookTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBookTVC.m; sourceTree = "<group>"; };
 		1482D1FE1952486000B8F957 /* libPods-LocationsApp-MCSwipeTableViewCell.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-LocationsApp-MCSwipeTableViewCell.a"; path = "Pods/build/Debug-iphoneos/libPods-LocationsApp-MCSwipeTableViewCell.a"; sourceTree = "<group>"; };
@@ -116,12 +116,16 @@
 		14C6666419464A4800341F0D /* Login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Login.m; sourceTree = "<group>"; };
 		14C66666194669FF00341F0D /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		14C66667194669FF00341F0D /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		14C666751946B8C300341F0D /* FBFriendListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBFriendListTableViewController.h; sourceTree = "<group>"; };
-		14C666761946B8C300341F0D /* FBFriendListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBFriendListTableViewController.m; sourceTree = "<group>"; };
 		14C666781947A60A00341F0D /* LocationManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManagerController.h; sourceTree = "<group>"; };
 		14C666791947A60A00341F0D /* LocationManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManagerController.m; sourceTree = "<group>"; };
 		1D1535FBEDE949B4AA929E11 /* libPods-LocationsApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LocationsApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		80A31E3896C1448999197265 /* Pods-LocationsApp.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocationsApp.xcconfig"; path = "Pods/Pods-LocationsApp.xcconfig"; sourceTree = "<group>"; };
+		E0644B1C195A20590012CAF7 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		E0644B1D195A20590012CAF7 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		E0644B20195A3B0F0012CAF7 /* BlurredImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurredImage.h; sourceTree = "<group>"; };
+		E0644B21195A3B0F0012CAF7 /* BlurredImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurredImage.m; sourceTree = "<group>"; };
+		E0644B26195A3FC30012CAF7 /* OptionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsView.h; sourceTree = "<group>"; };
+		E0644B27195A3FC30012CAF7 /* OptionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0644B1E195A20590012CAF7 /* AddressBook.framework in Frameworks */,
+				E0644B1F195A20590012CAF7 /* AddressBookUI.framework in Frameworks */,
 				14035A37194A212200AEC543 /* Social.framework in Frameworks */,
 				14C6665E194635A000341F0D /* SystemConfiguration.framework in Frameworks */,
 				14C6665A1946358F00341F0D /* Security.framework in Frameworks */,
@@ -184,6 +190,8 @@
 		14AB33011942816400B8E20D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E0644B1C195A20590012CAF7 /* AddressBook.framework */,
+				E0644B1D195A20590012CAF7 /* AddressBookUI.framework */,
 				1482D1FE1952486000B8F957 /* libPods-LocationsApp-MCSwipeTableViewCell.a */,
 				14035A36194A212200AEC543 /* Social.framework */,
 				14315C4E194923DE00378EA5 /* MapKit.framework */,
@@ -219,6 +227,8 @@
 				14AB33401942930F00B8E20D /* TableViewCells */,
 				14AB331D1942816400B8E20D /* Images.xcassets */,
 				14AB33091942816400B8E20D /* Supporting Files */,
+				E0644B20195A3B0F0012CAF7 /* BlurredImage.h */,
+				E0644B21195A3B0F0012CAF7 /* BlurredImage.m */,
 			);
 			path = LocationsApp;
 			sourceTree = "<group>";
@@ -278,8 +288,8 @@
 				14315C5B1949297E00378EA5 /* MapVC.m */,
 				1482D1FB1950C88200B8F957 /* AddressBookTVC.h */,
 				1482D1FC1950C88200B8F957 /* AddressBookTVC.m */,
-				144F7B4A1954AC830038122E /* Homepage.h */,
-				144F7B4B1954AC830038122E /* Homepage.m */,
+				E0644B26195A3FC30012CAF7 /* OptionsView.h */,
+				E0644B27195A3FC30012CAF7 /* OptionsView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -298,8 +308,6 @@
 		14C666711946B4D800341F0D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				14C666751946B8C300341F0D /* FBFriendListTableViewController.h */,
-				14C666761946B8C300341F0D /* FBFriendListTableViewController.m */,
 				14C666781947A60A00341F0D /* LocationManagerController.h */,
 				14C666791947A60A00341F0D /* LocationManagerController.m */,
 				14315C60194A12D700378EA5 /* ParseController.h */,
@@ -454,20 +462,20 @@
 			files = (
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
 				14C66668194669FF00341F0D /* User.m in Sources */,
+				E0644B22195A3B0F0012CAF7 /* BlurredImage.m in Sources */,
 				14315C4D19490A0400378EA5 /* Contact.m in Sources */,
 				144BA0C4194F80A000977673 /* SearchCell.m in Sources */,
 				144BA0BE194F68A600977673 /* AddContacts.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6666519464A4800341F0D /* Login.m in Sources */,
-				14C666771946B8C300341F0D /* FBFriendListTableViewController.m in Sources */,
 				14C6667A1947A60A00341F0D /* LocationManagerController.m in Sources */,
 				1482D1FD1950C88200B8F957 /* AddressBookTVC.m in Sources */,
-				144F7B4C1954AC830038122E /* Homepage.m in Sources */,
 				14315C5C1949297E00378EA5 /* MapVC.m in Sources */,
 				14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */,
 				14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */,
 				14315C62194A12D700378EA5 /* ParseController.m in Sources */,
+				E0644B28195A3FC30012CAF7 /* OptionsView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +611,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -616,6 +626,7 @@
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "E4CE06DE-B10B-4A7F-AB0D-C39C22A7FAB1";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -626,6 +637,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -639,6 +652,7 @@
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "E4CE06DE-B10B-4A7F-AB0D-C39C22A7FAB1";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

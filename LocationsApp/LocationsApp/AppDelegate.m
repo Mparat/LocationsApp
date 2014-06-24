@@ -179,19 +179,25 @@
     homepage.signedInUser = self.parseController.signedInUser;
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
 
-    AddContacts *addContacts = [[AddContacts alloc] init];
-    addContacts.locationManager = self.locationManager;
-    addContacts.parseController = self.parseController;
-    addContacts.signedInUser = self.parseController.signedInUser;
-    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addContacts];
-    
+//    AddContacts *addContacts = [[AddContacts alloc] init];
+//    addContacts.locationManager = self.locationManager;
+//    addContacts.parseController = self.parseController;
+//    addContacts.signedInUser = self.parseController.signedInUser;
+//    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addContacts];
+
+    AddressBookTVC *contacts = [[AddressBookTVC alloc] init];
+    contacts.locationManager = self.locationManager;
+    contacts.parseController = self.parseController;
+    contacts.signedInUser = self.parseController.signedInUser;
+    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
+
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     
     NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];
     tabBarController.viewControllers = controllers;
     
     UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:nil tag:0];
-    UITabBarItem *addNew = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:nil tag:1];
+    UITabBarItem *addNew = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:1];
     
     tabBarController.tabBarItem = chats;
     tabBarController.tabBarItem = addNew;
