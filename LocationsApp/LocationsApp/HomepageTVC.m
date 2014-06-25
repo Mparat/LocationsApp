@@ -10,7 +10,6 @@
 #import "HomepageChatCell.h"
 #import "MessageVC.h"
 #import "User.h"
-#import "Login.h"
 #import "LocationManagerController.h"
 #import "Contact.h"
 #import "AppDelegate.h"
@@ -34,9 +33,7 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize recipient = _recipient;
-//@synthesize swipeCell = _swipeCell;
 
-@synthesize loggedIn;
 #define chatCell @"chatCell"
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -163,17 +160,8 @@
     }
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] %@", searchTerm];
-//    [usernamesArray filterUsingPredicate:predicate]; // filtered usernames
     [namesArray filterUsingPredicate:predicate]; // filtered Names
     
-//    NSMutableArray *friends1 = [[NSMutableArray alloc] init];
-//    for (int i = 0; i < [usernamesArray count]; i++) {
-//        PFQuery *query = [PFUser query];
-//        [query whereKey:@"username" equalTo:[usernamesArray objectAtIndex:i]]; // filtered usernamesArray
-//        PFUser *recipient = (PFUser *)[query getFirstObject];
-//        [friends1 addObject:recipient]; // array of friends --> PFUsers
-//    }
-//    
     NSMutableArray *friends2 = [[NSMutableArray alloc] init];
     for (int i = 0; i < [namesArray count]; i++) {
         PFQuery *query = [PFUser query];
@@ -181,54 +169,7 @@
         PFUser *recipient = (PFUser *)[query getFirstObject];
         [friends2 addObject:recipient]; // array of friends --> PFUsers
     }
-
-//    if ([friends1 count] < [friends2 count]) {
-//        [self.searchResults addObjectsFromArray:friends1];
-//        for (int i = 0; i < [friends1 count]; i++) {
-//            for (int j = 0; j < [friends2 count]; j++) {
-//                if (![[[friends1 objectAtIndex:i] username] isEqualToString:[[friends2 objectAtIndex:j] username]]) {
-//                    [self.searchResults addObject:[friends2 objectAtIndex:j]]; // add the extra from friends2 that don't overlap
-//                }
-//            }
-//        }
-//    }
-//    else {
-//        [self.searchResults addObjectsFromArray:friends2];
-//        for (int i = 0; i < [friends1 count]; i++) {
-//            for (int j = 0; j < [friends2 count]; j++) {
-//                if (![[[friends1 objectAtIndex:i] username] isEqualToString:[[friends2 objectAtIndex:j] username]]) {
-//                    [self.searchResults addObject:[friends1 objectAtIndex:i]]; // add the extra from friends1 that don't overlap
-//                }
-//            }
-//        }
-//    }
-    
-    // self.searchResults contains the PFUsers that match the searchTerm by username or Name
-    
-
-//    NSMutableArray *array = [self.signedInUser objectForKey:@"friendsArray"];
-//    
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] %@", searchTerm];
-//    [array filterUsingPredicate:predicate];
-//    for (int i = 0; i < [array count]; i++) {
-//        PFQuery *query = [PFUser query];
-//        [query whereKey:@"username" equalTo:[array objectAtIndex:i]];
-//        PFUser *recipient = (PFUser *)[query getFirstObject];
-//        [self.searchResults addObject:recipient]; // array of friends Names
-//    }
-
-//    [self.searchResults addObjectsFromArray:[array filteredArrayUsingPredicate:predicate]];
-    
-//    [self.searchResults addObjectsFromArray:friends1];
     [self.searchResults addObjectsFromArray:friends2];
-//
-//    for (int i = 0; i < [friends1 count]; i++) {
-//        for (int j = 0; j < [friends2 count]; j++) {
-//            if ([[[friends1 objectAtIndex:i] objectForKey:@"username"] isEqualToString:[[friends2 objectAtIndex:j] objectForKey:@"username"]]) {
-//                [self.searchResults removeObject:[friends1 objectAtIndex:i]];
-//            }
-//        }
-//    }
 }
 
 #pragma mark - Table view data source
@@ -241,7 +182,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.tableView) {
-        return [[self.signedInUser objectForKey:@"friendsArray"] count];
+        return [[self.signedInUser objectForKey:@"friends"] count];
     }
     else{
         return [self.searchResults count];
@@ -278,22 +219,15 @@
         [query whereKey:@"username" equalTo:name];
         PFUser *recipient = (PFUser *)[query getFirstObject];
         name = [recipient objectForKey:@"additional"];
-        self.recipient = recipient;
+//        self.recipient = recipient;
     }
     else{
         name = [[self.searchResults objectAtIndex:path.row] objectForKey:@"additional"];
         self.recipient = [self.searchResults objectAtIndex:path.row];
     }
     
-    // find the name corresponding to the username that is in the friendsArray
-//    PFQuery *query = [PFUser query];
-//    [query whereKey:@"username" equalTo:name];
-//    PFUser *recipient = (PFUser *)[query getFirstObject];
-//    NSString *actualName = [recipient objectForKey:@"additional"];
-    
     [(HomepageChatCell *)cell placeSubviewsForCellWithName:name Location:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
     [self configureSwipeViews:cell];
-
 }
 
 -(void)configureSwipeViews:(HomepageChatCell *)cell
@@ -368,24 +302,17 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:indexPath.row]; // returns usernames (converted to Names when cell is created)
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"username" equalTo:name];
+    PFUser *recipient = (PFUser *)[query getFirstObject];
+    self.recipient = recipient;
+    
     OptionsView *options = [[OptionsView alloc] init];
     options.recipient = self.recipient;
     options.parseController = self.parseController;
     options.locationManager = self.locationManager;
     [self.navigationController pushViewController:options animated:YES];
-    
-    //    MessageVC *messageVC = [MessageVC alloc];
-//    messageVC.locationManager = self.locationManager;
-//    messageVC.parseController = self.parseController;
-//    messageVC.signedInUser = self.signedInUser;
-//    messageVC.recipient = self.recipient;
-//    messageVC = [messageVC init];
-//    messageVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-//    [self.navigationController presentViewController:[[UINavigationController alloc]initWithRootViewController:messageVC] animated:YES completion:^{
-//        //
-//    }];
-////    [self.navigationController pushViewController:messageVC animated:YES];
 }
 
 
@@ -428,7 +355,7 @@
 
 
 
-#pragma mark - MCSwipeTableViewCellDelegate
+#pragma mark - MCSwipeTableViewCellDelegate // not being called..
 
 // Called when the user starts swiping the cell.
 - (void)swipeTableViewCellDidStartSwiping:(MCSwipeTableViewCell *)cell{

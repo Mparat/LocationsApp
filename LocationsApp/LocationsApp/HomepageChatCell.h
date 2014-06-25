@@ -11,9 +11,6 @@
 #import "MCSwipeTableViewCell.h"
 
 @interface HomepageChatCell : MCSwipeTableViewCell 
-{
-    UIButton *ask;
-}
 
 @property (nonatomic, strong) User *user;
 -(void)placeSubviewsForCellWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date;

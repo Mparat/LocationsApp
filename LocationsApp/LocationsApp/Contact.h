@@ -10,6 +10,10 @@
 
 @interface Contact : NSObject
 
-@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *firstName;
+@property (nonatomic, strong) NSString *lastName;
+@property (nonatomic, strong) NSString *phoneNumber;
+@property (nonatomic, strong) NSString *username;
+
 
 @end

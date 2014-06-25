@@ -22,4 +22,7 @@
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic) CFArrayRef contacts;
 
+@property (nonatomic, strong) NSMutableArray *friends;
+
+
 @end

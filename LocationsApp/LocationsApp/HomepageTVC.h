@@ -23,6 +23,4 @@
 @property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) PFUser *recipient;
 
-@property BOOL loggedIn;
-
 @end

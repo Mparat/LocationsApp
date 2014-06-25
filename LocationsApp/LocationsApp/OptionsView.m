@@ -52,9 +52,9 @@
 
 -(void)sendText
 {
-//    NSNumber *number = [self.recipient objectForKey:@"phoneNumber"];
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:%@", number]]];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms:16507964182"]];
+    NSString *number = [self.recipient objectForKey:@"phoneNumber"];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:%@", number]]];
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"sms:16507964182"]];
 }
 
 

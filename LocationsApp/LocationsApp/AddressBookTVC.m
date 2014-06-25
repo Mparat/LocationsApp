@@ -11,6 +11,8 @@
 #import "AddContacts.h"
 #import "HomepageTVC.h"
 #import "SearchCell.h"
+#import "Contact.h"
+#import "ContactCell.h"
 
 @interface AddressBookTVC () <UISearchDisplayDelegate, UISearchBarDelegate>
 
@@ -27,8 +29,10 @@
 @synthesize signedInUser = _signedInUser;
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
+@synthesize friends = _friends;
 
-#define searchCell @"searchCell"
+#define contactCell @"contactCell"
+#define friendsArray @"friendsArray"
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -45,7 +49,7 @@
     [self addNavBar];
     [self addSearchBar];
 
-    [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:searchCell];
+    [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     [self getContacts];
 //    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 //    [self.signedInUser save];
@@ -97,22 +101,41 @@
     }
     
     if (accessGranted) {
-        // do your stuff
         ABRecordRef source = ABAddressBookCopyDefaultSource(self.addressBook);
-        self.contacts = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(self.addressBook, source, kABPersonSortByFirstName);
+        self.contacts = ABAddressBookCopyArrayOfAllPeopleInSource(self.addressBook, source);
+        self.friends = [NSMutableArray array];
         
-        for (int i = 0; i < (CFArrayGetCount(self.contacts)); i++) {
-            ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, i);
+        for (int i = 0; i < CFArrayGetCount(self.contacts); i++) {
+            ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, i); // person
             NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
+            if (first == NULL) {
+                first = @"";
+            }
             NSString *last = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
-            if (first == NULL && last == NULL){
-                ABAddressBookRemoveRecord(self.addressBook, person, &error);
+            if (last == NULL) {
+                last = @"";
+            }
+            ABMultiValueRef phones =(__bridge ABMultiValueRef)((__bridge NSString*)ABRecordCopyValue(person, kABPersonPhoneProperty)); // list of phones
+            NSString *phoneNumberLabel; // label of phone #
+            for (CFIndex j = 0; j < ABMultiValueGetCount(phones); j++) {
+                phoneNumberLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, j);
+                PFQuery *query = [PFUser query];
+                if ([phoneNumberLabel isEqualToString:kABPersonPhoneMobileLabel] || [phoneNumberLabel isEqualToString:kABPersonPhoneIPhoneLabel]) {
+                    [query whereKeyExists:@"phoneNumber"];
+                    [query whereKey:@"username" notEqualTo:self.signedInUser.username];
+                    [query whereKey:@"phoneNumber" hasSuffix:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
+                    if (query != NULL) {
+                        Contact *newContact = [[Contact alloc]init];
+                        newContact.firstName = first;
+                        newContact.lastName = last;
+                        newContact.phoneNumber = [((PFUser *)query) objectForKey:@"phoneNumber"];
+                        newContact.username = [((PFUser *)query) objectForKey:@"username"];
+                        [self.friends addObject:newContact];
+                    }
+                }
             }
         }
-        
-        
     }
-
 }
 
 -(void)addNavBar
@@ -137,7 +160,7 @@
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:210.0/255.0 green:75.0/255.0 blue:104.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 
-    self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
+    self.navigationItem.title = [NSString stringWithFormat:@"Contacts"];
 }
 
 -(void)addSearchBar
@@ -174,10 +197,11 @@
     add.locationManager = self.locationManager;
     add.parseController = self.parseController;
     add.signedInUser = self.signedInUser;
-    [self.navigationController pushViewController:add animated:NO];
-//    [self.navigationController presentViewController:add animated:NO completion:^{
-//        //
-//    }];
+//    [self.navigationController pushViewController:add animated:NO];
+    add.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:add] animated:NO completion:^{
+        //
+    }];
 }
 
 
@@ -197,10 +221,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SearchCell *cell = [tableView dequeueReusableCellWithIdentifier:searchCell];
+    ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:contactCell];
     cell = nil;
     if (cell == nil) {
-        cell = [[SearchCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:searchCell];
+        cell = [[ContactCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:contactCell];
     }
     
     [self configureCell:cell atIndexPath:indexPath];
@@ -209,21 +233,12 @@
 }
 
 
--(void)configureCell:(SearchCell *)cell atIndexPath:(NSIndexPath *)path
+-(void)configureCell:(ContactCell *)cell atIndexPath:(NSIndexPath *)path
 {
 //    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
-
-    ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, path.row);
-    NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
-    if (first == NULL) {
-        first = @"";
-    }
-    NSString *last = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
-    if (last == NULL) {
-        last = @"";
-    }
-    NSString *name = [NSString stringWithFormat:@"%@ %@",first,last];
-    [(SearchCell *)cell placeSubviewsForCell:name];
+    Contact *friend = [self.friends objectAtIndex:path.row];
+    [(ContactCell *)cell initWithContact:friend];
+    cell.contact = friend;
 }
 
 

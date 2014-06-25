@@ -10,6 +10,9 @@
 
 @implementation Contact
 
-@synthesize name = _name;
+@synthesize firstName = _firstName;
+@synthesize lastName = _lastName;
+@synthesize phoneNumber = _phoneNumber;
+@synthesize username = _username;
 
 @end
