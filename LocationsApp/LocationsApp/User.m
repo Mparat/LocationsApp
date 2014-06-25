@@ -10,15 +10,9 @@
 
 @implementation User
 
-@synthesize name = _name;
-@synthesize location = _location;
-@synthesize time = _time;
-@synthesize picture = _picture;
+@synthesize username = _username;
+@synthesize phoneNumber = _phoneNumber;
+@synthesize friends = _friends;
 
--(User *)initWithName:(NSString *)text
-{
-    self.name = text;
-    return self;
-}
 
 @end

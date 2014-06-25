@@ -13,14 +13,20 @@
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "MCSwipeTableViewCell.h"
+#import "User.h"
 
 
 @interface HomepageTVC : UITableViewController <UITextFieldDelegate, LocationManagerControllerDelegate, ParseControllerDelegate, UITableViewDataSource>
+{
+    int number;
+}
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 
 @property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) PFUser *recipient;
+
+@property (nonatomic, strong) User *me;
 
 @end

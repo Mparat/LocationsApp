@@ -7,6 +7,7 @@
 //
 
 #import "AddressBookTVC.h"
+#import <AddressBook/AddressBook.h>
 #import "AppDelegate.h"
 #import "AddContacts.h"
 #import "HomepageTVC.h"
@@ -14,7 +15,7 @@
 #import "Contact.h"
 #import "ContactCell.h"
 
-@interface AddressBookTVC () <UISearchDisplayDelegate, UISearchBarDelegate>
+@interface AddressBookTVC () <UISearchDisplayDelegate, UISearchBarDelegate, MCSwipeTableViewCellDelegate>
 
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UISearchDisplayController *searchController;
@@ -29,6 +30,7 @@
 @synthesize signedInUser = _signedInUser;
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
+@synthesize me = _me;
 @synthesize friends = _friends;
 
 #define contactCell @"contactCell"
@@ -79,6 +81,12 @@
 {
     CFErrorRef error;
     self.addressBook = ABAddressBookCreateWithOptions(NULL, &error);
+    
+//    ABSearchElement *find = [ABPerson searchElementForProperty:kABLastNameProperty
+//                                                         label:nil
+//                                                           key:nil
+//                                                         value:@"Elba"
+//                                                    comparison:kABEqual];
 
     __block BOOL accessGranted = NO;
     if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
@@ -103,8 +111,9 @@
     if (accessGranted) {
         ABRecordRef source = ABAddressBookCopyDefaultSource(self.addressBook);
         self.contacts = ABAddressBookCopyArrayOfAllPeopleInSource(self.addressBook, source);
-        self.friends = [NSMutableArray array];
+//        self.friends = [NSMutableArray array];
         
+
         for (int i = 0; i < CFArrayGetCount(self.contacts); i++) {
             ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, i); // person
             NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
@@ -117,20 +126,22 @@
             }
             ABMultiValueRef phones =(__bridge ABMultiValueRef)((__bridge NSString*)ABRecordCopyValue(person, kABPersonPhoneProperty)); // list of phones
             NSString *phoneNumberLabel; // label of phone #
-            for (CFIndex j = 0; j < ABMultiValueGetCount(phones); j++) {
+            for (int j = 0; j < ABMultiValueGetCount(phones); j++) {
                 phoneNumberLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, j);
-                PFQuery *query = [PFUser query];
-                if ([phoneNumberLabel isEqualToString:kABPersonPhoneMobileLabel] || [phoneNumberLabel isEqualToString:kABPersonPhoneIPhoneLabel]) {
+                if ([phoneNumberLabel isEqualToString:(__bridge NSString*)kABPersonPhoneMobileLabel] || [phoneNumberLabel isEqualToString:(__bridge NSString*)kABPersonPhoneIPhoneLabel]) {
+                    PFQuery *query = [PFUser query];
                     [query whereKeyExists:@"phoneNumber"];
                     [query whereKey:@"username" notEqualTo:self.signedInUser.username];
                     [query whereKey:@"phoneNumber" hasSuffix:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
-                    if (query != NULL) {
+                    [query whereKey:@"phoneNumber" containsString:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
+                    if ([query getFirstObject] != NULL) {
                         Contact *newContact = [[Contact alloc]init];
                         newContact.firstName = first;
                         newContact.lastName = last;
-                        newContact.phoneNumber = [((PFUser *)query) objectForKey:@"phoneNumber"];
-                        newContact.username = [((PFUser *)query) objectForKey:@"username"];
-                        [self.friends addObject:newContact];
+                        newContact.phoneNumber = [(PFUser *)[query getFirstObject] objectForKey:@"phoneNumber"];
+                        newContact.username = [(PFUser *)[query getFirstObject] objectForKey:@"username"];
+//                        [self.friends addObject:newContact];
+                        [self.me.friends addObject:newContact];
                     }
                 }
             }
@@ -215,8 +226,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    return [[self.signedInUser objectForKey:@"friendsArray"] count];
-//    return CFArrayGetCount(self.contacts);
-    return 100;
+    return [self.me.friends count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -224,11 +234,10 @@
     ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:contactCell];
     cell = nil;
     if (cell == nil) {
-        cell = [[ContactCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:contactCell];
+        cell = [[ContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contactCell];
     }
     
     [self configureCell:cell atIndexPath:indexPath];
-
     return cell;
 }
 
@@ -236,48 +245,57 @@
 -(void)configureCell:(ContactCell *)cell atIndexPath:(NSIndexPath *)path
 {
 //    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
-    Contact *friend = [self.friends objectAtIndex:path.row];
+    Contact *friend = [self.me.friends objectAtIndex:path.row];
     [(ContactCell *)cell initWithContact:friend];
     cell.contact = friend;
+    [self configureSwipeViews:cell];
 }
 
-
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+-(void)configureSwipeViews:(ContactCell *)cell
 {
-    return YES;
+    UILabel *askText = [[UILabel alloc] init];
+    UIView *askView = [[UIView alloc] init];
+    askText.text = @"Ask";
+    askText.textColor = [UIColor blackColor];
+    [askView addSubview:askText];
+    UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
+    
+    
+    UILabel *tellText = [[UILabel alloc] init];
+    UIView *tellView = [[UIView alloc] init];
+    tellText.text = @"Tell";
+    tellText.textColor = [UIColor blackColor];
+    [tellView addSubview:tellText];
+    UIColor *yellowColor = [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0];
+    
+    
+    [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"Ask\" cell");
+        ((ContactCell *)cell).contact.exists = YES;
+        [cell swipeToOriginWithCompletion:^{
+            //
+        }];
+    }];
+    
+    [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+        NSLog(@"Did swipe \"tell\" cell");
+        ((ContactCell *)cell).contact.exists = YES;
+        [cell swipeToOriginWithCompletion:^{
+            //
+        }];
+    }];
+    
+      
+    cell.firstTrigger = 0.01;
+    cell.secondTrigger = 0.6;
 }
 
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        [self.signedInUser removeObject:((SearchCell *)cell).username forKey:@"friendsArray"];
-        [self.signedInUser save];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-        [self.tableView reloadData];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (UIView *)viewWithImageName:(NSString *)imageName {
+    UIImage *image = [UIImage imageNamed:imageName];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    imageView.contentMode = UIViewContentModeCenter;
+    return imageView;
 }
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 
 

@@ -16,6 +16,7 @@
 #import "AddContacts.h"
 #import "LocationManagerController.h"
 #import "ParseController.h"
+#import "User.h"
 
 @implementation AppDelegate
 
@@ -172,23 +173,23 @@
 -(void)loginSucessful
 {
     self.parseController.signedInUser = [PFUser currentUser];
+    User *me = [[User alloc] init];
+    me.username = self.parseController.signedInUser.username;
+    me.phoneNumber = [self.parseController.signedInUser objectForKey:@"phoneNumber"];
+    me.friends = [NSMutableArray array];
     
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];
     homepage.signedInUser = self.parseController.signedInUser;
+    homepage.me = me;
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
-
-//    AddContacts *addContacts = [[AddContacts alloc] init];
-//    addContacts.locationManager = self.locationManager;
-//    addContacts.parseController = self.parseController;
-//    addContacts.signedInUser = self.parseController.signedInUser;
-//    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:addContacts];
 
     AddressBookTVC *contacts = [[AddressBookTVC alloc] init];
     contacts.locationManager = self.locationManager;
     contacts.parseController = self.parseController;
     contacts.signedInUser = self.parseController.signedInUser;
+    contacts.me = me;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];

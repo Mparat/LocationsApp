@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <AddressBookUI/AddressBookUI.h>
+#import <AddressBook/AddressBook.h>
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
+#import "User.h"
 
 
 @interface AddressBookTVC : UITableViewController <ABPeoplePickerNavigationControllerDelegate>
@@ -22,6 +24,7 @@
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic) CFArrayRef contacts;
 
+@property (nonatomic, strong) User *me;
 @property (nonatomic, strong) NSMutableArray *friends;
 
 

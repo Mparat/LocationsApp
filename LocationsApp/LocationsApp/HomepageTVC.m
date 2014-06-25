@@ -33,6 +33,7 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize recipient = _recipient;
+@synthesize me = _me;
 
 #define chatCell @"chatCell"
 
@@ -68,6 +69,13 @@
     [self.tabBarController.tabBar setHidden:NO];
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     [self.signedInUser save];
+    
+    number = 0;
+    for (int i = 0; i < [self.me.friends count]; i++) {
+        if (((Contact *)[self.me.friends objectAtIndex:i]).exists == YES) {
+            number++;
+        }
+    }
     
     [self.tableView reloadData];
 }
@@ -182,7 +190,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.tableView) {
-        return [[self.signedInUser objectForKey:@"friends"] count];
+//        return [[self.signedInUser objectForKey:@"friends"] count];
+        return number;
     }
     else{
         return [self.searchResults count];
@@ -214,12 +223,15 @@
     
     NSString *name = [[NSString alloc] init];
     if (tableView == self.tableView) {
-        name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row]; // returns usernames (converted to Names when cell is created)
-        PFQuery *query = [PFUser query];
-        [query whereKey:@"username" equalTo:name];
-        PFUser *recipient = (PFUser *)[query getFirstObject];
-        name = [recipient objectForKey:@"additional"];
-//        self.recipient = recipient;
+//        name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row]; // returns usernames (converted to Names when cell is created)
+//        PFQuery *query = [PFUser query];
+//        [query whereKey:@"username" equalTo:name];
+//        PFUser *recipient = (PFUser *)[query getFirstObject];
+//        name = [recipient objectForKey:@"additional"];
+////        self.recipient = recipient;
+        if (((Contact *)[self.me.friends objectAtIndex:path.row]).exists == YES) {
+            name = ((Contact *)[self.me.friends objectAtIndex:path.row]).firstName;
+        }
     }
     else{
         name = [[self.searchResults objectAtIndex:path.row] objectForKey:@"additional"];

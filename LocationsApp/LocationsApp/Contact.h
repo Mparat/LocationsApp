@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSString *phoneNumber;
 @property (nonatomic, strong) NSString *username;
+@property BOOL exists;
 
 
 @end

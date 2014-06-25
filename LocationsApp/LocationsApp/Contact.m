@@ -14,5 +14,6 @@
 @synthesize lastName = _lastName;
 @synthesize phoneNumber = _phoneNumber;
 @synthesize username = _username;
+@synthesize exists = _exists;
 
 @end

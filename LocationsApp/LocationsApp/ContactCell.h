@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "Contact.h"
+#import "MCSwipeTableViewCell.h"
 
-@interface ContactCell : UITableViewCell
+@interface ContactCell : MCSwipeTableViewCell
 
 @property (nonatomic, strong) Contact *contact;
 
