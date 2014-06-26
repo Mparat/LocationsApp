@@ -177,6 +177,7 @@
     me.username = self.parseController.signedInUser.username;
     me.phoneNumber = [self.parseController.signedInUser objectForKey:@"phoneNumber"];
     me.friends = [NSMutableArray array];
+    me.messageRecipients = [NSMutableArray array];
     
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];

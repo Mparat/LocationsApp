@@ -190,6 +190,40 @@
     self.searchResults = [NSMutableArray array];
 }
 
+#pragma mark - Search Bar Delegate controls
+-(void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
+{
+    UIButton *cancelButton;
+    UIView *topView = self.searchBar.subviews[0];
+    for (UIView *subView in topView.subviews) {
+        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
+            cancelButton = (UIButton*)subView;
+        }
+    }
+    if (cancelButton) {
+        [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
+    }
+}
+
+-(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterResults:searchString];
+    return YES;
+}
+
+-(void)filterResults:(NSString *)searchTerm
+{
+    [self.searchResults removeAllObjects];
+    [self.tableView reloadData];
+
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
+    [self.me.friends filterUsingPredicate:predicate]; // filtered Names
+ 
+    
+    [self.searchResults addObjectsFromArray:self.me.friends];
+}
+
 -(void)logoutSuccessful
 {
     [PFUser logOut];
@@ -226,7 +260,12 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    return [[self.signedInUser objectForKey:@"friendsArray"] count];
-    return [self.me.friends count];
+    if ([self.searchResults count] == 0){
+        return [self.me.friends count];
+    }
+    else{
+        return [self.searchResults count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -237,15 +276,21 @@
         cell = [[ContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contactCell];
     }
     
-    [self configureCell:cell atIndexPath:indexPath];
+    [self configureCell:cell atIndexPath:indexPath inTableView:tableView];
     return cell;
 }
 
 
--(void)configureCell:(ContactCell *)cell atIndexPath:(NSIndexPath *)path
+-(void)configureCell:(ContactCell *)cell atIndexPath:(NSIndexPath *)path inTableView:(UITableView *)tableView
 {
 //    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
-    Contact *friend = [self.me.friends objectAtIndex:path.row];
+    Contact *friend = [[Contact alloc] init];
+    if (tableView == self.tableView) {
+        friend = [self.me.friends objectAtIndex:path.row];
+    }
+    else{
+        friend = [self.searchResults objectAtIndex:path.row];
+    }
     [(ContactCell *)cell initWithContact:friend];
     cell.contact = friend;
     [self configureSwipeViews:cell];
@@ -272,6 +317,7 @@
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
         ((ContactCell *)cell).contact.exists = YES;
+        [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
         [cell swipeToOriginWithCompletion:^{
             //
         }];
@@ -280,6 +326,7 @@
     [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
         ((ContactCell *)cell).contact.exists = YES;
+        [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
         [cell swipeToOriginWithCompletion:^{
             //
         }];

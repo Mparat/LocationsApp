@@ -13,6 +13,6 @@
 @synthesize username = _username;
 @synthesize phoneNumber = _phoneNumber;
 @synthesize friends = _friends;
-
+@synthesize messageRecipients = _messageRecipients;
 
 @end

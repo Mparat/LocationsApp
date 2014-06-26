@@ -70,13 +70,6 @@
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     [self.signedInUser save];
     
-    number = 0;
-    for (int i = 0; i < [self.me.friends count]; i++) {
-        if (((Contact *)[self.me.friends objectAtIndex:i]).exists == YES) {
-            number++;
-        }
-    }
-    
     [self.tableView reloadData];
 }
 
@@ -191,7 +184,7 @@
 {
     if (tableView == self.tableView) {
 //        return [[self.signedInUser objectForKey:@"friends"] count];
-        return number;
+        return [self.me.messageRecipients count];
     }
     else{
         return [self.searchResults count];
@@ -229,9 +222,7 @@
 //        PFUser *recipient = (PFUser *)[query getFirstObject];
 //        name = [recipient objectForKey:@"additional"];
 ////        self.recipient = recipient;
-        if (((Contact *)[self.me.friends objectAtIndex:path.row]).exists == YES) {
-            name = ((Contact *)[self.me.friends objectAtIndex:path.row]).firstName;
-        }
+        name = ((Contact *)[self.me.messageRecipients objectAtIndex:path.row]).firstName;
     }
     else{
         name = [[self.searchResults objectAtIndex:path.row] objectForKey:@"additional"];
