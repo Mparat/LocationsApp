@@ -21,11 +21,14 @@
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) PFUser *signedInUser;
 
+@property (nonatomic, strong) NSArray *parseUserNumbers;
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic) CFArrayRef contacts;
 
 @property (nonatomic, strong) User *me;
 @property (nonatomic, strong) NSMutableArray *friends;
+
+@property (nonatomic, strong) ABPeoplePickerNavigationController *picker;
 
 
 @end

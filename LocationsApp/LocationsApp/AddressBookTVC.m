@@ -6,6 +6,11 @@
 //  Copyright (c) 2014 Meera Parat. All rights reserved.
 //
 
+/*
+ at login, do the comparison and store the array of phone numbers in a nsuserdefault, code it, keyed archive, etc.....
+*/
+
+
 #import "AddressBookTVC.h"
 #import <AddressBook/AddressBook.h>
 #import "AppDelegate.h"
@@ -28,10 +33,12 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
+@synthesize parseUserNumbers = _parseUserNumbers;
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
 @synthesize me = _me;
 @synthesize friends = _friends;
+@synthesize picker;
 
 #define contactCell @"contactCell"
 #define friendsArray @"friendsArray"
@@ -49,7 +56,7 @@
 {
     [super viewDidLoad];
     [self addNavBar];
-    [self addSearchBar];
+//    [self addSearchBar];
 
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     [self getContacts];
@@ -82,12 +89,6 @@
     CFErrorRef error;
     self.addressBook = ABAddressBookCreateWithOptions(NULL, &error);
     
-//    ABSearchElement *find = [ABPerson searchElementForProperty:kABLastNameProperty
-//                                                         label:nil
-//                                                           key:nil
-//                                                         value:@"Elba"
-//                                                    comparison:kABEqual];
-
     __block BOOL accessGranted = NO;
     if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
         dispatch_semaphore_t sema = dispatch_semaphore_create(0);
@@ -113,7 +114,44 @@
         self.contacts = ABAddressBookCopyArrayOfAllPeopleInSource(self.addressBook, source);
 //        self.friends = [NSMutableArray array];
         
-
+//        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+//            ABMultiValueRef phoneNumbers = ABRecordCopyValue((__bridge ABRecordRef)evaluatedObject, kABPersonPhoneProperty);
+//            BOOL result = NO;
+//            
+//            for (CFIndex i = 0; i < ABMultiValueGetCount(phoneNumbers); i++) {
+//                NSString *phoneNumber = (__bridge NSString *)ABMultiValueCopyValueAtIndex(phoneNumbers, i);
+//                
+//                PFQuery *query = [PFUser query];
+//                [query whereKeyExists:@"phoneNumber"];
+//                [query whereKey:@"username" notEqualTo:self.signedInUser.username];
+//                [query whereKey:@"phoneNumber" hasSuffix:phoneNumber];
+//                [query whereKey:@"phoneNumber" containsString:phoneNumber];
+//                if ([query getFirstObject] != NULL){
+//                    result = YES;
+//                }
+//            }
+//            CFRelease(phoneNumbers);
+//            return result;
+//        }];
+//        NSArray *results = [self.contacts filteredArrayUsingPredicate:predicate];
+////        [self.me.friends addObjectsFromArray:[self.contacts filteredArrayUsingPredicate:predicate]];
+//        for (int i = 0; i < [self.me.friends count]; i++) {
+//            ABRecordRef person = (__bridge ABRecordRef)([results objectAtIndex:i]);
+//            NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
+//            if (first == NULL) {
+//                first = @"";
+//            }
+//            NSString *last = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
+//            if (last == NULL) {
+//                last = @"";
+//            }
+//
+//            Contact *newContact = [[Contact alloc]init];
+//            newContact.firstName = first;
+//            newContact.lastName = last;
+//            [self.me.friends addObject:newContact];
+//        }
+        
         for (int i = 0; i < CFArrayGetCount(self.contacts); i++) {
             ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, i); // person
             NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
@@ -125,22 +163,18 @@
                 last = @"";
             }
             ABMultiValueRef phones =(__bridge ABMultiValueRef)((__bridge NSString*)ABRecordCopyValue(person, kABPersonPhoneProperty)); // list of phones
-            NSString *phoneNumberLabel; // label of phone #
             for (int j = 0; j < ABMultiValueGetCount(phones); j++) {
-                phoneNumberLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, j);
-                if ([phoneNumberLabel isEqualToString:(__bridge NSString*)kABPersonPhoneMobileLabel] || [phoneNumberLabel isEqualToString:(__bridge NSString*)kABPersonPhoneIPhoneLabel]) {
-                    PFQuery *query = [PFUser query];
-                    [query whereKeyExists:@"phoneNumber"];
-                    [query whereKey:@"username" notEqualTo:self.signedInUser.username];
-                    [query whereKey:@"phoneNumber" hasSuffix:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
-                    [query whereKey:@"phoneNumber" containsString:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
-                    if ([query getFirstObject] != NULL) {
+                for (int k = 0; k < [self.parseUserNumbers count]; k++) {
+                    NSString *number = [NSString stringWithFormat:@"1%@", (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
+                    NSCharacterSet *toExclude = [NSCharacterSet characterSetWithCharactersInString:@"/.()- "];
+                    number = [[number componentsSeparatedByCharactersInSet:toExclude] componentsJoinedByString: @""];
+
+                    if ([[self.parseUserNumbers objectAtIndex:k] isEqualToString:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)] || [[self.parseUserNumbers objectAtIndex:k] isEqualToString:number]) {
                         Contact *newContact = [[Contact alloc]init];
                         newContact.firstName = first;
                         newContact.lastName = last;
-                        newContact.phoneNumber = [(PFUser *)[query getFirstObject] objectForKey:@"phoneNumber"];
-                        newContact.username = [(PFUser *)[query getFirstObject] objectForKey:@"username"];
-//                        [self.friends addObject:newContact];
+                        newContact.phoneNumber = [self.parseUserNumbers objectAtIndex:k];
+//                        newContact.username = [(PFUser *)[query getFirstObject] objectForKey:@"username"];
                         [self.me.friends addObject:newContact];
                     }
                 }
@@ -148,6 +182,7 @@
         }
     }
 }
+
 
 -(void)addNavBar
 {
@@ -203,6 +238,8 @@
     if (cancelButton) {
         [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
     }
+    
+    // this is where to put the code to make sure the footer view is above the keyboard --> textfieldDidbeginediting, or something like that...
 }
 
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
@@ -249,6 +286,18 @@
     }];
 }
 
+-(void)addRecipientsView
+{
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70)];
+    footer.backgroundColor = [UIColor blueColor];
+    UIButton *send = [[UIButton alloc] initWithFrame:CGRectMake(4*footer.frame.size.width/5, footer.frame.origin.y, footer.frame.size.width/5, 70)];
+    [send setBackgroundColor:[UIColor whiteColor]];
+    [send setTitle:@"Ask" forState:UIControlStateNormal];
+    [send setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
+    [footer addSubview:send];
+    [self.view addSubview:footer];
+}
 
 #pragma mark - Table view data source
 
@@ -264,7 +313,8 @@
         return [self.me.friends count];
     }
     else{
-        return [self.searchResults count];
+//        return [self.searchResults count];
+        return [self.me.friends count];
     }
 }
 
@@ -289,7 +339,9 @@
         friend = [self.me.friends objectAtIndex:path.row];
     }
     else{
-        friend = [self.searchResults objectAtIndex:path.row];
+//        friend = [self.searchResults objectAtIndex:path.row];
+        friend = [self.me.friends objectAtIndex:path.row];
+
     }
     [(ContactCell *)cell initWithContact:friend];
     cell.contact = friend;
@@ -316,8 +368,10 @@
     
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
+        if (((ContactCell *)cell).contact.exists == NO){
+            [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
+        }
         ((ContactCell *)cell).contact.exists = YES;
-        [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
         [cell swipeToOriginWithCompletion:^{
             //
         }];
@@ -325,13 +379,14 @@
     
     [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
+        if (((ContactCell *)cell).contact.exists == NO){
+            [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
+        }
         ((ContactCell *)cell).contact.exists = YES;
-        [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
         [cell swipeToOriginWithCompletion:^{
             //
         }];
     }];
-    
       
     cell.firstTrigger = 0.01;
     cell.secondTrigger = 0.6;
@@ -343,6 +398,12 @@
     imageView.contentMode = UIViewContentModeCenter;
     return imageView;
 }
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self addRecipientsView];
+}
+
 
 
 

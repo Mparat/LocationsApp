@@ -17,11 +17,13 @@
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "User.h"
+#import "ContactsVC.h"
 
 @implementation AppDelegate
 
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
+@synthesize parseUserNumbers = _parseUserNumbers;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -173,6 +175,16 @@
 -(void)loginSucessful
 {
     self.parseController.signedInUser = [PFUser currentUser];
+    PFQuery *query = [PFUser query];
+    [query whereKeyExists:@"phoneNumber"];
+    [query whereKey:@"username" notEqualTo:self.parseController.signedInUser.username];
+    self.parseUserNumbers = [NSMutableArray array];
+    NSArray *users = [query findObjects];
+    for (int i = 0; i < [users count]; i++) {
+        NSString *number = [[users objectAtIndex:i] objectForKey:@"phoneNumber"];
+        [self.parseUserNumbers addObject:number];
+    }
+    
     User *me = [[User alloc] init];
     me.username = self.parseController.signedInUser.username;
     me.phoneNumber = [self.parseController.signedInUser objectForKey:@"phoneNumber"];
@@ -191,7 +203,11 @@
     contacts.parseController = self.parseController;
     contacts.signedInUser = self.parseController.signedInUser;
     contacts.me = me;
+    contacts.parseUserNumbers = self.parseUserNumbers;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
+
+//    ContactsVC *contacts = [[ContactsVC alloc] init];
+//    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     
