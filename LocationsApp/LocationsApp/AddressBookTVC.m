@@ -56,12 +56,11 @@
 {
     [super viewDidLoad];
     [self addNavBar];
-//    [self addSearchBar];
+    [self addSearchBar];
 
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     [self getContacts];
-//    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-//    [self.signedInUser save];
+
     [self.tableView reloadData];
 }
 
@@ -70,11 +69,7 @@
     [self.tabBarController.tabBar setHidden:NO];
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     [self.signedInUser save];
-    
-    UISwipeGestureRecognizer *swipeRecognizerLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(addFriends)];
-    [swipeRecognizerLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-//    [self.view addGestureRecognizer:swipeRecognizerLeft];
-    
+
     [self.tableView reloadData];
 }
 
@@ -112,45 +107,6 @@
     if (accessGranted) {
         ABRecordRef source = ABAddressBookCopyDefaultSource(self.addressBook);
         self.contacts = ABAddressBookCopyArrayOfAllPeopleInSource(self.addressBook, source);
-//        self.friends = [NSMutableArray array];
-        
-//        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-//            ABMultiValueRef phoneNumbers = ABRecordCopyValue((__bridge ABRecordRef)evaluatedObject, kABPersonPhoneProperty);
-//            BOOL result = NO;
-//            
-//            for (CFIndex i = 0; i < ABMultiValueGetCount(phoneNumbers); i++) {
-//                NSString *phoneNumber = (__bridge NSString *)ABMultiValueCopyValueAtIndex(phoneNumbers, i);
-//                
-//                PFQuery *query = [PFUser query];
-//                [query whereKeyExists:@"phoneNumber"];
-//                [query whereKey:@"username" notEqualTo:self.signedInUser.username];
-//                [query whereKey:@"phoneNumber" hasSuffix:phoneNumber];
-//                [query whereKey:@"phoneNumber" containsString:phoneNumber];
-//                if ([query getFirstObject] != NULL){
-//                    result = YES;
-//                }
-//            }
-//            CFRelease(phoneNumbers);
-//            return result;
-//        }];
-//        NSArray *results = [self.contacts filteredArrayUsingPredicate:predicate];
-////        [self.me.friends addObjectsFromArray:[self.contacts filteredArrayUsingPredicate:predicate]];
-//        for (int i = 0; i < [self.me.friends count]; i++) {
-//            ABRecordRef person = (__bridge ABRecordRef)([results objectAtIndex:i]);
-//            NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
-//            if (first == NULL) {
-//                first = @"";
-//            }
-//            NSString *last = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
-//            if (last == NULL) {
-//                last = @"";
-//            }
-//
-//            Contact *newContact = [[Contact alloc]init];
-//            newContact.firstName = first;
-//            newContact.lastName = last;
-//            [self.me.friends addObject:newContact];
-//        }
         
         for (int i = 0; i < CFArrayGetCount(self.contacts); i++) {
             ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, i); // person
@@ -255,10 +211,11 @@
 
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
-    [self.me.friends filterUsingPredicate:predicate]; // filtered Names
+    NSMutableArray *filter = [NSMutableArray arrayWithArray:self.me.friends];
+    [filter filterUsingPredicate:predicate]; // filtered Names
  
     
-    [self.searchResults addObjectsFromArray:self.me.friends];
+    [self.searchResults addObjectsFromArray:filter];
 }
 
 -(void)logoutSuccessful
@@ -309,11 +266,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    return [[self.signedInUser objectForKey:@"friendsArray"] count];
-    if ([self.searchResults count] == 0){
-        return [self.me.friends count];
+    if (tableView == self.searchController.searchResultsTableView){
+        return [self.searchResults count];
     }
     else{
-//        return [self.searchResults count];
         return [self.me.friends count];
     }
 }
@@ -335,13 +291,11 @@
 {
 //    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
     Contact *friend = [[Contact alloc] init];
-    if (tableView == self.tableView) {
-        friend = [self.me.friends objectAtIndex:path.row];
+    if (tableView == self.searchController.searchResultsTableView){
+        friend = [self.searchResults objectAtIndex:path.row];
     }
     else{
-//        friend = [self.searchResults objectAtIndex:path.row];
         friend = [self.me.friends objectAtIndex:path.row];
-
     }
     [(ContactCell *)cell initWithContact:friend];
     cell.contact = friend;

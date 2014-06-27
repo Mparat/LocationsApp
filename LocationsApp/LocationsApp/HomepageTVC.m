@@ -150,27 +150,11 @@
     [self.searchResults removeAllObjects];
     [self.tableView reloadData];
 
-    // I don't think you can create a new PFUser field that includes the friends' actual Names, because they are not unique so you wouldn't know what usernames they correspond with
-    NSMutableArray *usernamesArray = [self.signedInUser objectForKey:@"friendsArray"]; //array with user's friends usernames (to search through) because these are all the people in the homepageTVC.
-    NSMutableArray *namesArray = [[NSMutableArray alloc] init]; // array with the user's friends (usernames from friendsArray turned into PFusers)
-    for (int i = 0; i < [usernamesArray count]; i++) {
-        PFQuery *query = [PFUser query];
-        [query whereKey:@"username" equalTo:[usernamesArray objectAtIndex:i]];
-        PFUser *recipient = (PFUser *)[query getFirstObject];
-        [namesArray addObject:[recipient objectForKey:@"additional"]]; // array of friends Names
-    }
-
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] %@", searchTerm];
-    [namesArray filterUsingPredicate:predicate]; // filtered Names
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
+    NSMutableArray *filter = [NSMutableArray arrayWithArray:self.me.messageRecipients];
+    [filter filterUsingPredicate:predicate]; // filtered Names
     
-    NSMutableArray *friends2 = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [namesArray count]; i++) {
-        PFQuery *query = [PFUser query];
-        [query whereKey:@"additional" equalTo:[namesArray objectAtIndex:i]]; // filtered NamesArray
-        PFUser *recipient = (PFUser *)[query getFirstObject];
-        [friends2 addObject:recipient]; // array of friends --> PFUsers
-    }
-    [self.searchResults addObjectsFromArray:friends2];
+    [self.searchResults addObjectsFromArray:filter];
 }
 
 #pragma mark - Table view data source
@@ -182,12 +166,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.tableView) {
-//        return [[self.signedInUser objectForKey:@"friends"] count];
-        return [self.me.messageRecipients count];
+    if (tableView == self.searchController.searchResultsTableView) {
+        return [self.searchResults count];
     }
     else{
-        return [self.searchResults count];
+        return [self.me.messageRecipients count];
     }
 }
 
@@ -215,18 +198,12 @@
 //    NSDate *date = current.timestamp;
     
     NSString *name = [[NSString alloc] init];
-    if (tableView == self.tableView) {
-//        name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row]; // returns usernames (converted to Names when cell is created)
-//        PFQuery *query = [PFUser query];
-//        [query whereKey:@"username" equalTo:name];
-//        PFUser *recipient = (PFUser *)[query getFirstObject];
-//        name = [recipient objectForKey:@"additional"];
-////        self.recipient = recipient;
-        name = ((Contact *)[self.me.messageRecipients objectAtIndex:path.row]).firstName;
+    if (tableView == self.searchController.searchResultsTableView) {
+        name = ((Contact *)[self.searchResults objectAtIndex:path.row]).firstName;
+        self.recipient = [self.searchResults objectAtIndex:path.row];
     }
     else{
-        name = [[self.searchResults objectAtIndex:path.row] objectForKey:@"additional"];
-        self.recipient = [self.searchResults objectAtIndex:path.row];
+        name = ((Contact *)[self.me.messageRecipients objectAtIndex:path.row]).firstName;
     }
     
     [(HomepageChatCell *)cell placeSubviewsForCellWithName:name Location:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
