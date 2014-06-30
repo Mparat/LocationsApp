@@ -324,6 +324,11 @@
         NSLog(@"Did swipe \"Ask\" cell");
         if (((ContactCell *)cell).contact.exists == NO){
             [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
+
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
+            [defaults setObject:data forKey:self.me.username];
+            [defaults synchronize];
         }
         ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{
@@ -335,6 +340,11 @@
         NSLog(@"Did swipe \"tell\" cell");
         if (((ContactCell *)cell).contact.exists == NO){
             [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
+            [defaults setObject:data forKey:self.me.username];
+            [defaults synchronize];
         }
         ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{

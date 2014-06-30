@@ -16,4 +16,28 @@
 @synthesize username = _username;
 @synthesize exists = _exists;
 
+- (id)initWithCoder:(NSCoder *)decoder {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    self.firstName = [decoder decodeObjectForKey:@"firstName"];
+    self.lastName = [decoder decodeObjectForKey:@"lastName"];
+    self.phoneNumber = [decoder decodeObjectForKey:@"username"];
+    self.username = [decoder decodeObjectForKey:@"phoneNumber"];
+    self.exists = [decoder decodeObjectForKey:@"exists"];
+
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.firstName forKey:@"firstName"];
+    [aCoder encodeObject:self.lastName forKey:@"lastName"];
+    [aCoder encodeObject:self.phoneNumber forKey:@"phoneNumber"];
+    [aCoder encodeObject:self.username forKey:@"username"];
+    [aCoder encodeBool:self.exists forKey:@"exists"];
+}
+
+
 @end
