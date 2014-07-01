@@ -16,8 +16,8 @@
 #import "AddressBookTVC.h"
 #import "AddContacts.h"
 #import "MCSwipeTableViewCell.h"
-#import "MapVC.h"
 #import "OptionsView.h"
+#import "ContactCell.h"
 
 @interface HomepageTVC () <UISearchDisplayDelegate, UISearchBarDelegate, MCSwipeTableViewCellDelegate>
 
@@ -57,9 +57,6 @@
     [self addNavBar];
     [self addSearchBar];
     
-    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)]; // friendsArray is an array of usernames, only
-    [self.signedInUser save];
-    
     [self.tableView reloadData];
 
 }
@@ -67,9 +64,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden:NO];
-    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    [self.signedInUser save];
-    
+    [self addNavBar];
+
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 //    NSData *data = [defaults objectForKey:self.me.username];
 //    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -86,13 +82,7 @@
 
 -(void)addNavBar
 {
-    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-    [logout setTitle:@"Logout" forState:UIControlStateNormal];
-    [logout setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
-    self.navigationItem.leftBarButtonItem = logoutButton;
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", [self.signedInUser objectForKey:@"additional"]];
 
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:68.0/255.0 green:212.0/255.0 blue:103.0/255.0 alpha:1.0];
@@ -185,6 +175,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//    [tableView beginUpdates];
+//    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    [tableView endUpdates];
+//    
     HomepageChatCell *cell = [tableView dequeueReusableCellWithIdentifier:chatCell];
     cell.delegate = self;
     cell = nil;
@@ -201,16 +196,15 @@
 //    NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
 //    NSDate *date = current.timestamp;
     
-    NSString *name = [[NSString alloc] init];
+    Contact *recipient = [[Contact alloc] init];
     if (tableView == self.searchController.searchResultsTableView) {
-        name = ((Contact *)[self.searchResults objectAtIndex:path.row]).firstName;
-        self.recipient = [self.searchResults objectAtIndex:path.row];
+        recipient = [self.searchResults objectAtIndex:path.row];
     }
     else{
-        name = ((Contact *)[self.me.messageRecipients objectAtIndex:path.row]).firstName;
+        recipient = [self.me.messageRecipients objectAtIndex:path.row];
     }
-    
-    [(HomepageChatCell *)cell placeSubviewsForCellWithName:name Location:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
+    cell.contact = recipient;
+    [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
     [self configureSwipeViews:cell];
 }
 
@@ -226,19 +220,10 @@
     
     UILabel *tellText = [[UILabel alloc] init];
     UIView *tellView = [[UIView alloc] init];
-    tellText.text = @"Ask";
+    tellText.text = @"Tell";
     tellText.textColor = [UIColor blackColor];
     [tellView addSubview:tellText];
     UIColor *yellowColor = [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0];
-    
-    
-    UILabel *mapText = [[UILabel alloc] init];
-    UIView *mapView = [[UIView alloc] init];
-    mapText.text = @"Ask";
-    mapText.textColor = [UIColor blackColor];
-    [mapView addSubview:mapText];
-    UIColor *redColor = [UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0];
-    //    UIColor *brownColor = [UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0];
     
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
@@ -254,19 +239,6 @@
         }];
     }];
     
-    [cell setSwipeGestureWithView:mapView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
-        NSLog(@"Did swipe \"map\" cell");
-        MapVC *mapPage = [[MapVC alloc] init];
-        mapPage.locationManager = self.locationManager;
-        mapPage.parseController = self.parseController;
-        mapPage.signedInUser = self.signedInUser;
-        mapPage.recipient = self.recipient;
-        [self.navigationController pushViewController:mapPage animated:YES];
-    }];
-    
-    [cell swipeToOriginWithCompletion:^{
-        //
-    }];
     cell.firstTrigger = 0.01;
     cell.secondTrigger = 0.6;    
 }
@@ -286,34 +258,32 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:indexPath.row]; // returns usernames (converted to Names when cell is created)
-    PFQuery *query = [PFUser query];
-    [query whereKey:@"username" equalTo:name];
-    PFUser *recipient = (PFUser *)[query getFirstObject];
-    self.recipient = recipient;
-    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    self.recipient = ((ContactCell *)cell).contact;
     OptionsView *options = [[OptionsView alloc] init];
     options.recipient = self.recipient;
+    options.me = self.me;
     options.parseController = self.parseController;
     options.locationManager = self.locationManager;
     [self.navigationController pushViewController:options animated:YES];
 }
 
 
- // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
  {
      // Return NO if you do not want the specified item to be editable.
      return YES;
  }
 
-
-
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
  {
      if (editingStyle == UITableViewCellEditingStyleDelete) {
-         // Delete the row from the data source
+         [self.me.messageRecipients removeObjectAtIndex:indexPath.row];
+         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
+         [defaults setObject:data forKey:self.me.username];
+         [defaults synchronize];
+
          [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
      } else if (editingStyle == UITableViewCellEditingStyleInsert) {
          // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view

@@ -17,7 +17,6 @@
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "User.h"
-#import "ContactsVC.h"
 
 @implementation AppDelegate
 

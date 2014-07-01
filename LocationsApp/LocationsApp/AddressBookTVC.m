@@ -39,7 +39,7 @@
 @synthesize contacts = _contacts;
 @synthesize me = _me;
 @synthesize friends = _friends;
-@synthesize picker;
+@synthesize selectedIndexPath = _selectedIndexPath;
 
 #define contactCell @"contactCell"
 #define friendsArray @"friendsArray"
@@ -61,20 +61,23 @@
 
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     [self getContacts];
-
+    
+    self.tableView.allowsMultipleSelection = YES;
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+    
     [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden:NO];
-    [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    [self.signedInUser save];
-    
+    [self addNavBar];
+    self.selectedIndexPath = nil;
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 //    NSData *data = [defaults objectForKey:self.me.username];
 //    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-
+    selectedContacts = [NSMutableArray array];
+    
     [self.tableView reloadData];
 }
 
@@ -215,12 +218,23 @@
     [self.tableView reloadData];
 
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
-    NSMutableArray *filter = [NSMutableArray arrayWithArray:self.me.friends];
-    [filter filterUsingPredicate:predicate]; // filtered Names
- 
+    NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
+    NSMutableArray *filter1 = [NSMutableArray arrayWithArray:self.me.friends];
+    [filter1 filterUsingPredicate:predicate1]; // filtered Names
+
+    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"self beginswith[cd] %@", searchTerm];
+    NSMutableArray *filter2 = [NSMutableArray arrayWithArray:self.parseUserUsernames];
+    [filter2 filterUsingPredicate:predicate2]; // filtered usernames from Parse
+
     
-    [self.searchResults addObjectsFromArray:filter];
+    [self.searchResults addObjectsFromArray:filter1];
+//    [self.searchResults addObjectsFromArray:filter2];
+    
+//    for (int i = 0; i < [filter2 count]; i++) {
+//        for (int j = 0; j < [filter1 count]; j++) {
+//            if
+//        }
+//    }
 }
 
 -(void)logoutSuccessful
@@ -270,7 +284,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return [[self.signedInUser objectForKey:@"friendsArray"] count];
     if (tableView == self.searchController.searchResultsTableView){
         return [self.searchResults count];
     }
@@ -294,7 +307,6 @@
 
 -(void)configureCell:(ContactCell *)cell atIndexPath:(NSIndexPath *)path inTableView:(UITableView *)tableView
 {
-//    NSString *name = [[self.signedInUser objectForKey:@"friendsArray"] objectAtIndex:path.row];
     Contact *friend = [[Contact alloc] init];
     if (tableView == self.searchController.searchResultsTableView){
         friend = [self.searchResults objectAtIndex:path.row];
@@ -342,6 +354,9 @@
             [defaults setObject:data forKey:self.me.username];
             [defaults synchronize];
         }
+        if (new == false) {
+            NSLog(@"Send a \"ask\" message");
+                  }
         ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{
             //
@@ -365,13 +380,16 @@
             [defaults setObject:data forKey:self.me.username];
             [defaults synchronize];
         }
+        if (new == false) {
+            NSLog(@"Send a \"tell\" message to an already created message recipient");
+        }
         ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{
             //
         }];
     }];
       
-    cell.firstTrigger = 0.01;
+    cell.firstTrigger = 0.1;
     cell.secondTrigger = 0.6;
 }
 
@@ -384,10 +402,47 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self addRecipientsView];
+//    [self addRecipientsView];
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
 }
 
+-(void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell.accessoryType == UITableViewCellAccessoryNone) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [selectedContacts addObject:((ContactCell *)cell).contact];
+    }
+    else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [selectedContacts removeObject:((ContactCell *)cell).contact];
+    }
+    NSLog(@"selected? %d", cell.selected); // if this method is called, then the cell is selected.
 
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70)];
+    footer.backgroundColor = [UIColor blueColor];
+    UIButton *send = [[UIButton alloc] initWithFrame:CGRectMake(4*footer.frame.size.width/5, footer.frame.origin.y, footer.frame.size.width/5, 70)];
+    [send setBackgroundColor:[UIColor whiteColor]];
+    [send setTitle:@"Ask" forState:UIControlStateNormal];
+    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
+    [footer addSubview:send];
+    
+    NSLog(@"selected contacts: %@", selectedContacts);
+    
+//    NSIndexPath *path = [tableView indexPathForSelectedRow];
+    if ([selectedContacts count] == 0) { // if (path)
+        [footer removeFromSuperview];
+    }
+    else{
+        NSLog(@"no cell is selected");
+        [self.view addSubview:footer];
+    }
+
+}
 
 
 @end

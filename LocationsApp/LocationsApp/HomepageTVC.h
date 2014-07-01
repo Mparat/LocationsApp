@@ -25,8 +25,8 @@
 @property (nonatomic, strong) ParseController *parseController;
 
 @property (nonatomic, strong) PFUser *signedInUser;
-@property (nonatomic, strong) PFUser *recipient;
 
 @property (nonatomic, strong) User *me;
+@property (nonatomic, strong) Contact *recipient;
 
 @end

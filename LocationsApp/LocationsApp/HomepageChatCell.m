@@ -21,12 +21,13 @@
 @implementation HomepageChatCell
 
 @synthesize user = _user;
+@synthesize contact = _contact;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-//        self.user = [[User alloc] initWithName:@"Sam"];
+        //
     }
     return self;
 }
@@ -43,9 +44,9 @@
     // Configure the view for the selected state
 }
 
--(void)placeSubviewsForCellWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date
+-(void)placeSubviewsForCellWithName:(Contact *)recipient Location:(NSString *)text Date:(NSDate *)date
 {
-    [self setContactInfoWithName:name Location:text Date:date];
+    [self setContactInfoWithName:recipient.firstName Location:text Date:date];
 }
 
 -(void)askForLocation
@@ -56,11 +57,7 @@
 -(void)setContactInfoWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date
 {
     // picture: 50 x 50, 10 buffer all around
-//    PFQuery *query = [PFUser query];
-//    [query whereKey:@"username" equalTo:name];
-//    PFUser *recipient = (PFUser *)[query getFirstObject];
-//    NSString *actualName = [recipient objectForKey:@"additional"];
-    
+
     self.username = [[UILabel alloc] init];
     self.username.text = name;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.username.font, NSFontAttributeName, nil];

@@ -15,7 +15,10 @@
 #import "User.h"
 
 
-@interface AddressBookTVC : UITableViewController <ABPeoplePickerNavigationControllerDelegate>
+@interface AddressBookTVC : UITableViewController
+{
+    NSMutableArray *selectedContacts;
+}
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
@@ -30,7 +33,7 @@
 @property (nonatomic, strong) User *me;
 @property (nonatomic, strong) NSMutableArray *friends;
 
-@property (nonatomic, strong) ABPeoplePickerNavigationController *picker;
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 
 
 @end

@@ -51,7 +51,6 @@
 		E0644B22195A3B0F0012CAF7 /* BlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B21195A3B0F0012CAF7 /* BlurredImage.m */; };
 		E0644B28195A3FC30012CAF7 /* OptionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B27195A3FC30012CAF7 /* OptionsView.m */; };
 		E0644B2B195B51360012CAF7 /* ContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B2A195B51360012CAF7 /* ContactCell.m */; };
-		E09B6E04195CC7C100D27565 /* ContactsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E09B6E03195CC7C100D27565 /* ContactsVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,8 +129,6 @@
 		E0644B27195A3FC30012CAF7 /* OptionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsView.m; sourceTree = "<group>"; };
 		E0644B29195B51360012CAF7 /* ContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactCell.h; sourceTree = "<group>"; };
 		E0644B2A195B51360012CAF7 /* ContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactCell.m; sourceTree = "<group>"; };
-		E09B6E02195CC7C100D27565 /* ContactsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsVC.h; sourceTree = "<group>"; };
-		E09B6E03195CC7C100D27565 /* ContactsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,14 +289,12 @@
 				1482D1FC1950C88200B8F957 /* AddressBookTVC.m */,
 				144BA0BC194F68A600977673 /* AddContacts.h */,
 				144BA0BD194F68A600977673 /* AddContacts.m */,
-				14315C5A1949297E00378EA5 /* MapVC.h */,
-				14315C5B1949297E00378EA5 /* MapVC.m */,
 				E0644B26195A3FC30012CAF7 /* OptionsView.h */,
 				E0644B27195A3FC30012CAF7 /* OptionsView.m */,
+				14315C5A1949297E00378EA5 /* MapVC.h */,
+				14315C5B1949297E00378EA5 /* MapVC.m */,
 				14AB33451942ECAB00B8E20D /* MessageVC.h */,
 				14AB33461942ECAB00B8E20D /* MessageVC.m */,
-				E09B6E02195CC7C100D27565 /* ContactsVC.h */,
-				E09B6E03195CC7C100D27565 /* ContactsVC.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -473,7 +468,6 @@
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
 				14C66668194669FF00341F0D /* User.m in Sources */,
 				E0644B22195A3B0F0012CAF7 /* BlurredImage.m in Sources */,
-				E09B6E04195CC7C100D27565 /* ContactsVC.m in Sources */,
 				14315C4D19490A0400378EA5 /* Contact.m in Sources */,
 				144BA0C4194F80A000977673 /* SearchCell.m in Sources */,
 				144BA0BE194F68A600977673 /* AddContacts.m in Sources */,

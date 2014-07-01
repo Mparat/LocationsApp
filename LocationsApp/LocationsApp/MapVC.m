@@ -8,6 +8,7 @@
 
 #import "MapVC.h"
 #import "MessageVC.h"
+#import "OptionsView.h"
 
 @interface MapVC ()
 
@@ -18,6 +19,7 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
+@synthesize me = _me;
 @synthesize recipient = _recipient;
 
 
@@ -63,15 +65,16 @@
 
 -(void) addNavBar
 {
-//    UIButton *back = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-//    [back setTitle:@"<" forState:UIControlStateNormal];
-//    [back setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//    [back addTarget:self action:@selector(backToMessage) forControlEvents:UIControlEventTouchUpInside];
-//
-//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:back];
-//    self.navigationItem.leftBarButtonItem = backButton;
+    UIButton *done = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [done setTitle:@"Done" forState:UIControlStateNormal];
+    [done setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [done addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithCustomView:done];
+    self.navigationItem.rightBarButtonItem = doneButton;
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%@", [self.recipient objectForKey:@"additional"]];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@", self.recipient.firstName];
+                                
 
 //    self.navigationController.navigationBar.opaque = YES;
 //    self.navigationController.navigationBar.translucent = YES;
@@ -84,12 +87,10 @@
 
 }
 
--(void)backToMessage
+-(void)done
 {
-    MessageVC *message = [[MessageVC alloc] init];
-    [message setLocationManager:self.locationManager];
-    message.locationManager = self.locationManager;
-    [self.navigationController pushViewController:message animated:YES];
+    OptionsView *options = [[OptionsView alloc] init];
+    [self.navigationController pushViewController:options animated:YES];
 }
 
 
