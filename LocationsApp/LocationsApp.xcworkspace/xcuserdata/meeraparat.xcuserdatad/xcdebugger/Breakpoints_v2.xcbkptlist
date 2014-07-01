@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425942143.319454"
+            timestampString = "425946323.623885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "-addRecipientsView"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,21 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425945393.32334"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "452"
-            endingLineNumber = "452">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425945393.32334"
+            timestampString = "425946323.623885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "454"
@@ -54,7 +40,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425945393.32334"
+            timestampString = "425946323.623885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "456"
@@ -68,11 +54,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425945393.32334"
+            timestampString = "425946323.623885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "456"
-            endingLineNumber = "456">
+            startingLineNumber = "458"
+            endingLineNumber = "458">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -82,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425945393.32334"
+            timestampString = "425946323.623885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "456"
-            endingLineNumber = "456">
+            startingLineNumber = "458"
+            endingLineNumber = "458">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -96,11 +82,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425945393.32334"
+            timestampString = "425946323.623885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "457"
-            endingLineNumber = "457">
+            startingLineNumber = "458"
+            endingLineNumber = "458">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -110,13 +96,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/AddressBookTVC.m"
-            timestampString = "425945214.307124"
+            timestampString = "425946323.623885"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "438"
-            endingLineNumber = "438"
-            landmarkName = "-tableView:didHighlightRowAtIndexPath:"
-            landmarkType = "5">
+            startingLineNumber = "459"
+            endingLineNumber = "459">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

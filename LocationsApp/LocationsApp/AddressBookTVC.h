@@ -18,6 +18,8 @@
 @interface AddressBookTVC : UITableViewController
 {
     NSMutableArray *selectedContacts;
+    UIView *footer;
+    UIButton *send;
 }
 
 @property (nonatomic, strong) LocationManagerController *locationManager;

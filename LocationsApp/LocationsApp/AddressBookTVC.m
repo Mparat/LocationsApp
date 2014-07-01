@@ -66,6 +66,16 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     
     [self.tableView reloadData];
+    
+    footer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70)];
+    footer.backgroundColor = [UIColor blueColor];
+    send = [[UIButton alloc] initWithFrame:CGRectMake(4*footer.frame.size.width/5, footer.frame.origin.y, footer.frame.size.width/5, 70)];
+    [send setBackgroundColor:[UIColor whiteColor]];
+    [send setTitle:@"Ask" forState:UIControlStateNormal];
+    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
+    [footer addSubview:send];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -422,14 +432,6 @@
     }
     NSLog(@"selected? %d", cell.selected); // if this method is called, then the cell is selected.
 
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70)];
-    footer.backgroundColor = [UIColor blueColor];
-    UIButton *send = [[UIButton alloc] initWithFrame:CGRectMake(4*footer.frame.size.width/5, footer.frame.origin.y, footer.frame.size.width/5, 70)];
-    [send setBackgroundColor:[UIColor whiteColor]];
-    [send setTitle:@"Ask" forState:UIControlStateNormal];
-    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
-    [footer addSubview:send];
     
     NSLog(@"selected contacts: %@", selectedContacts);
     
