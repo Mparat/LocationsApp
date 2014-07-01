@@ -17,6 +17,8 @@
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) NSMutableArray *parseUserNumbers;
+@property (nonatomic, strong) NSMutableArray *parseUserUsernames;
+
 
 -(UINavigationController *)navigationController;
 

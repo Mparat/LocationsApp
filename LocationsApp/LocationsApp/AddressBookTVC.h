@@ -22,6 +22,8 @@
 @property (nonatomic, strong) PFUser *signedInUser;
 
 @property (nonatomic, strong) NSArray *parseUserNumbers;
+@property (nonatomic, strong) NSArray *parseUserUsernames;
+
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic) CFArrayRef contacts;
 

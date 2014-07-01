@@ -24,6 +24,7 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize parseUserNumbers = _parseUserNumbers;
+@synthesize parseUserUsernames = _parseUserUsernames;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -179,17 +180,28 @@
     [query whereKeyExists:@"phoneNumber"];
     [query whereKey:@"username" notEqualTo:self.parseController.signedInUser.username];
     self.parseUserNumbers = [NSMutableArray array];
+    self.parseUserUsernames = [NSMutableArray array];
+
     NSArray *users = [query findObjects];
     for (int i = 0; i < [users count]; i++) {
         NSString *number = [[users objectAtIndex:i] objectForKey:@"phoneNumber"];
+        NSString *username = [[users objectAtIndex:i] objectForKey:@"username"];
         [self.parseUserNumbers addObject:number];
+        [self.parseUserUsernames addObject:username];
     }
     
     User *me = [[User alloc] init];
     me.username = self.parseController.signedInUser.username;
     me.phoneNumber = [self.parseController.signedInUser objectForKey:@"phoneNumber"];
     me.friends = [NSMutableArray array];
-    me.messageRecipients = [NSMutableArray array];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [defaults objectForKey:me.username];
+    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    
+    me.messageRecipients = [NSMutableArray arrayWithArray:array];
+
+
     
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];
@@ -204,10 +216,8 @@
     contacts.signedInUser = self.parseController.signedInUser;
     contacts.me = me;
     contacts.parseUserNumbers = self.parseUserNumbers;
+    contacts.parseUserUsernames = self.parseUserUsernames;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
-
-//    ContactsVC *contacts = [[ContactsVC alloc] init];
-//    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     

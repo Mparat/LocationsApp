@@ -23,8 +23,8 @@
     }
     self.firstName = [decoder decodeObjectForKey:@"firstName"];
     self.lastName = [decoder decodeObjectForKey:@"lastName"];
-    self.phoneNumber = [decoder decodeObjectForKey:@"username"];
-    self.username = [decoder decodeObjectForKey:@"phoneNumber"];
+    self.phoneNumber = [decoder decodeObjectForKey:@"phoneNumber"];
+    self.username = [decoder decodeObjectForKey:@"username"];
     self.exists = [decoder decodeObjectForKey:@"exists"];
 
     return self;

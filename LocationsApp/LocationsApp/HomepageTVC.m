@@ -70,9 +70,9 @@
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     [self.signedInUser save];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey:self.me.username];
-    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSData *data = [defaults objectForKey:self.me.username];
+//    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     
     [self.tableView reloadData];
 }

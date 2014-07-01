@@ -34,6 +34,7 @@
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
 @synthesize parseUserNumbers = _parseUserNumbers;
+@synthesize parseUserUsernames = _parseUserUsernames;
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
 @synthesize me = _me;
@@ -69,6 +70,10 @@
     [self.tabBarController.tabBar setHidden:NO];
     [[self.signedInUser objectForKey:@"friendsArray"] sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     [self.signedInUser save];
+    
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSData *data = [defaults objectForKey:self.me.username];
+//    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 
     [self.tableView reloadData];
 }
@@ -130,7 +135,7 @@
                         newContact.firstName = first;
                         newContact.lastName = last;
                         newContact.phoneNumber = [self.parseUserNumbers objectAtIndex:k];
-//                        newContact.username = [(PFUser *)[query getFirstObject] objectForKey:@"username"];
+                        newContact.username = [self.parseUserUsernames objectAtIndex:k];
                         [self.me.friends addObject:newContact];
                     }
                 }
@@ -322,9 +327,16 @@
     
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
-        if (((ContactCell *)cell).contact.exists == NO){
+        BOOL new = true;
+        for (int i = 0; i < [self.me.messageRecipients count]; i++){
+            if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
+                NSLog(@"contact exits");
+                new = false;
+            }
+        }
+        if (new == true) {
             [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
-
+            
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
             [defaults setObject:data forKey:self.me.username];
@@ -338,7 +350,14 @@
     
     [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
-        if (((ContactCell *)cell).contact.exists == NO){
+        BOOL new = true;
+        for (int i = 0; i < [self.me.messageRecipients count]; i++){
+            if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
+                NSLog(@"contact exits");
+                new = false;
+            }
+        }
+        if (new == true) {
             [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
             
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
