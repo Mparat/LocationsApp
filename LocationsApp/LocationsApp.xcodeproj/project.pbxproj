@@ -51,6 +51,8 @@
 		E0644B22195A3B0F0012CAF7 /* BlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B21195A3B0F0012CAF7 /* BlurredImage.m */; };
 		E0644B28195A3FC30012CAF7 /* OptionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B27195A3FC30012CAF7 /* OptionsView.m */; };
 		E0644B2B195B51360012CAF7 /* ContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B2A195B51360012CAF7 /* ContactCell.m */; };
+		E09829E219648B4E00E75625 /* MessageCVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E09829E119648B4E00E75625 /* MessageCVC.m */; };
+		E09829E51964A62700E75625 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E09829E41964A62700E75625 /* MessageCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +131,10 @@
 		E0644B27195A3FC30012CAF7 /* OptionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsView.m; sourceTree = "<group>"; };
 		E0644B29195B51360012CAF7 /* ContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactCell.h; sourceTree = "<group>"; };
 		E0644B2A195B51360012CAF7 /* ContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactCell.m; sourceTree = "<group>"; };
+		E09829E019648B4E00E75625 /* MessageCVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCVC.h; sourceTree = "<group>"; };
+		E09829E119648B4E00E75625 /* MessageCVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCVC.m; sourceTree = "<group>"; };
+		E09829E31964A62700E75625 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
+		E09829E41964A62700E75625 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +234,7 @@
 				14C6666919466B2000341F0D /* People */,
 				14AB33411942931C00B8E20D /* Views */,
 				14AB33401942930F00B8E20D /* TableViewCells */,
+				E09829E61964A62D00E75625 /* CollectionViewCells */,
 				14AB331D1942816400B8E20D /* Images.xcassets */,
 				14AB33091942816400B8E20D /* Supporting Files */,
 				E0644B20195A3B0F0012CAF7 /* BlurredImage.h */,
@@ -291,6 +298,8 @@
 				144BA0BD194F68A600977673 /* AddContacts.m */,
 				E0644B26195A3FC30012CAF7 /* OptionsView.h */,
 				E0644B27195A3FC30012CAF7 /* OptionsView.m */,
+				E09829E019648B4E00E75625 /* MessageCVC.h */,
+				E09829E119648B4E00E75625 /* MessageCVC.m */,
 				14315C5A1949297E00378EA5 /* MapVC.h */,
 				14315C5B1949297E00378EA5 /* MapVC.m */,
 				14AB33451942ECAB00B8E20D /* MessageVC.h */,
@@ -319,6 +328,15 @@
 				14315C61194A12D700378EA5 /* ParseController.m */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		E09829E61964A62D00E75625 /* CollectionViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				E09829E31964A62700E75625 /* MessageCell.h */,
+				E09829E41964A62700E75625 /* MessageCell.m */,
+			);
+			name = CollectionViewCells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -475,8 +493,10 @@
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6666519464A4800341F0D /* Login.m in Sources */,
 				14C6667A1947A60A00341F0D /* LocationManagerController.m in Sources */,
+				E09829E219648B4E00E75625 /* MessageCVC.m in Sources */,
 				1482D1FD1950C88200B8F957 /* AddressBookTVC.m in Sources */,
 				14315C5C1949297E00378EA5 /* MapVC.m in Sources */,
+				E09829E51964A62700E75625 /* MessageCell.m in Sources */,
 				E0644B2B195B51360012CAF7 /* ContactCell.m in Sources */,
 				14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */,
 				14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */,

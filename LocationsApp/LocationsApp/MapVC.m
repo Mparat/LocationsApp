@@ -36,6 +36,8 @@
 {
     [super viewDidLoad];
     [self.view addSubview:[self.locationManager displayMap:self.view]];
+    self.navigationController.navigationBarHidden = NO;
+
     [self addNavBar];
 
     UITableViewController *extra = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];

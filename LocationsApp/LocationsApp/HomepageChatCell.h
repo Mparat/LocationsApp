@@ -17,6 +17,7 @@
 @property (nonatomic, strong) Contact *contact;
 
 -(void)placeSubviewsForCellWithName:(Contact *)recipient Location:(NSString *)text Date:(NSDate *)date;
+-(void)placeSubviewsForGroupMessageCell:(NSArray *)recipients Location:(NSString *)text Date:(NSDate *)date;
 
 
 @end

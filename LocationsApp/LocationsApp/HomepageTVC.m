@@ -34,6 +34,7 @@
 @synthesize parseController = _parseController;
 @synthesize recipient = _recipient;
 @synthesize me = _me;
+@synthesize expandedIndexPath = _expandedIndexPath;
 
 #define chatCell @"chatCell"
 
@@ -66,9 +67,9 @@
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
 
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSData *data = [defaults objectForKey:self.me.username];
-//    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [defaults objectForKey:self.me.username];
+    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     
     [self.tableView reloadData];
 }
@@ -82,6 +83,15 @@
 
 -(void)addNavBar
 {
+    UIButton *new = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [new setTitle:@"New" forState:UIControlStateNormal];
+    [new setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [new addTarget:self action:@selector(createNewMessage) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *newMessageButton = [[UIBarButtonItem alloc] initWithCustomView:new];
+    self.navigationItem.rightBarButtonItem = newMessageButton;
+
+    
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", [self.signedInUser objectForKey:@"additional"]];
 
@@ -106,16 +116,10 @@
     self.searchResults = [NSMutableArray array];
 }
 
--(void)logoutSuccessful
+-(void)createNewMessage
 {
-    [PFUser logOut];
-    UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] navigationController];
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        //
-    }];
-    [self.navigationController presentViewController:controller animated:YES completion:^{
-        //
-    }];
+    [self.navigationController.tabBarController setSelectedIndex:1]; // to Contacts page
+    // tab bar button for this page should be selected/highlighted
 }
 
 #pragma mark - Search Bar Delegate controls
@@ -170,7 +174,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
+        return 100;
+    }
+    else{
+        return 70;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -199,12 +208,19 @@
     Contact *recipient = [[Contact alloc] init];
     if (tableView == self.searchController.searchResultsTableView) {
         recipient = [self.searchResults objectAtIndex:path.row];
+        cell.contact = recipient;
+        [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate date]];
     }
     else{
-        recipient = [self.me.messageRecipients objectAtIndex:path.row];
+        if ([([self.me.messageRecipients objectAtIndex:path.row]) isKindOfClass:[NSMutableArray class]]) {
+            [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:path.row] Location:@"location" Date:[NSDate date]]; //
+        }
+        else{
+            recipient = [self.me.messageRecipients objectAtIndex:path.row];
+            cell.contact = recipient;
+            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate date]]; // current date+time
+        }
     }
-    cell.contact = recipient;
-    [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate dateWithTimeIntervalSinceNow:5]];
     [self configureSwipeViews:cell];
 }
 
@@ -232,14 +248,15 @@
         }];
     }];
     
-    [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState2 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+    [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
         [cell swipeToOriginWithCompletion:^{
             //
         }];
     }];
     
-    cell.firstTrigger = 0.01;
+    cell.defaultColor = [UIColor grayColor];
+    cell.firstTrigger = 0.2;
     cell.secondTrigger = 0.6;    
 }
 
@@ -265,7 +282,9 @@
     options.me = self.me;
     options.parseController = self.parseController;
     options.locationManager = self.locationManager;
-    [self.navigationController pushViewController:options animated:YES];
+    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
+        //
+    }];
 }
 
 
@@ -290,23 +309,25 @@
      }
  }
 
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.tableView.editing) {
+        return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
+}
 
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView beginUpdates]; // triggers heightforrow..
+    if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
+        self.expandedIndexPath = nil;
+    }
+    else{
+        self.expandedIndexPath = indexPath;
+    }
+    [tableView endUpdates];
+}
 
 
 #pragma mark - MCSwipeTableViewCellDelegate // not being called..

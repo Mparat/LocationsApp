@@ -39,7 +39,6 @@
 @synthesize contacts = _contacts;
 @synthesize me = _me;
 @synthesize friends = _friends;
-@synthesize selectedIndexPath = _selectedIndexPath;
 
 #define contactCell @"contactCell"
 #define friendsArray @"friendsArray"
@@ -58,37 +57,26 @@
     [super viewDidLoad];
     [self addNavBar];
     [self addSearchBar];
+    [self addRecipientsView];
+    [self getContacts];
 
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
-    [self getContacts];
     
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
-    
-    [self.tableView reloadData];
-    
-    footer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70)];
-    footer.backgroundColor = [UIColor blueColor];
-    send = [[UIButton alloc] initWithFrame:CGRectMake(4*footer.frame.size.width/5, footer.frame.origin.y, footer.frame.size.width/5, 70)];
-    [send setBackgroundColor:[UIColor whiteColor]];
-    [send setTitle:@"Ask" forState:UIControlStateNormal];
-    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
-    [footer addSubview:send];
+    self.clearsSelectionOnViewWillAppear = NO;
 
+    [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
-    self.selectedIndexPath = nil;
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSData *data = [defaults objectForKey:self.me.username];
-//    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
     selectedContacts = [NSMutableArray array];
     
-    [self.tableView reloadData];
+    self.clearsSelectionOnViewWillAppear = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -167,15 +155,6 @@
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
     self.navigationItem.leftBarButtonItem = logoutButton;
-    
-    
-    UIButton *findFriends = [[UIButton alloc] initWithFrame:CGRectMake(8*self.navigationController.navigationBar.frame.size.width/10, 10, 40, 30)];
-    [findFriends setTitle:@"Add" forState:UIControlStateNormal];
-    [findFriends setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [findFriends addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *addFriendsButton = [[UIBarButtonItem alloc] initWithCustomView:findFriends];
-    self.navigationItem.rightBarButtonItem = addFriendsButton;
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:210.0/255.0 green:75.0/255.0 blue:104.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
@@ -265,7 +244,6 @@
     add.locationManager = self.locationManager;
     add.parseController = self.parseController;
     add.signedInUser = self.signedInUser;
-//    [self.navigationController pushViewController:add animated:NO];
     add.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:add] animated:NO completion:^{
         //
@@ -274,15 +252,54 @@
 
 -(void)addRecipientsView
 {
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70)];
+    footer = [[UIView alloc] init];
+    footer.frame = CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70);
     footer.backgroundColor = [UIColor blueColor];
-    UIButton *send = [[UIButton alloc] initWithFrame:CGRectMake(4*footer.frame.size.width/5, footer.frame.origin.y, footer.frame.size.width/5, 70)];
-    [send setBackgroundColor:[UIColor whiteColor]];
+    send = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    send.frame = CGRectMake(4*footer.frame.size.width/5, 200, footer.frame.size.width/5, 70);
+    send.frame = CGRectMake(4*footer.frame.size.width/5, 5, footer.frame.size.width/5, 60);
+//    [send setBackgroundColor:[UIColor whiteColor]];
     [send setTitle:@"Ask" forState:UIControlStateNormal];
-    [send setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:send];
-    [self.view addSubview:footer];
+
+    selectedContactsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 4*footer.frame.size.width/5, 50)];
+    selectedContactsLabel.text = @"";
+    [footer addSubview:selectedContactsLabel];
+    
+    UIButton *cancelSelection = [[UIButton alloc] initWithFrame:CGRectMake(6*self.navigationController.navigationBar.frame.size.width/10, 30, 70, 30)];
+    [cancelSelection setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelSelection setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [cancelSelection addTarget:self action:@selector(cancelSelection) forControlEvents:UIControlEventTouchUpInside];
+    
+    cancelSelectionButton = [[UIBarButtonItem alloc] initWithCustomView:cancelSelection];
+}
+
+-(void)askLocation
+{
+    [self.me.messageRecipients addObject:selectedContacts];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
+    [defaults setObject:data forKey:self.me.username];
+    [defaults synchronize];
+    [self cancelSelection];
+}
+
+-(void)cancelSelection
+{
+    NSArray *paths = [NSArray arrayWithArray:[self.tableView indexPathsForSelectedRows]];
+    int count = (int)[selectedContacts count];
+
+    for (int i = 0; i < count; i++) {
+        [self.tableView deselectRowAtIndexPath:[paths objectAtIndex:i] animated:NO];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[paths objectAtIndex:i]];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [selectedContacts removeObject:((ContactCell *)cell).contact];
+    }
+    [footer removeFromSuperview];
+    self.navigationItem.rightBarButtonItem = nil;
+    selectedContactsLabel.text = @"";
 }
 
 #pragma mark - Table view data source
@@ -351,9 +368,11 @@
         NSLog(@"Did swipe \"Ask\" cell");
         BOOL new = true;
         for (int i = 0; i < [self.me.messageRecipients count]; i++){
-            if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
-                NSLog(@"contact exits");
-                new = false;
+            if (![[self.me.messageRecipients objectAtIndex:i] isKindOfClass:[NSMutableArray class]]){
+                if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
+                    NSLog(@"contact exits");
+                    new = false;
+                }
             }
         }
         if (new == true) {
@@ -366,7 +385,7 @@
         }
         if (new == false) {
             NSLog(@"Send a \"ask\" message");
-                  }
+        }
         ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{
             //
@@ -377,9 +396,11 @@
         NSLog(@"Did swipe \"tell\" cell");
         BOOL new = true;
         for (int i = 0; i < [self.me.messageRecipients count]; i++){
-            if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
-                NSLog(@"contact exits");
-                new = false;
+            if (![[self.me.messageRecipients objectAtIndex:i] isKindOfClass:[NSMutableArray class]]){
+                if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
+                    NSLog(@"contact exits");
+                    new = false;
+                }
             }
         }
         if (new == true) {
@@ -398,7 +419,8 @@
             //
         }];
     }];
-      
+    
+    cell.defaultColor = [UIColor grayColor];
     cell.firstTrigger = 0.1;
     cell.secondTrigger = 0.6;
 }
@@ -412,10 +434,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [self addRecipientsView];
-    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
 }
 
@@ -425,25 +444,38 @@
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [selectedContacts addObject:((ContactCell *)cell).contact];
+        if ([selectedContacts count] == 1) {
+            selectedContactsLabel.text = [NSString stringWithFormat:@"%@ %@", selectedContactsLabel.text, ((Contact *)[selectedContacts lastObject]).firstName];
+        }
+        if ([selectedContacts count] > 1) {
+            selectedContactsLabel.text = [NSString stringWithFormat:@"%@, %@", selectedContactsLabel.text, ((Contact *)[selectedContacts lastObject]).firstName];
+        }
     }
     else{
         cell.accessoryType = UITableViewCellAccessoryNone;
         [selectedContacts removeObject:((ContactCell *)cell).contact];
+        selectedContactsLabel.text = @"";
+        for (int i = 0; i < [selectedContacts count]; i++) {
+            if (i == 0) {
+                selectedContactsLabel.text = [NSString stringWithFormat:@"%@ %@", selectedContactsLabel.text, ((Contact *)[selectedContacts objectAtIndex:i]).firstName];
+            }
+            if (i > 0) {
+                selectedContactsLabel.text = [NSString stringWithFormat:@"%@, %@", selectedContactsLabel.text, ((Contact *)[selectedContacts objectAtIndex:i]).firstName];
+            }
+        }
     }
-    NSLog(@"selected? %d", cell.selected); // if this method is called, then the cell is selected.
-
-    
-    NSLog(@"selected contacts: %@", selectedContacts);
     
 //    NSIndexPath *path = [tableView indexPathForSelectedRow];
     if ([selectedContacts count] == 0) { // if (path)
+        NSLog(@"no cell is selected");
         [footer removeFromSuperview];
+        self.navigationItem.rightBarButtonItem = nil;
+        selectedContactsLabel.text = @"";
     }
     else{
-        NSLog(@"no cell is selected");
         [self.view addSubview:footer];
+        self.navigationItem.rightBarButtonItem = cancelSelectionButton;
     }
-
 }
 
 

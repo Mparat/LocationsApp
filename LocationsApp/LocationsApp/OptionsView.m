@@ -8,6 +8,7 @@
 
 #import "OptionsView.h"
 #import "MapVC.h"
+#import "MessageCVC.h"
 
 @interface OptionsView ()
 
@@ -27,6 +28,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.view.backgroundColor = [UIColor whiteColor];
+//        self.view.alpha = 0.6;
     }
     return self;
 }
@@ -40,47 +42,51 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden:YES];
-    [self addNavBar];
-}
-
--(void)addNavBar
-{
-    //
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void)initButtons
 {
-    UIButton *okay = [[UIButton alloc] initWithFrame:CGRectMake(4*self.view.frame.size.width/5, self.view.frame.size.height/10, 50, 50)];
-    [okay setTitle:@"Okay" forState:UIControlStateNormal];
-    [okay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [okay addTarget:self action:@selector(sendOkay) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:okay];
-
-    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(4*self.view.frame.size.width/5, 3*self.view.frame.size.height/10, 50, 50)];
-    [tell setTitle:@"Tell" forState:UIControlStateNormal];
-    [tell setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [tell addTarget:self action:@selector(tellLocation) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:tell];
-
-    UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(4*self.view.frame.size.width/5, 5*self.view.frame.size.height/10, 50, 50)];
+    UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height/2 - 105, 80, 80)];
+    [[ask layer] setBorderColor:[UIColor blackColor].CGColor];
+    [[ask layer] setBorderWidth:2.0f];
     [ask setTitle:@"Ask" forState:UIControlStateNormal];
     [ask setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:ask];
 
-    UIButton *text = [[UIButton alloc] initWithFrame:CGRectMake(4*self.view.frame.size.width/5, 7*self.view.frame.size.height/10, 50, 50)];
+    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(120, self.view.frame.size.height/2 - 105, 80, 80)];
+    [[tell layer] setBorderColor:[UIColor blackColor].CGColor];
+    [[tell layer] setBorderWidth:2.0f];
+    [tell setTitle:@"Tell" forState:UIControlStateNormal];
+    [tell setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [tell addTarget:self action:@selector(tellLocation) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:tell];
+
+    UIButton *okay = [[UIButton alloc] initWithFrame:CGRectMake(220, self.view.frame.size.height/2 - 105, 80, 80)];
+    [[okay layer] setBorderColor:[UIColor blackColor].CGColor];
+    [[okay layer] setBorderWidth:2.0f];
+    [okay setTitle:@"Okay" forState:UIControlStateNormal];
+    [okay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [okay addTarget:self action:@selector(sendOkay) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:okay];
+    
+    UIButton *text = [[UIButton alloc] initWithFrame:CGRectMake(70, self.view.frame.size.height/2 + 25, 80, 80)];
+    [[text layer] setBorderColor:[UIColor blackColor].CGColor];
+    [[text layer] setBorderWidth:2.0f];
     [text setTitle:@"Text" forState:UIControlStateNormal];
     [text setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [text addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:text];
 
-    UIButton *map = [[UIButton alloc] initWithFrame:CGRectMake(4*self.view.frame.size.width/5, 9*self.view.frame.size.height/10, 50, 50)];
+    UIButton *map = [[UIButton alloc] initWithFrame:CGRectMake(170, self.view.frame.size.height/2 + 25, 80, 80)];
+    [[map layer] setBorderColor:[UIColor blackColor].CGColor];
+    [[map layer] setBorderWidth:2.0f];
     [map setTitle:@"Map" forState:UIControlStateNormal];
     [map setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [map addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
@@ -105,8 +111,17 @@
 
 -(void)sendText
 {
-    NSString *number = self.recipient.phoneNumber;
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:%@", number]]];
+//    NSString *number = self.recipient.phoneNumber;
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:%@", number]]];
+
+    MessageCVC *message = [[MessageCVC alloc] init];
+    message.locationManager = self.locationManager;
+    message.parseController = self.parseController;
+    message.signedInUser = self.signedInUser;
+    message.recipient = self.recipient;
+    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:message] animated:YES completion:^{
+        //
+    }];
 }
 
 -(void)viewMap
@@ -119,5 +134,13 @@
     [self.navigationController pushViewController:mapView animated:YES];
 }
 
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touched, not on button");
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+}
 
 @end

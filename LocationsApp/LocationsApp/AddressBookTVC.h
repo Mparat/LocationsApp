@@ -19,7 +19,9 @@
 {
     NSMutableArray *selectedContacts;
     UIView *footer;
+    UILabel *selectedContactsLabel;
     UIButton *send;
+    UIBarButtonItem *cancelSelectionButton;
 }
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
@@ -34,8 +36,5 @@
 
 @property (nonatomic, strong) User *me;
 @property (nonatomic, strong) NSMutableArray *friends;
-
-@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
-
 
 @end
