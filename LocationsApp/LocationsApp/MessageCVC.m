@@ -26,6 +26,16 @@
 //    return self;
 //}
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        //configure class
+    }
+    return self;
+}
+
+
 -(id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
     self = [super initWithCollectionViewLayout:layout];
@@ -62,6 +72,26 @@
     [self.view addSubview:self.textField];
 }
 
+- (void) animations
+{
+    
+    [UIView animateWithDuration:1.0f animations:^{
+        self.textField.frame = CGRectMake(100, 100, 100, 100);
+    }];
+    
+    [UIView animateWithDuration:1.0f animations:^{
+        //
+    } completion:^(BOOL finished) {
+        //
+    }];
+    
+    [UIView animateWithDuration:1.0f delay:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
+        //
+    } completion:^(BOOL finished) {
+        //
+    }];
+    
+}
 #pragma mark - Collection View Data Sources
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView

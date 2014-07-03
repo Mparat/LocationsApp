@@ -26,4 +26,6 @@
 
 @property (nonatomic,strong) UICollectionView *collectionView;
 
+- (id)init;
+
 @end

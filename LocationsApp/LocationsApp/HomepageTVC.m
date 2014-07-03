@@ -70,7 +70,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [defaults objectForKey:self.me.username];
     self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    
+    self.navigationController.navigationBarHidden = NO;
     [self.tableView reloadData];
 }
 
@@ -278,9 +278,10 @@
     options.me = self.me;
     options.parseController = self.parseController;
     options.locationManager = self.locationManager;
-    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
-        //
-    }];
+    [self.navigationController pushViewController:options animated:NO];
+//    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
+//        //
+//    }];
 }
 
 
