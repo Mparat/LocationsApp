@@ -175,7 +175,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
-        return 100;
+        return 250;
     }
     else{
         return 70;
@@ -183,12 +183,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-//    indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//    [tableView beginUpdates];
-//    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-//    [tableView endUpdates];
-//    
+{    
     HomepageChatCell *cell = [tableView dequeueReusableCellWithIdentifier:chatCell];
     cell.delegate = self;
     cell = nil;
@@ -214,6 +209,8 @@
     else{
         if ([([self.me.messageRecipients objectAtIndex:path.row]) isKindOfClass:[NSMutableArray class]]) {
             [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:path.row] Location:@"location" Date:[NSDate date]]; //
+//            recipient = [[self.me.messageRecipients objectAtIndex:path.row] objectAtIndex:0];
+//            cell.contact = recipient;
         }
         else{
             recipient = [self.me.messageRecipients objectAtIndex:path.row];
@@ -232,7 +229,6 @@
     askText.textColor = [UIColor blackColor];
     [askView addSubview:askText];
     UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
-    
     
     UILabel *tellText = [[UILabel alloc] init];
     UIView *tellView = [[UIView alloc] init];
@@ -322,9 +318,15 @@
     [tableView beginUpdates]; // triggers heightforrow..
     if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
         self.expandedIndexPath = nil;
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [(HomepageChatCell *)cell clearViews];
+        [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:indexPath.row] Location:@"location" Date:[NSDate date]]; //
     }
     else{
         self.expandedIndexPath = indexPath;
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [(HomepageChatCell *)cell clearViews];
+        [(HomepageChatCell *)cell setGroupMessageCell:[self.me.messageRecipients objectAtIndex:indexPath.row] Location:@"location" Date:[NSDate date]];
     }
     [tableView endUpdates];
 }

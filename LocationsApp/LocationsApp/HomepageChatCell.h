@@ -15,9 +15,13 @@
 
 @property (nonatomic, strong) User *user;
 @property (nonatomic, strong) Contact *contact;
+@property CGFloat height;
 
 -(void)placeSubviewsForCellWithName:(Contact *)recipient Location:(NSString *)text Date:(NSDate *)date;
 -(void)placeSubviewsForGroupMessageCell:(NSArray *)recipients Location:(NSString *)text Date:(NSDate *)date;
+
+-(void)setGroupMessageCell:(NSArray *)names Location:(NSString *)text Date:(NSDate *)date;
+-(void)clearViews;
 
 
 @end

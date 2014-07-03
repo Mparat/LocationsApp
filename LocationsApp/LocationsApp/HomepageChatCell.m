@@ -22,6 +22,7 @@
 
 @synthesize user = _user;
 @synthesize contact = _contact;
+@synthesize height = _height;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -60,6 +61,7 @@
             names = [NSString stringWithFormat:@"%@, %@", names, ((Contact *)[recipients objectAtIndex:i]).firstName];
         }
     }
+//    [self setGroupMessageCell:recipients Location:text Date:date];
     [self setContactInfoWithName:names Location:text Date:date];
     [self addExtendIcon];
 }
@@ -89,7 +91,7 @@
     
     self.time.frame = CGRectMake(3*self.frame.size.width/4, 10, self.time.frame.size.width, 16);
     self.time.font = [UIFont fontWithName:@"Helvetica" size:16];
-    self.time.textColor = [UIColor blackColor];
+    self.time.textColor = [UIColor grayColor];
     [self addSubview:self.time];
     
     self.username = [[UILabel alloc] init];
@@ -115,8 +117,70 @@
     
     self.location.frame = CGRectMake(self.username.frame.origin.x , self.username.frame.origin.y + self.username.frame.size.height, self.location.frame.size.width, 14);
     self.location.font = [UIFont fontWithName:@"Helvetica" size:14];
-    self.location.textColor = [UIColor blackColor];
+    self.location.textColor = [UIColor grayColor];
     [self addSubview:self.location];
+}
+
+
+-(void)setGroupMessageCell:(NSArray *)names Location:(NSString *)text Date:(NSDate *)date
+{
+    // picture: 50 x 50, 10 buffer all around
+    for (int i = 0; i < [names count]; i++) {
+        NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+        //    [timeFormat setDateFormat:@"hh:mm a"];
+        [timeFormat setTimeStyle:NSDateFormatterShortStyle];
+        NSString *theTime = [timeFormat stringFromDate:date];
+        
+        self.time = [[UILabel alloc] init];
+        //    self.time.text = [NSString stringWithFormat:@"%@", date];
+        self.time.text = theTime;
+        NSDictionary *dict3 = [NSDictionary dictionaryWithObjectsAndKeys:self.time.font, NSFontAttributeName, nil];
+        self.time.frame = CGRectMake(self.time.frame.origin.x,
+                                     self.time.frame.origin.y,
+                                     [self.time.text sizeWithAttributes:dict3].width,
+                                     [self.time.text sizeWithAttributes:dict3].height);
+        
+        self.time.frame = CGRectMake(3*self.frame.size.width/4, 10 +70*i, self.time.frame.size.width, 16);
+        self.time.font = [UIFont fontWithName:@"Helvetica" size:16];
+        self.time.textColor = [UIColor grayColor];
+        [self addSubview:self.time];
+        
+        self.username = [[UILabel alloc] init];
+        self.username.text = ((Contact *)[names objectAtIndex:i]).firstName;
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.username.font, NSFontAttributeName, nil];
+        self.username.frame = CGRectMake(self.username.frame.origin.x,
+                                         self.username.frame.origin.y,
+                                         [self.username.text sizeWithAttributes:dict].width,
+                                         [self.username.text sizeWithAttributes:dict].height);
+        
+        self.username.frame = CGRectMake(70, 10 + 70*i, 3*self.frame.size.width/4 - 70, 16);
+        self.username.font = [UIFont fontWithName:@"Helvetica" size:16];
+        self.username.textColor = [UIColor blackColor];
+        [self addSubview:self.username];
+        
+        self.location = [[UILabel alloc] init];
+        self.location.text = [NSString stringWithFormat:@"%@", text];
+        NSDictionary *dict2 = [NSDictionary dictionaryWithObjectsAndKeys:self.location.font, NSFontAttributeName, nil];
+        self.location.frame = CGRectMake(self.location.frame.origin.x,
+                                         self.location.frame.origin.y,
+                                         [self.location.text sizeWithAttributes:dict2].width,
+                                         [self.location.text sizeWithAttributes:dict2].height);
+        
+        self.location.frame = CGRectMake(self.username.frame.origin.x , (self.username.frame.origin.y + self.username.frame.size.height), self.location.frame.size.width, 14);
+        self.location.font = [UIFont fontWithName:@"Helvetica" size:14];
+        self.location.textColor = [UIColor grayColor];
+        [self addSubview:self.location];
+    }
+    self.height = self.location.frame.origin.y + self.location.frame.size.height;
+//    NSLog(@"cell height:%f", self.location.frame.origin.y + self.location.frame.size.height);
+}
+
+-(void)clearViews
+{
+//[self.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    [self.username removeFromSuperview];
+    [self.time removeFromSuperview];
+    [self.location removeFromSuperview];
 }
 
 -(void)addExtendIcon
