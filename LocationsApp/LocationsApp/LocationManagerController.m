@@ -78,7 +78,13 @@
         }
     }];
     NSLog(@"placemark? %@", self.placemark);
-    return self.placemark.name;
+//    return self.placemark.name;
+//    return [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
+//            self.placemark.subThoroughfare, self.placemark.thoroughfare,
+//            self.placemark.postalCode, self.placemark.locality,
+//            self.placemark.administrativeArea,
+//            self.placemark.country];
+    return self.placemark.subLocality;
 }
 
 -(NSString *)returnMyLocationName:(CLLocation *)location

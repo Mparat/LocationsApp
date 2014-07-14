@@ -67,9 +67,9 @@
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey:self.me.username];
-    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSData *data = [defaults objectForKey:self.me.username];
+//    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     self.navigationController.navigationBarHidden = NO;
     [self.tableView reloadData];
 }
@@ -196,7 +196,8 @@
 
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path inTableView:(UITableView *)tableView
 {
-//    CLLocation *current = [self.locationManager fetchCurrentLocation];
+    CLLocation *current = [self.locationManager fetchCurrentLocation];
+    NSString *text = [self.locationManager returnMyLocationName:current];
 //    NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
 //    NSDate *date = current.timestamp;
     
@@ -215,7 +216,7 @@
         else{
             recipient = [self.me.messageRecipients objectAtIndex:path.row];
             cell.contact = recipient;
-            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate date]]; // current date+time
+            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:text Date:[NSDate date]]; // current date+time
         }
     }
     [self configureSwipeViews:cell];
