@@ -202,12 +202,11 @@
 
 
     
-    HomepageTVC *homepage = [HomepageTVC alloc];
+    HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];
     homepage.signedInUser = self.parseController.signedInUser;
     homepage.me = me;
-    [homepage init];
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
 
     AddressBookTVC *contacts = [[AddressBookTVC alloc] init];

@@ -77,6 +77,10 @@
     selectedContacts = [NSMutableArray array];
     
     self.clearsSelectionOnViewWillAppear = NO;
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSData *data = [defaults objectForKey:self.me.username];
+//    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    [self.me.messageRecipients addObjectsFromArray:array];
 }
 
 - (void)didReceiveMemoryWarning

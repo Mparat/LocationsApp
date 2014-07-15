@@ -72,7 +72,10 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [defaults objectForKey:self.me.username];
-    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if ([self.me.messageRecipients count] != 0) {
+        self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    
     self.navigationController.navigationBarHidden = NO;
     [self.tableView reloadData];
 }
@@ -337,6 +340,17 @@
     }
     return UITableViewCellEditingStyleNone;
 }
+
+//-(void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (self.expandedIndexPath != nil) {
+//        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:self.expandedIndexPath.section] count]; i++) {
+//            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:self.expandedIndexPath.section]]
+//                                  withRowAnimation:UITableViewRowAnimationTop];
+//            newRow = false;
+//        }
+//    }
+//}
 
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
