@@ -69,7 +69,7 @@
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
-
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [defaults objectForKey:self.me.username];
     self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -214,14 +214,12 @@
     
     Contact *recipient = [[Contact alloc] init];
     
-    if (newRow == true) {
-//        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:path.section] count]; i++) {
-            Contact *recipient = [[Contact alloc] init];
-            recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
-            ((HomepageChatCell *)cell).contact = recipient;
-            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
-            cell.backgroundColor = [UIColor lightGrayColor];
-//        }
+    if ((self.expandedIndexPath != nil) && (path.section == self.expandedIndexPath.section) && (path.row != 0)) {
+        Contact *recipient = [[Contact alloc] init];
+        recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
+        ((HomepageChatCell *)cell).contact = recipient;
+        [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
+        cell.backgroundColor = [UIColor lightGrayColor];
     }
     else{
         if (tableView == self.searchController.searchResultsTableView) {
@@ -347,7 +345,8 @@
         self.expandedIndexPath = nil;
         for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
             [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
-                                      withRowAnimation:UITableViewRowAnimationTop];
+                                    withRowAnimation:UITableViewRowAnimationTop];
+            newRow = false;
         }
     }
     else{ //clicked to expand. triggers heightforrow..and rowsinsection
@@ -355,6 +354,7 @@
             for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:self.expandedIndexPath.section] count]; i++) {
                 [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:self.expandedIndexPath.section]]
                                       withRowAnimation:UITableViewRowAnimationTop];
+                newRow = false;
             }
         }
         self.expandedIndexPath = indexPath;
