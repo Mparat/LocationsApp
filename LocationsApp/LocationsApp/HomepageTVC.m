@@ -35,6 +35,7 @@
 @synthesize recipient = _recipient;
 @synthesize me = _me;
 @synthesize expandedIndexPath = _expandedIndexPath;
+@synthesize newRow;
 
 #define chatCell @"chatCell"
 
@@ -56,8 +57,10 @@
     
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
-    [self addSearchBar];
+//    [self addSearchBar];
     
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    newRow = false;
     [self.tableView reloadData];
 
 }
@@ -67,9 +70,9 @@
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
 
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSData *data = [defaults objectForKey:self.me.username];
-//    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [defaults objectForKey:self.me.username];
+    self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     self.navigationController.navigationBarHidden = NO;
     [self.tableView reloadData];
 }
@@ -159,11 +162,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+//    return 1;
     if (tableView == self.searchController.searchResultsTableView) {
         return [self.searchResults count];
     }
@@ -172,14 +171,26 @@
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
-        return 250;
+//    if (tableView == self.searchController.searchResultsTableView) {
+//        return [self.searchResults count];
+//    }
+//    else{
+//        return [self.me.messageRecipients count];
+//    }
+    NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:section];
+    if ([path compare:self.expandedIndexPath] == NSOrderedSame) {
+        return [[self.me.messageRecipients objectAtIndex:path.section] count]+1;
     }
     else{
-        return 70;
+        return 1;
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -202,23 +213,36 @@
 //    NSDate *date = current.timestamp;
     
     Contact *recipient = [[Contact alloc] init];
-    if (tableView == self.searchController.searchResultsTableView) {
-        recipient = [self.searchResults objectAtIndex:path.row];
-        cell.contact = recipient;
-        [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate date]];
+    
+    if (newRow == true) {
+        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:path.section] count]; i++) {
+            Contact *recipient = [[Contact alloc] init];
+            recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:i];
+            ((HomepageChatCell *)cell).contact = recipient;
+            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
+            cell.backgroundColor = [UIColor lightGrayColor];
+        }
     }
     else{
-        if ([([self.me.messageRecipients objectAtIndex:path.row]) isKindOfClass:[NSMutableArray class]]) {
-            [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:path.row] Location:@"location" Date:[NSDate date]]; //
-//            recipient = [[self.me.messageRecipients objectAtIndex:path.row] objectAtIndex:0];
-//            cell.contact = recipient;
+        if (tableView == self.searchController.searchResultsTableView) {
+            recipient = [self.searchResults objectAtIndex:path.section];
+            cell.contact = recipient;
+            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate date]];
         }
         else{
-            recipient = [self.me.messageRecipients objectAtIndex:path.row];
-            cell.contact = recipient;
-            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:text Date:[NSDate date]]; // current date+time
+            if ([([self.me.messageRecipients objectAtIndex:path.section]) isKindOfClass:[NSMutableArray class]]) {
+                [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:path.section] Location:@"" Date:[NSDate date]]; //
+                //            recipient = [[self.me.messageRecipients objectAtIndex:path.row] objectAtIndex:0];
+                //            cell.contact = recipient;
+            }
+            else{
+                recipient = [self.me.messageRecipients objectAtIndex:path.section];
+                cell.contact = recipient;
+                [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:text Date:[NSDate date]]; // current date+time
+            }
         }
     }
+    
     [self configureSwipeViews:cell];
 }
 
@@ -295,13 +319,14 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
  {
      if (editingStyle == UITableViewCellEditingStyleDelete) {
-         [self.me.messageRecipients removeObjectAtIndex:indexPath.row];
+         [self.me.messageRecipients removeObjectAtIndex:indexPath.section];
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
          NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
          [defaults setObject:data forKey:self.me.username];
          [defaults synchronize];
 
-         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+         [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+//         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
      } else if (editingStyle == UITableViewCellEditingStyleInsert) {
          // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
      }
@@ -317,18 +342,27 @@
 
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView beginUpdates]; // triggers heightforrow..
+    [tableView beginUpdates]; // triggers heightforrow..and rowsinsection
     if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
         self.expandedIndexPath = nil;
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [(HomepageChatCell *)cell clearViews];
-        [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:indexPath.row] Location:@"location" Date:[NSDate date]]; //
+        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
+                                      withRowAnimation:UITableViewRowAnimationTop];
+        }
     }
-    else{
+    else{ //clicked to expand. triggers heightforrow..and rowsinsection
+        if (self.expandedIndexPath != nil) {
+            for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:self.expandedIndexPath.section] count]; i++) {
+                [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:self.expandedIndexPath.section]]
+                                      withRowAnimation:UITableViewRowAnimationTop];
+            }
+        }
         self.expandedIndexPath = indexPath;
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [(HomepageChatCell *)cell clearViews];
-        [(HomepageChatCell *)cell setGroupMessageCell:[self.me.messageRecipients objectAtIndex:indexPath.row] Location:@"location" Date:[NSDate date]];
+        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
+            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            newRow = true;
+        }
     }
     [tableView endUpdates];
 }

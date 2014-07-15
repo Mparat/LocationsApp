@@ -31,4 +31,6 @@
 
 @property (nonatomic, strong) NSIndexPath *expandedIndexPath;
 
+@property BOOL newRow;
+
 @end

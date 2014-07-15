@@ -39,7 +39,7 @@
                   clientKey:@"r46J9MvgvF6pbnmO7PUsatJbseIbWJM2zqBjSvC4"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     [PFFacebookUtils initializeFacebook];
-
+    
     if (![PFUser currentUser]) {
         [self.window setRootViewController:[self navigationController]];
     }
@@ -202,11 +202,12 @@
 
 
     
-    HomepageTVC *homepage = [[HomepageTVC alloc] init];
+    HomepageTVC *homepage = [HomepageTVC alloc];
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];
     homepage.signedInUser = self.parseController.signedInUser;
     homepage.me = me;
+    [homepage init];
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
 
     AddressBookTVC *contacts = [[AddressBookTVC alloc] init];

@@ -32,6 +32,16 @@
 {
     NSLog(@"Starting locations update");
     [locationManager startUpdatingLocation];
+    if ([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusAvailable) {
+        
+        NSLog(@"Background updates are available for the app.");
+    }else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusDenied)
+    {
+        NSLog(@"The user explicitly disabled background behavior for this app or for the whole system.");
+    }else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted)
+    {
+        NSLog(@"Background updates are unavailable and the user cannot enable them again. For example, this status can occur when parental controls are in effect for the current user.");
+    }
 }
 
 -(void)stopCollectingLocations
@@ -78,13 +88,13 @@
         }
     }];
     NSLog(@"placemark? %@", self.placemark);
-//    return self.placemark.name;
+    return self.placemark.name;
 //    return [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
 //            self.placemark.subThoroughfare, self.placemark.thoroughfare,
 //            self.placemark.postalCode, self.placemark.locality,
 //            self.placemark.administrativeArea,
 //            self.placemark.country];
-    return self.placemark.subLocality;
+//    return self.placemark.subLocality;
 }
 
 -(NSString *)returnMyLocationName:(CLLocation *)location
@@ -99,7 +109,13 @@
         }
     }];
     NSLog(@"placemark? %@", self.placemark);
-    return self.placemark.name;
+//    return self.placemark.name;
+//    return self.placemark.subLocality; // returns "Mission District"
+    return [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
+            self.placemark.subThoroughfare, self.placemark.thoroughfare,
+            self.placemark.postalCode, self.placemark.locality,
+            self.placemark.administrativeArea,
+            self.placemark.country];
 }
 
 #pragma mark - MKMapView delegate methods

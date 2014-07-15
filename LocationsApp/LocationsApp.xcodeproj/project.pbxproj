@@ -404,6 +404,9 @@
 					14AB32FE1942816400B8E20D = {
 						DevelopmentTeam = U72AQXJV3B;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.InAppPurchase = {
 								enabled = 0;
 							};
