@@ -215,13 +215,13 @@
     Contact *recipient = [[Contact alloc] init];
     
     if (newRow == true) {
-        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:path.section] count]; i++) {
+//        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:path.section] count]; i++) {
             Contact *recipient = [[Contact alloc] init];
-            recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:i];
+            recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
             ((HomepageChatCell *)cell).contact = recipient;
             [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
             cell.backgroundColor = [UIColor lightGrayColor];
-        }
+//        }
     }
     else{
         if (tableView == self.searchController.searchResultsTableView) {
