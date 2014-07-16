@@ -14,7 +14,7 @@
 #import "Contact.h"
 
 
-@interface MessageCVC : UICollectionViewController <UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface MessageCVC : UICollectionViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
 
 @property (nonatomic, strong) UITextField *textField;
@@ -24,8 +24,6 @@
 @property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) User *me;
 
-@property (nonatomic,strong) UICollectionView *collectionView;
-
-- (id)init;
+//- (id)init;
 
 @end

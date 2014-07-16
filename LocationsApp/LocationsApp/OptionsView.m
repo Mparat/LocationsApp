@@ -144,9 +144,11 @@
     message.parseController = self.parseController;
     message.signedInUser = self.signedInUser;
     message.recipient = self.recipient;
-    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:message] animated:YES completion:^{
-        //
-    }];
+    [self.navigationController pushViewController:message animated:YES];
+
+//    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:message] animated:YES completion:^{
+//        //
+//    }];
 }
 
 -(void)viewMap
@@ -161,7 +163,6 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"touched, not on button");
     [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:0] animated:NO];
 //    [self.navigationController dismissViewControllerAnimated:YES completion:^{
 //        //

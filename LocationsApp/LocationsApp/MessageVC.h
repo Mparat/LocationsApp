@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
+#import "ParseController.h"
 #import "User.h"
 #import "Contact.h"
-#import "ParseController.h"
 
 @interface MessageVC : UIViewController <UITableViewDelegate, UITextFieldDelegate>
 {

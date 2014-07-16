@@ -77,6 +77,9 @@
     }
     
     self.navigationController.navigationBarHidden = NO;
+    if (self.tableView.editing) {
+        [self setEditing:NO animated:NO];
+    }
     [self.tableView reloadData];
 }
 
@@ -310,6 +313,16 @@
      return YES;
  }
 
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    [super setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:YES];
+    if (editing) {
+        self.navigationController.editButtonItem.enabled = NO;
+    } else {
+        self.navigationController.editButtonItem.enabled = YES;
+    }
+}
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
  {
      if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -343,6 +356,7 @@
     }
     return UITableViewCellEditingStyleNone;
 }
+
 
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {

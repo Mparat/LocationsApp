@@ -153,7 +153,7 @@
 
 -(void)addNavBar
 {
-    UIButton *settings = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    UIButton *settings = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
     [settings setTitle:@"Settings" forState:UIControlStateNormal];
     [settings setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [settings addTarget:self action:@selector(toSettings) forControlEvents:UIControlEventTouchUpInside];
