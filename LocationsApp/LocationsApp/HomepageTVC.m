@@ -165,7 +165,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-//    return 1;
     if (tableView == self.searchController.searchResultsTableView) {
         return [self.searchResults count];
     }
@@ -176,12 +175,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    if (tableView == self.searchController.searchResultsTableView) {
-//        return [self.searchResults count];
-//    }
-//    else{
-//        return [self.me.messageRecipients count];
-//    }
     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:section];
     if ([path compare:self.expandedIndexPath] == NSOrderedSame) {
         return [[self.me.messageRecipients objectAtIndex:path.section] count]+1;
@@ -336,21 +329,20 @@
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.tableView.editing) {
+//        [tableView beginUpdates];
+//        if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
+//            self.expandedIndexPath = nil;
+//            for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
+//                [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
+//                                      withRowAnimation:UITableViewRowAnimationTop];
+//                newRow = false;
+//            }
+//        }
+//        [tableView endUpdates];
         return UITableViewCellEditingStyleDelete;
     }
     return UITableViewCellEditingStyleNone;
 }
-
-//-(void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (self.expandedIndexPath != nil) {
-//        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:self.expandedIndexPath.section] count]; i++) {
-//            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:self.expandedIndexPath.section]]
-//                                  withRowAnimation:UITableViewRowAnimationTop];
-//            newRow = false;
-//        }
-//    }
-//}
 
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {

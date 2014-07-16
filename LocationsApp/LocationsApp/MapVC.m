@@ -73,7 +73,7 @@
     [done addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
 
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithCustomView:done];
-    self.navigationItem.rightBarButtonItem = doneButton;
+//    self.navigationItem.rightBarButtonItem = doneButton;
     
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.recipient.firstName];
                                 

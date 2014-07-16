@@ -52,6 +52,8 @@
 		E0644B2B195B51360012CAF7 /* ContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B2A195B51360012CAF7 /* ContactCell.m */; };
 		E09829E219648B4E00E75625 /* MessageCVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E09829E119648B4E00E75625 /* MessageCVC.m */; };
 		E09829E51964A62700E75625 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E09829E41964A62700E75625 /* MessageCell.m */; };
+		E0B3C3B91975FACB00106D72 /* SettingsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B3C3B81975FACB00106D72 /* SettingsTVC.m */; };
+		E0B3C3BC1975FD4C00106D72 /* LogoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B3C3BB1975FD4C00106D72 /* LogoutCell.m */; };
 		E0F091E11964F0A900E27499 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E0F091DE1964F0A900E27499 /* UIImage+ImageEffects.m */; };
 		E0F091E21964F0A900E27499 /* APLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0F091E01964F0A900E27499 /* APLViewController.m */; };
 /* End PBXBuildFile section */
@@ -134,6 +136,10 @@
 		E09829E119648B4E00E75625 /* MessageCVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCVC.m; sourceTree = "<group>"; };
 		E09829E31964A62700E75625 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
 		E09829E41964A62700E75625 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
+		E0B3C3B71975FACB00106D72 /* SettingsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTVC.h; sourceTree = "<group>"; };
+		E0B3C3B81975FACB00106D72 /* SettingsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTVC.m; sourceTree = "<group>"; };
+		E0B3C3BA1975FD4C00106D72 /* LogoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoutCell.h; sourceTree = "<group>"; };
+		E0B3C3BB1975FD4C00106D72 /* LogoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutCell.m; sourceTree = "<group>"; };
 		E0F091DD1964F0A900E27499 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		E0F091DE1964F0A900E27499 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		E0F091DF1964F0A900E27499 /* APLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLViewController.h; sourceTree = "<group>"; };
@@ -283,6 +289,8 @@
 				E0644B2A195B51360012CAF7 /* ContactCell.m */,
 				144BA0C2194F80A000977673 /* SearchCell.h */,
 				144BA0C3194F80A000977673 /* SearchCell.m */,
+				E0B3C3BA1975FD4C00106D72 /* LogoutCell.h */,
+				E0B3C3BB1975FD4C00106D72 /* LogoutCell.m */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -296,6 +304,8 @@
 				14AB333B194281D500B8E20D /* HomepageTVC.m */,
 				1482D1FB1950C88200B8F957 /* AddressBookTVC.h */,
 				1482D1FC1950C88200B8F957 /* AddressBookTVC.m */,
+				E0B3C3B71975FACB00106D72 /* SettingsTVC.h */,
+				E0B3C3B81975FACB00106D72 /* SettingsTVC.m */,
 				144BA0BC194F68A600977673 /* AddContacts.h */,
 				144BA0BD194F68A600977673 /* AddContacts.m */,
 				E0644B26195A3FC30012CAF7 /* OptionsView.h */,
@@ -501,6 +511,8 @@
 			files = (
 				14AB33131942816400B8E20D /* AppDelegate.m in Sources */,
 				14C66668194669FF00341F0D /* User.m in Sources */,
+				E0B3C3B91975FACB00106D72 /* SettingsTVC.m in Sources */,
+				E0B3C3BC1975FD4C00106D72 /* LogoutCell.m in Sources */,
 				14315C4D19490A0400378EA5 /* Contact.m in Sources */,
 				144BA0C4194F80A000977673 /* SearchCell.m in Sources */,
 				144BA0BE194F68A600977673 /* AddContacts.m in Sources */,

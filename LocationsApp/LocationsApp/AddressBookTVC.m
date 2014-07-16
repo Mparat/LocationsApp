@@ -19,6 +19,7 @@
 #import "SearchCell.h"
 #import "Contact.h"
 #import "ContactCell.h"
+#import "SettingsTVC.h"
 
 @interface AddressBookTVC () <UISearchDisplayDelegate, UISearchBarDelegate, MCSwipeTableViewCellDelegate>
 
@@ -152,13 +153,13 @@
 
 -(void)addNavBar
 {
-    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-    [logout setTitle:@"Logout" forState:UIControlStateNormal];
-    [logout setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [logout addTarget:self action:@selector(logoutSuccessful) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *settings = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+    [settings setTitle:@"Settings" forState:UIControlStateNormal];
+    [settings setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [settings addTarget:self action:@selector(toSettings) forControlEvents:UIControlEventTouchUpInside];
     
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithCustomView:logout];
-    self.navigationItem.leftBarButtonItem = logoutButton;
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settings];
+    self.navigationItem.rightBarButtonItem = settingsButton;
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:210.0/255.0 green:75.0/255.0 blue:104.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
@@ -230,16 +231,10 @@
 //    }
 }
 
--(void)logoutSuccessful
+-(void)toSettings
 {
-    [PFUser logOut];
-    UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] navigationController];
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        //
-    }];
-    [self.navigationController presentViewController:controller animated:YES completion:^{
-        //
-    }];
+    SettingsTVC *settings = [[SettingsTVC alloc] init];
+    [self.navigationController pushViewController:settings animated:YES];
 }
 
 -(void)addFriends
