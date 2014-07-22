@@ -60,13 +60,12 @@
     [self addSearchBar];
     [self addRecipientsView];
     [self getContacts];
-
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.clearsSelectionOnViewWillAppear = NO;
-
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView reloadData];
 }
 
@@ -77,6 +76,8 @@
 
     selectedContacts = [NSMutableArray array];
     
+//    [controller2 setTabBarItem:addNew];
+
     self.clearsSelectionOnViewWillAppear = NO;
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 //    NSData *data = [defaults objectForKey:self.me.username];
@@ -153,18 +154,20 @@
 
 -(void)addNavBar
 {
-    UIButton *settings = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 80, 30)];
-    [settings setTitle:@"Settings" forState:UIControlStateNormal];
-    [settings setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    UIButton *settings = [[UIButton alloc] init];
+    [settings setImage:[UIImage imageNamed:@"SettingsIcon"] forState:UIControlStateNormal];
     [settings addTarget:self action:@selector(toSettings) forControlEvents:UIControlEventTouchUpInside];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    [settings setFrame:CGRectMake(-10, 0, 44, 44)];
+    [view addSubview:settings];
     
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settings];
-    self.navigationItem.rightBarButtonItem = settingsButton;
-    
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:210.0/255.0 green:75.0/255.0 blue:104.0/255.0 alpha:1.0];
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:view];
+    self.navigationItem.leftBarButtonItem = settingsButton;
+
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 
-    self.navigationItem.title = [NSString stringWithFormat:@"Contacts"];
+    self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
 }
 
 -(void)addSearchBar
@@ -252,18 +255,19 @@
 -(void)addRecipientsView
 {
     footer = [[UIView alloc] init];
-    footer.frame = CGRectMake(0, self.view.frame.size.height - 140, self.view.frame.size.width, 70);
-    footer.backgroundColor = [UIColor blueColor];
+    footer.frame = CGRectMake(0, 460, self.view.frame.size.width, 60);
+    footer.backgroundColor = [UIColor colorWithRed:42.0/255.0 green:192.0/255.0 blue:124.0/255.0 alpha:1.0];
     send = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    send.frame = CGRectMake(4*footer.frame.size.width/5, 200, footer.frame.size.width/5, 70);
-    send.frame = CGRectMake(4*footer.frame.size.width/5, 5, footer.frame.size.width/5, 60);
-//    [send setBackgroundColor:[UIColor whiteColor]];
-    [send setTitle:@"Ask" forState:UIControlStateNormal];
-    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    send.frame = CGRectMake(270, 0, 50, 60);
+//    [send setTitle:@"Ask" forState:UIControlStateNormal];
+    [send setBackgroundImage:[UIImage imageNamed:@"AskCell"] forState:UIControlStateNormal];
+//    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:send];
-
-    selectedContactsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 4*footer.frame.size.width/5, 50)];
+    
+    selectedContactsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 250, 20)];
+    selectedContactsLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+    selectedContactsLabel.textColor = [UIColor whiteColor];
     selectedContactsLabel.text = @"";
     [footer addSubview:selectedContactsLabel];
     
@@ -294,6 +298,7 @@
         [self.tableView deselectRowAtIndexPath:[paths objectAtIndex:i] animated:NO];
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[paths objectAtIndex:i]];
         cell.accessoryType = UITableViewCellAccessoryNone;
+        [cell setBackgroundColor: [UIColor whiteColor]];
         [selectedContacts removeObject:((ContactCell *)cell).contact];
     }
     [footer removeFromSuperview];
@@ -318,6 +323,11 @@
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 68;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:contactCell];
@@ -327,6 +337,7 @@
     }
     
     [self configureCell:cell atIndexPath:indexPath inTableView:tableView];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 
@@ -347,21 +358,12 @@
 
 -(void)configureSwipeViews:(ContactCell *)cell
 {
-    UILabel *askText = [[UILabel alloc] init];
-    UIView *askView = [[UIView alloc] init];
-    askText.text = @"Ask";
-    askText.textColor = [UIColor blackColor];
-    [askView addSubview:askText];
-    UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
+    UIView *askView = [self viewWithImageName:@"AskCell"];
+    UIColor *greenColor = [UIColor colorWithRed:42.0 / 255.0 green:192.0 / 255.0 blue:124.0 / 255.0 alpha:1.0];
     
-    
-    UILabel *tellText = [[UILabel alloc] init];
-    UIView *tellView = [[UIView alloc] init];
-    tellText.text = @"Tell";
-    tellText.textColor = [UIColor blackColor];
-    [tellView addSubview:tellText];
-    UIColor *yellowColor = [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0];
-    
+    UIView *tellView = [self viewWithImageName:@"TellCell"];
+    UIColor *purpleColor = [UIColor colorWithRed:177.0 / 255.0 green:74.0 / 255.0 blue:223.0 / 255.0 alpha:1.0];
+
     
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
@@ -391,7 +393,7 @@
         }];
     }];
     
-    [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+    [cell setSwipeGestureWithView:tellView color:purpleColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
         BOOL new = true;
         for (int i = 0; i < [self.me.messageRecipients count]; i++){
@@ -419,9 +421,9 @@
         }];
     }];
     
-    cell.defaultColor = [UIColor grayColor];
-    cell.firstTrigger = 0.1;
-    cell.secondTrigger = 0.6;
+    cell.defaultColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
+    cell.firstTrigger = 0.25;
+//    cell.secondTrigger = 0.6;
 }
 
 - (UIView *)viewWithImageName:(NSString *)imageName {
@@ -442,6 +444,7 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [cell setBackgroundColor: [UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:1.0]];
         [selectedContacts addObject:((ContactCell *)cell).contact];
         if ([selectedContacts count] == 1) {
             selectedContactsLabel.text = [NSString stringWithFormat:@"%@ %@", selectedContactsLabel.text, ((Contact *)[selectedContacts lastObject]).firstName];
@@ -453,6 +456,7 @@
     else{
         cell.accessoryType = UITableViewCellAccessoryNone;
         [selectedContacts removeObject:((ContactCell *)cell).contact];
+        [cell setBackgroundColor: [UIColor whiteColor]];
         selectedContactsLabel.text = @"";
         for (int i = 0; i < [selectedContacts count]; i++) {
             if (i == 0) {
@@ -472,7 +476,8 @@
         selectedContactsLabel.text = @"";
     }
     else{
-        [self.view addSubview:footer];
+//        [self.view addSubview:footer];
+        [self.navigationController.view addSubview:footer];
         self.navigationItem.rightBarButtonItem = cancelSelectionButton;
     }
 }

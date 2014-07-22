@@ -85,11 +85,8 @@
     [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:ask];
 
-    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(120, self.view.frame.size.height/2 - 105, 80, 80)];
-    [[tell layer] setBorderColor:[UIColor whiteColor].CGColor];
-    [[tell layer] setBorderWidth:2.0f];
-    [tell setTitle:@"Tell" forState:UIControlStateNormal];
-    [tell setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(122, 160, 74, 100)];
+    [tell setBackgroundImage:[UIImage imageNamed:@"TellUnselected"] forState:UIControlStateNormal];
     [tell addTarget:self action:@selector(tellLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:tell];
 

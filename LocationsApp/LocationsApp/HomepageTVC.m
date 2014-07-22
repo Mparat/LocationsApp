@@ -92,19 +92,23 @@
 
 -(void)addNavBar
 {
-    UIButton *new = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-    [new setTitle:@"New" forState:UIControlStateNormal];
-    [new setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [new addTarget:self action:@selector(createNewMessage) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *settings = [[UIButton alloc] init];
+    [settings setImage:[UIImage imageNamed:@"New"] forState:UIControlStateNormal];
+    [settings addTarget:self action:@selector(createNewMessage) forControlEvents:UIControlEventTouchUpInside];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 58, 58)];
+    [settings setFrame:CGRectMake(15, 0, 58, 58)];
+    [view addSubview:settings];
+
     
-    UIBarButtonItem *newMessageButton = [[UIBarButtonItem alloc] initWithCustomView:new];
+    UIBarButtonItem *newMessageButton = [[UIBarButtonItem alloc] initWithCustomView:view];
     self.navigationItem.rightBarButtonItem = newMessageButton;
 
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    self.navigationItem.title = [NSString stringWithFormat:@"Hi, %@", [self.signedInUser objectForKey:@"additional"]];
+    self.editButtonItem.tintColor = [UIColor whiteColor];
+    self.navigationItem.title = @"";
 
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:68.0/255.0 green:212.0/255.0 blue:103.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:10.0]};
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
@@ -189,7 +193,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 68;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -218,7 +222,7 @@
         recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
         ((HomepageChatCell *)cell).contact = recipient;
         [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
-        cell.backgroundColor = [UIColor lightGrayColor];
+        cell.backgroundColor = [UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:1.0];
     }
     else{
         if (tableView == self.searchController.searchResultsTableView) {
@@ -245,19 +249,11 @@
 
 -(void)configureSwipeViews:(HomepageChatCell *)cell
 {
-    UILabel *askText = [[UILabel alloc] init];
-    UIView *askView = [[UIView alloc] init];
-    askText.text = @"Ask";
-    askText.textColor = [UIColor blackColor];
-    [askView addSubview:askText];
-    UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
+    UIView *askView = [self viewWithImageName:@"AskCell"];
+    UIColor *greenColor = [UIColor colorWithRed:42.0 / 255.0 green:192.0 / 255.0 blue:124.0 / 255.0 alpha:1.0];
     
-    UILabel *tellText = [[UILabel alloc] init];
-    UIView *tellView = [[UIView alloc] init];
-    tellText.text = @"Tell";
-    tellText.textColor = [UIColor blackColor];
-    [tellView addSubview:tellText];
-    UIColor *yellowColor = [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0];
+    UIView *tellView = [self viewWithImageName:@"TellCell"];
+    UIColor *purpleColor = [UIColor colorWithRed:177.0 / 255.0 green:74.0 / 255.0 blue:223.0 / 255.0 alpha:1.0];
     
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
@@ -266,15 +262,15 @@
         }];
     }];
     
-    [cell setSwipeGestureWithView:tellView color:yellowColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+    [cell setSwipeGestureWithView:tellView color:purpleColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
         [cell swipeToOriginWithCompletion:^{
             //
         }];
     }];
     
-    cell.defaultColor = [UIColor grayColor];
-    cell.firstTrigger = 0.2;
+    cell.defaultColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
+    cell.firstTrigger = 0.25;
     cell.secondTrigger = 0.6;    
 }
 

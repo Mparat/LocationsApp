@@ -372,6 +372,7 @@
 				D8DD353706A042B69042799D /* Check Pods Manifest.lock */,
 				14AB32FB1942816400B8E20D /* Sources */,
 				14AB32FC1942816400B8E20D /* Frameworks */,
+				E0B3C3BD19788B2800106D72 /* Export Sketch Assets */,
 				14AB32FD1942816400B8E20D /* Resources */,
 				B68D7621ECA44312BAA36037 /* Copy Pods Resources */,
 			);
@@ -501,6 +502,20 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		E0B3C3BD19788B2800106D72 /* Export Sketch Assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Export Sketch Assets";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#Settings\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Settings.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Settings.imageset --formats=\"png\"\n#UnselectedContacts\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedContacts.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedContacts.imageset --formats=\"png\"\n#SelectedContacts\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedContacts.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedContacts.imageset --formats=\"png\"\n#UnselectedMessages\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedMessages.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedMessages.imageset --formats=\"png\"\n#SelectedMessage\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedMessages.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedMessages.imageset --formats=\"png\"\n#AskCell\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AskCell.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AskCell.imageset --formats=\"png\"\n#TellCell\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellCell.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellCell.imageset --formats=\"png\"\n#New\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/New.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/New.imageset --formats=\"png\"\n#TellUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellUnselected.imageset --formats=\"png\"\n#TellSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellSelected.imageset --formats=\"png\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

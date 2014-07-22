@@ -223,12 +223,24 @@
     NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];
     tabBarController.viewControllers = controllers;
     
-    UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:nil tag:0];
-    UITabBarItem *addNew = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:1];
-    
-    tabBarController.tabBarItem = chats;
-    tabBarController.tabBarItem = addNew;
-    
+    UIImage *unselectedContacts = [UIImage imageNamed:@"UnselectedContacts"];
+    UIImage *selectedContacts = [UIImage imageNamed:@"SelectedContacts"];
+    UIImage *unselectedMessages = [UIImage imageNamed:@"UnselectedMessages"];
+    UIImage *selectedMessages = [UIImage imageNamed:@"SelectedMessages"];
+    UIColor *red = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
+
+    selectedMessages = [selectedMessages imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    controller1.tabBarController.tabBar.selectedImageTintColor = red;
+
+    selectedContacts = [selectedContacts imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    controller2.tabBarController.tabBar.selectedImageTintColor = red;
+
+    UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:unselectedMessages selectedImage:selectedMessages];
+    UITabBarItem *addNew = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:unselectedContacts selectedImage:selectedContacts];
+
+    [controller1 setTabBarItem:chats];
+    [controller2 setTabBarItem:addNew];
+
     [self.window setRootViewController:tabBarController];
 }
 
