@@ -81,6 +81,12 @@
         [self setEditing:NO animated:NO];
     }
     [self.tableView reloadData];
+    if (self.expandedIndexPath != nil) {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:self.expandedIndexPath]; //self.expandedIndexPath
+        cell.layer.shadowColor = [[UIColor blackColor] CGColor];
+        cell.layer.shadowOpacity = 0.1f;
+        cell.layer.shadowOffset = CGSizeMake(0, 1);
+    }
 }
 
 
@@ -243,7 +249,7 @@
             }
         }
     }
-    
+
     [self configureSwipeViews:cell];
 }
 
@@ -362,6 +368,10 @@
         for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
             [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
                                     withRowAnimation:UITableViewRowAnimationTop];
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            cell.layer.shadowColor = [[UIColor clearColor] CGColor];
+            cell.layer.shadowOpacity = 0.0f;
+            cell.layer.shadowOffset = CGSizeMake(0, 0);
             newRow = false;
         }
     }
@@ -370,6 +380,10 @@
             for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:self.expandedIndexPath.section] count]; i++) {
                 [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:self.expandedIndexPath.section]]
                                       withRowAnimation:UITableViewRowAnimationTop];
+                UITableViewCell *cell = [tableView cellForRowAtIndexPath:self.expandedIndexPath];
+                cell.layer.shadowColor = [[UIColor clearColor] CGColor];
+                cell.layer.shadowOpacity = 0.0f;
+                cell.layer.shadowOffset = CGSizeMake(0, 0);
                 newRow = false;
             }
         }
@@ -377,6 +391,16 @@
         for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
                                       withRowAnimation:UITableViewRowAnimationAutomatic];
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:self.expandedIndexPath]; //indexPath
+            cell.layer.shadowColor = [[UIColor blackColor] CGColor];
+            cell.layer.shadowOpacity = 0.1f;
+            cell.layer.shadowOffset = CGSizeMake(0, 1);
+            
+//            UITableViewCell *cell2 = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathWithIndex:indexPath.section+1]];
+//            cell2.layer.shadowColor = [[UIColor blackColor] CGColor];
+//            cell2.layer.shadowOpacity = 0.1f;
+//            cell2.layer.shadowOffset = CGSizeMake(0, 1);
+
             newRow = true;
         }
     }

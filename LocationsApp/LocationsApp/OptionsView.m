@@ -76,17 +76,15 @@
 
 -(void)initButtons
 {
-//    UIColor *clear = [UIColor colorWithWhite:1.0 alpha:0.6];
-    UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height/2 - 105, 80, 80)];
-    [[ask layer] setBorderColor:[UIColor whiteColor].CGColor];
-    [[ask layer] setBorderWidth:2.0f];
-    [ask setTitle:@"Ask" forState:UIControlStateNormal];
-    [ask setTitleColor:[UIColor whiteColor]  forState:UIControlStateNormal];
+    UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(21.5, 160, 78, 100)];
+    [ask setImage:[UIImage imageNamed:@"AskUnselected"] forState:UIControlStateNormal];
+//    [tell setImage:[UIImage imageNamed:@"AskSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:ask];
 
-    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(122, 160, 74, 100)];
-    [tell setBackgroundImage:[UIImage imageNamed:@"TellUnselected"] forState:UIControlStateNormal];
+    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(121, 160, 78, 100)];
+    [tell setImage:[UIImage imageNamed:@"TellUnselected"] forState:UIControlStateNormal];
+//    [tell setImage:[UIImage imageNamed:@"TellSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [tell addTarget:self action:@selector(tellLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:tell];
 

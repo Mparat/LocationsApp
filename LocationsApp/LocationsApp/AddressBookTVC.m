@@ -258,10 +258,8 @@
     footer.frame = CGRectMake(0, 460, self.view.frame.size.width, 60);
     footer.backgroundColor = [UIColor colorWithRed:42.0/255.0 green:192.0/255.0 blue:124.0/255.0 alpha:1.0];
     send = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    send.frame = CGRectMake(270, 0, 50, 60);
-//    [send setTitle:@"Ask" forState:UIControlStateNormal];
+    send.frame = CGRectMake(257, 0, 58, 58);
     [send setBackgroundImage:[UIImage imageNamed:@"AskCell"] forState:UIControlStateNormal];
-//    [send setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:send];
     
