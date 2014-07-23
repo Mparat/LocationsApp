@@ -76,45 +76,40 @@
 
 -(void)initButtons
 {
-    UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(21.5, 160, 78, 100)];
+    UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(21.5, 173, 78, 100)];
     [ask setImage:[UIImage imageNamed:@"AskUnselected"] forState:UIControlStateNormal];
 //    [tell setImage:[UIImage imageNamed:@"AskSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:ask];
 
-    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(121, 160, 78, 100)];
+    UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(121, 173, 78, 100)];
     [tell setImage:[UIImage imageNamed:@"TellUnselected"] forState:UIControlStateNormal];
 //    [tell setImage:[UIImage imageNamed:@"TellSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [tell addTarget:self action:@selector(tellLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:tell];
 
-    UIButton *okay = [[UIButton alloc] initWithFrame:CGRectMake(220, self.view.frame.size.height/2 - 105, 80, 80)];
-    [[okay layer] setBorderColor:[UIColor whiteColor].CGColor];
-    [[okay layer] setBorderWidth:2.0f];
-    [okay setTitle:@"Okay" forState:UIControlStateNormal];
-    [okay setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [okay addTarget:self action:@selector(sendOkay) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:okay];
-    
-    UIButton *text = [[UIButton alloc] initWithFrame:CGRectMake(70, self.view.frame.size.height/2 + 25, 80, 80)];
-    [[text layer] setBorderColor:[UIColor whiteColor].CGColor];
-    [[text layer] setBorderWidth:2.0f];
-    [text setTitle:@"Text" forState:UIControlStateNormal];
-    [text setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    UIButton *text = [[UIButton alloc] initWithFrame:CGRectMake(220.5, 173, 78, 100)];
+    [text setImage:[UIImage imageNamed:@"TextUnselected"] forState:UIControlStateNormal];
+//    [text setImage:[UIImage imageNamed:@"TextSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [text addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:text];
 
-    UIButton *map = [[UIButton alloc] initWithFrame:CGRectMake(170, self.view.frame.size.height/2 + 25, 80, 80)];
-    [[map layer] setBorderColor:[UIColor whiteColor].CGColor];
-    [[map layer] setBorderWidth:2.0f];
-    [map setTitle:@"Map" forState:UIControlStateNormal];
-    [map setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+    UIButton *directions = [[UIButton alloc] initWithFrame:CGRectMake(71.25, 295, 78, 100)];
+    [directions setImage:[UIImage imageNamed:@"DirectionsUnselected"] forState:UIControlStateNormal];
+//    [directions setImage:[UIImage imageNamed:@"DirectionsSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [directions addTarget:self action:@selector(toAppleMaps) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:directions];
+    
+    UIButton *map = [[UIButton alloc] initWithFrame:CGRectMake(170.75, 295, 78, 100)];
+    [map setImage:[UIImage imageNamed:@"MapUnselected"] forState:UIControlStateNormal];
+//    [map setImage:[UIImage imageNamed:@"MapSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [map addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:map];
 
 }
 
--(void)sendOkay
+-(void)toAppleMaps
 {
     
 }

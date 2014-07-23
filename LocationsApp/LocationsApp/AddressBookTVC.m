@@ -155,7 +155,7 @@
 -(void)addNavBar
 {
     UIButton *settings = [[UIButton alloc] init];
-    [settings setImage:[UIImage imageNamed:@"SettingsIcon"] forState:UIControlStateNormal];
+    [settings setImage:[UIImage imageNamed:@"Settings"] forState:UIControlStateNormal];
     [settings addTarget:self action:@selector(toSettings) forControlEvents:UIControlEventTouchUpInside];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     [settings setFrame:CGRectMake(-10, 0, 44, 44)];
