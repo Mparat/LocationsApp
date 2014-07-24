@@ -39,19 +39,8 @@
     self.navigationController.navigationBarHidden = NO;
 
     [self addNavBar];
-
-    UITableViewController *extra = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    extra.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    extra.tableView.backgroundColor = [UIColor blackColor];
-    extra.tableView.alpha = 0.6;
     
-//    extra.navigationController.navigationBar.opaque = YES;
-//    extra.navigationController.navigationBar.translucent = YES;
-//    [[UINavigationBar appearance] setBarStyle:UIBarStyleBlackTranslucent];
-//    extra.navigationController.navigationBar.barTintColor = [UIColor clearColor];
-//    extra.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-//    [self.view addSubview:extra.tableView];
-
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -84,7 +73,7 @@
 //    self.navigationController.navigationBar.barTintColor = [UIColor clearColor];
 //    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0 green:205.0/255.0 blue:6.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:42.0/255.0 green:192.0/255.0 blue:124.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 
 }

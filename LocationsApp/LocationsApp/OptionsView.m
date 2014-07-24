@@ -67,6 +67,7 @@
 {
     [self.tabBarController.tabBar setHidden:YES];
     self.navigationController.navigationBarHidden = YES;
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:self.navigationItem.backBarButtonItem.style target:self action:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -77,46 +78,53 @@
 -(void)initButtons
 {
     UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(21.5, 173, 78, 100)];
-    [ask setImage:[UIImage imageNamed:@"AskUnselected"] forState:UIControlStateNormal];
+    [ask setBackgroundImage:[UIImage imageNamed:@"AskUnselected"] forState:UIControlStateNormal];
 //    [tell setImage:[UIImage imageNamed:@"AskSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:ask];
 
     UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(121, 173, 78, 100)];
-    [tell setImage:[UIImage imageNamed:@"TellUnselected"] forState:UIControlStateNormal];
+    [tell setBackgroundImage:[UIImage imageNamed:@"TellSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [tell setBackgroundImage:[UIImage imageNamed:@"TellUnselected"] forState:UIControlStateNormal];
 //    [tell setImage:[UIImage imageNamed:@"TellSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [tell addTarget:self action:@selector(tellLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:tell];
 
     UIButton *text = [[UIButton alloc] initWithFrame:CGRectMake(220.5, 173, 78, 100)];
-    [text setImage:[UIImage imageNamed:@"TextUnselected"] forState:UIControlStateNormal];
+    [text setBackgroundImage:[UIImage imageNamed:@"TextUnselected"] forState:UIControlStateNormal];
 //    [text setImage:[UIImage imageNamed:@"TextSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [text addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:text];
 
     
     UIButton *directions = [[UIButton alloc] initWithFrame:CGRectMake(71.25, 295, 78, 100)];
-    [directions setImage:[UIImage imageNamed:@"DirectionsUnselected"] forState:UIControlStateNormal];
+    [directions setBackgroundImage:[UIImage imageNamed:@"DirectionsUnselected"] forState:UIControlStateNormal];
 //    [directions setImage:[UIImage imageNamed:@"DirectionsSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [directions addTarget:self action:@selector(toAppleMaps) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:directions];
     
     UIButton *map = [[UIButton alloc] initWithFrame:CGRectMake(170.75, 295, 78, 100)];
-    [map setImage:[UIImage imageNamed:@"MapUnselected"] forState:UIControlStateNormal];
+    [map setBackgroundImage:[UIImage imageNamed:@"MapUnselected"] forState:UIControlStateNormal];
 //    [map setImage:[UIImage imageNamed:@"MapSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [map addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:map];
 
+    UIButton *close = [[UIButton alloc] initWithFrame:CGRectMake(140, 450, 40, 40)];
+    [close setBackgroundImage:[UIImage imageNamed:@"Close"] forState:UIControlStateNormal];
+    //    [map setImage:[UIImage imageNamed:@"MapSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [close addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:close];
 }
 
 -(void)toAppleMaps
 {
-    
+    NSURL *URL = [NSURL URLWithString:@"http://maps.apple.com/?q"];
+    [[UIApplication sharedApplication] openURL:URL];
 }
 
 -(void)tellLocation
 {
-    
+
 }
 
 -(void)askLocation
@@ -151,13 +159,18 @@
     [self.navigationController pushViewController:mapView animated:YES];
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+-(void)closeView
 {
     [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:0] animated:NO];
-//    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-//        //
-//    }];
 }
+
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:0] animated:NO];
+////    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+////        //
+////    }];
+//}
 
 
 @end

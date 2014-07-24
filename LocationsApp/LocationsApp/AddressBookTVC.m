@@ -61,7 +61,8 @@
     [self addRecipientsView];
     [self getContacts];
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
-    
+    selectedContacts = [NSMutableArray array];
+
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.clearsSelectionOnViewWillAppear = NO;
@@ -73,10 +74,6 @@
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
-
-    selectedContacts = [NSMutableArray array];
-    
-//    [controller2 setTabBarItem:addNew];
 
     self.clearsSelectionOnViewWillAppear = NO;
 //    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -258,20 +255,21 @@
     footer.frame = CGRectMake(0, 460, self.view.frame.size.width, 60);
     footer.backgroundColor = [UIColor colorWithRed:42.0/255.0 green:192.0/255.0 blue:124.0/255.0 alpha:1.0];
     send = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    send.frame = CGRectMake(257, 0, 58, 58);
+    send.frame = CGRectMake(251, 0, 58, 58);
     [send setBackgroundImage:[UIImage imageNamed:@"AskCell"] forState:UIControlStateNormal];
     [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:send];
     
-    selectedContactsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 250, 20)];
+    selectedContactsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, 250, 20)];
     selectedContactsLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
     selectedContactsLabel.textColor = [UIColor whiteColor];
     selectedContactsLabel.text = @"";
     [footer addSubview:selectedContactsLabel];
     
-    UIButton *cancelSelection = [[UIButton alloc] initWithFrame:CGRectMake(6*self.navigationController.navigationBar.frame.size.width/10, 30, 70, 30)];
+    UIButton *cancelSelection = [[UIButton alloc] initWithFrame:CGRectMake(253, 33, 53, 20)];
     [cancelSelection setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelSelection setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    cancelSelection.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
     [cancelSelection addTarget:self action:@selector(cancelSelection) forControlEvents:UIControlEventTouchUpInside];
     
     cancelSelectionButton = [[UIBarButtonItem alloc] initWithCustomView:cancelSelection];
@@ -295,7 +293,7 @@
     for (int i = 0; i < count; i++) {
         [self.tableView deselectRowAtIndexPath:[paths objectAtIndex:i] animated:NO];
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[paths objectAtIndex:i]];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        ((ContactCell *)cell).accessoryView = nil;
         [cell setBackgroundColor: [UIColor whiteColor]];
         [selectedContacts removeObject:((ContactCell *)cell).contact];
     }
@@ -434,14 +432,16 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    UIImageView *selected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SelectedCircle"]];
+    ((ContactCell *)cell).accessoryView = selected;
 }
 
 -(void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell.accessoryType == UITableViewCellAccessoryNone) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if (((ContactCell *)cell).accessoryView == nil) {
+        UIImageView *selected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SelectedCircle"]];
+        ((ContactCell *)cell).accessoryView = selected;
         [cell setBackgroundColor: [UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:1.0]];
         [selectedContacts addObject:((ContactCell *)cell).contact];
         if ([selectedContacts count] == 1) {
@@ -452,7 +452,7 @@
         }
     }
     else{
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        ((ContactCell *)cell).accessoryView = nil;
         [selectedContacts removeObject:((ContactCell *)cell).contact];
         [cell setBackgroundColor: [UIColor whiteColor]];
         selectedContactsLabel.text = @"";

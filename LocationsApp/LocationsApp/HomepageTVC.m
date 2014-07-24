@@ -85,7 +85,7 @@
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:self.expandedIndexPath]; //self.expandedIndexPath
         cell.layer.shadowColor = [[UIColor blackColor] CGColor];
         cell.layer.shadowOpacity = 0.1f;
-        cell.layer.shadowOffset = CGSizeMake(0, 1);
+        cell.layer.shadowOffset = CGSizeMake(0, 2);
     }
 }
 
@@ -241,6 +241,7 @@
                 [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:path.section] Location:@"" Date:[NSDate date]]; //
                 //            recipient = [[self.me.messageRecipients objectAtIndex:path.row] objectAtIndex:0];
                 //            cell.contact = recipient;
+                [self downArrow:cell];
             }
             else{
                 recipient = [self.me.messageRecipients objectAtIndex:path.section];
@@ -252,6 +253,17 @@
 
     [self configureSwipeViews:cell];
 }
+
+- (void)accessoryButtonTapped:(id)sender event:(id)event {
+    NSSet *touches = [event allTouches];
+    UITouch *touch = [touches anyObject];
+    CGPoint currentTouchPosition = [touch locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint: currentTouchPosition];
+    if (indexPath != nil){
+        [self tableView: self.tableView accessoryButtonTappedForRowWithIndexPath: indexPath];
+    }
+}
+
 
 -(void)configureSwipeViews:(HomepageChatCell *)cell
 {
@@ -372,6 +384,7 @@
             cell.layer.shadowColor = [[UIColor clearColor] CGColor];
             cell.layer.shadowOpacity = 0.0f;
             cell.layer.shadowOffset = CGSizeMake(0, 0);
+            [self downArrow:cell];
             newRow = false;
         }
     }
@@ -384,6 +397,8 @@
                 cell.layer.shadowColor = [[UIColor clearColor] CGColor];
                 cell.layer.shadowOpacity = 0.0f;
                 cell.layer.shadowOffset = CGSizeMake(0, 0);
+                [self downArrow:cell];
+
                 newRow = false;
             }
         }
@@ -395,7 +410,7 @@
             cell.layer.shadowColor = [[UIColor blackColor] CGColor];
             cell.layer.shadowOpacity = 0.1f;
             cell.layer.shadowOffset = CGSizeMake(0, 1);
-            
+            [self upArrow:cell];
 //            UITableViewCell *cell2 = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathWithIndex:indexPath.section+1]];
 //            cell2.layer.shadowColor = [[UIColor blackColor] CGColor];
 //            cell2.layer.shadowOpacity = 0.1f;
@@ -405,6 +420,24 @@
         }
     }
     [tableView endUpdates];
+}
+
+-(void)downArrow:(UITableViewCell *)cell
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, 29, 29)];
+    [button setImage:[UIImage imageNamed:@"DownArrow"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+    cell.accessoryView = button;
+}
+
+-(void)upArrow:(UITableViewCell *)cell
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, 29, 29)];
+    [button setImage:[UIImage imageNamed:@"UpArrow"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+    cell.accessoryView = button;
 }
 
 

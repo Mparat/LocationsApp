@@ -22,6 +22,7 @@
     UILabel *selectedContactsLabel;
     UIButton *send;
     UIBarButtonItem *cancelSelectionButton;
+    BOOL checked;
 }
 
 @property (nonatomic, strong) LocationManagerController *locationManager;

@@ -41,8 +41,6 @@
     self.clearsSelectionOnViewWillAppear = NO;
     self.collectionView.delegate = self;
     [self.collectionView registerClass:[MessageCell class] forCellWithReuseIdentifier:messageCell];
-    [self initializeTextField];
-    [self addNavBar];
 }
 
 - (void)didReceiveMemoryWarning
@@ -53,36 +51,37 @@
 
 -(void)addNavBar
 {
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0 green:205.0/255.0 blue:6.0/255.0 alpha:1.0];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:177.0/255.0 green:74.0/255.0 blue:223.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.recipient.firstName];
 }
 
 -(void)initializeTextField
 {
-    UIView *bottom = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 30, self.view.frame.size.width, 50)];
-    bottom.backgroundColor = [UIColor whiteColor];
+    UIView *bottom = [[UIView alloc]initWithFrame:CGRectMake(-1, 523, self.view.frame.size.width+2, 46)];
+    bottom.backgroundColor = [UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:1.0];
+    bottom.layer.borderColor = [[UIColor colorWithRed:173.0/255.0 green:173.0/255.0 blue:173.0/255.0 alpha:1.0] CGColor];
+    bottom.layer.borderWidth = 0.5f;
     [self.view addSubview:bottom];
     self.textField = [[UITextField alloc] init];
     self.textField.placeholder = [NSString stringWithFormat:@"Message"];
-    self.textField.frame = CGRectMake(self.view.frame.size.width/15, 10, 7.5*self.view.frame.size.width/10, 30);
+    [bottom addSubview:self.textField];
+    self.textField.frame = CGRectMake(30+1, 8, 225, 29);
+    self.textField.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
+//    self.textField.layer.borderWidth = 1.0f;
     self.textField.borderStyle = UITextBorderStyleRoundedRect;
-    self.textField.backgroundColor = [UIColor clearColor];
+    self.textField.backgroundColor = [UIColor colorWithRed:250.0/255.0 green:250.0/255.0 blue:250.0/255.0 alpha:1.0];
     self.textField.textAlignment = NSTextAlignmentNatural;
     self.textField.delegate = self;
-    [bottom addSubview:self.textField];
     
     UIButton *send = [[UIButton alloc] init];
-    send = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //    send.backgroundColor = [UIColor blueColor];
-    send.layer.borderColor = [UIColor blueColor].CGColor;
-    send.layer.borderWidth = 1.0f;
-    send.layer.cornerRadius = 10;
-    send.frame = CGRectMake(self.textField.frame.size.width + 25, 10, 50, 30);
-    [send setTitle:@" Send" forState:UIControlStateNormal];
-    [send setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [bottom addSubview:send];
+    send.frame = CGRectMake(262.5+1, 12.5, 50, 20);
+    [send setTitle:@"Send" forState:UIControlStateNormal];
+//    send.titleLabel.text = @"Send";
+//    send.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+    [send setTitleColor:[UIColor colorWithRed:74.0/255.0 green:144.0/255.0 blue:226.0/255.0 alpha:1.0] forState:UIControlStateNormal];
     [send addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -181,8 +180,12 @@
 // Subscribe to keyboard show/hide notifications.
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self initializeTextField];
+    [self addNavBar];
+
     [self.tabBarController.tabBar setHidden:YES];
     self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
     [[NSNotificationCenter defaultCenter]
      addObserver:self selector:@selector(keyboardWillShow:)

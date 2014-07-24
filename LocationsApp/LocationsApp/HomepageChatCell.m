@@ -28,7 +28,9 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        //
+        UIImageView *read = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ReadCircle"]];
+        read.frame = CGRectMake(15, 19.5, 29, 29);
+        [self addSubview:read];
     }
     return self;
 }
@@ -62,7 +64,7 @@
         }
     }
 //    [self setGroupMessageCell:recipients Location:text Date:date];
-    [self setContactInfoWithName:names Location:text Date:date];
+    [self setContactInfoWithName:names Location:text Date:nil];
     [self addExtendIcon];
 }
 
@@ -185,7 +187,7 @@
 
 -(void)addExtendIcon
 {
-    self.accessoryType = UIButtonTypeDetailDisclosure;
+    //
 }
 
 @end

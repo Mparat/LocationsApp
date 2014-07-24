@@ -15,5 +15,6 @@
 @property (nonatomic, strong) Contact *contact;
 
 -(void)initWithContact:(Contact *)friend;
+//-(void)configureSelectedCellState:(BOOL)check;
 
 @end

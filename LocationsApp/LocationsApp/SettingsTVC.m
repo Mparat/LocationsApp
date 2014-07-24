@@ -41,6 +41,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden:YES];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning
@@ -52,6 +53,7 @@
 -(void)addNavBar
 {
     self.navigationItem.title = [NSString stringWithFormat:@"Settings"];
+    
 }
 
 #pragma mark - Table view data source
@@ -68,7 +70,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 68;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -87,8 +89,16 @@
     [(LogoutCell *)cell placeSubviewsForCell];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return @"Account";
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 65, self.tableView.frame.size.width, 50)];
+    header.backgroundColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
+    UILabel *text = [[UILabel alloc] init];
+    text.text = @"Account";
+    text.font = [UIFont fontWithName:@"Helvetica" size:17];
+    text.frame = CGRectMake(15, 0, 100, 25);
+    text.textColor = [UIColor colorWithRed:151.0/255.0 green:151.0/255.0 blue:151.0/255.0 alpha:1.0];
+    [header addSubview:text];
+    return header;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

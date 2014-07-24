@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "SelectedContacts-1x.png"
+      "filename" : "SelectedContacts.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "SelectedContacts-2x.png"
+      "filename" : "SelectedContacts@2x.png"
     }
   ],
   "info" : {

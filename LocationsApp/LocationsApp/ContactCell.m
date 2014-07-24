@@ -40,14 +40,14 @@
 -(void)placeNames:(Contact *)friend
 {
     [self.textLabel setText:[NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName]];
+    UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedCircle"]];
+    unselected.frame = CGRectMake(256+20, 19.5, 29, 29);
+    [self addSubview:unselected];
 }
-
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end
