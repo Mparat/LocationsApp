@@ -51,7 +51,7 @@
 
 -(void)addNavBar
 {
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:177.0/255.0 green:74.0/255.0 blue:223.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.recipient.firstName];

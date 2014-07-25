@@ -79,39 +79,38 @@
 {
     UIButton *ask = [[UIButton alloc] initWithFrame:CGRectMake(21.5, 173, 78, 100)];
     [ask setBackgroundImage:[UIImage imageNamed:@"AskUnselected"] forState:UIControlStateNormal];
-//    [tell setImage:[UIImage imageNamed:@"AskSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [ask setBackgroundImage:[UIImage imageNamed:@"AskSelected"] forState:UIControlStateHighlighted];
     [ask addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:ask];
 
     UIButton *tell = [[UIButton alloc] initWithFrame:CGRectMake(121, 173, 78, 100)];
-    [tell setBackgroundImage:[UIImage imageNamed:@"TellSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
     [tell setBackgroundImage:[UIImage imageNamed:@"TellUnselected"] forState:UIControlStateNormal];
-//    [tell setImage:[UIImage imageNamed:@"TellSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [tell setBackgroundImage:[UIImage imageNamed:@"TellSelected"] forState: UIControlStateHighlighted];
     [tell addTarget:self action:@selector(tellLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:tell];
 
     UIButton *text = [[UIButton alloc] initWithFrame:CGRectMake(220.5, 173, 78, 100)];
     [text setBackgroundImage:[UIImage imageNamed:@"TextUnselected"] forState:UIControlStateNormal];
-//    [text setImage:[UIImage imageNamed:@"TextSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [text setBackgroundImage:[UIImage imageNamed:@"TextSelected"] forState:UIControlStateHighlighted];
     [text addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:text];
 
     
     UIButton *directions = [[UIButton alloc] initWithFrame:CGRectMake(71.25, 295, 78, 100)];
     [directions setBackgroundImage:[UIImage imageNamed:@"DirectionsUnselected"] forState:UIControlStateNormal];
-//    [directions setImage:[UIImage imageNamed:@"DirectionsSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [directions setBackgroundImage:[UIImage imageNamed:@"DirectionsSelected"] forState:UIControlStateHighlighted];
     [directions addTarget:self action:@selector(toAppleMaps) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:directions];
     
     UIButton *map = [[UIButton alloc] initWithFrame:CGRectMake(170.75, 295, 78, 100)];
     [map setBackgroundImage:[UIImage imageNamed:@"MapUnselected"] forState:UIControlStateNormal];
-//    [map setImage:[UIImage imageNamed:@"MapSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [map setBackgroundImage:[UIImage imageNamed:@"MapSelected"] forState:UIControlStateHighlighted];
     [map addTarget:self action:@selector(viewMap) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:map];
 
     UIButton *close = [[UIButton alloc] initWithFrame:CGRectMake(140, 450, 40, 40)];
     [close setBackgroundImage:[UIImage imageNamed:@"Close"] forState:UIControlStateNormal];
-    //    [map setImage:[UIImage imageNamed:@"MapSelected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+//    [close setBackgroundImage:[UIImage imageNamed:@"Close"] forState:UIControlStateHighlighted];
     [close addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:close];
 }

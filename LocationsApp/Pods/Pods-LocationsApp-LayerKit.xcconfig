@@ -1,0 +1,2 @@
+PODS_LOCATIONSAPP_LAYERKIT_FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/LayerKit"
+PODS_LOCATIONSAPP_LAYERKIT_OTHER_LDFLAGS = -lz -framework CFNetwork -framework LayerKit -framework MobileCoreServices -framework Security -framework SystemConfiguration

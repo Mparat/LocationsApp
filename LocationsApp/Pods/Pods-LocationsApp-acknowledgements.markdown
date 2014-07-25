@@ -1,6 +1,11 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
+## LayerKit
+
+This repository contains commercially licensed software produced by Layer, Inc.
+
+
 ## MCSwipeTableViewCell
 
 Copyright (c) 2014 Ali Karagoz (http://alikaragoz.net/)

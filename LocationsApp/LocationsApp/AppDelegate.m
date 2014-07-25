@@ -17,6 +17,7 @@
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "User.h"
+#import <LayerKit/LayerKit.h>
 
 @implementation AppDelegate
 
@@ -28,7 +29,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    
+    LYRClient *layerClient = [LYRClient clientWithAppID:[[NSUUID alloc] initWithUUIDString:@"4ecc1f16-0c5e-11e4-ac3e-276b00000a10"]];
+    [layerClient connectWithCompletion:^(BOOL success, NSError *error) {
+        if (success) {
+            NSLog(@"Sucessfully connected to Layer!");
+        } else {
+            NSLog(@"Failed connection to Layer with error: %@", error);
+        }
+    }];
     self.locationManager = [[LocationManagerController alloc] init];
     [self.locationManager launchLocationManager];
     

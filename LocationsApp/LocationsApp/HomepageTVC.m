@@ -323,7 +323,6 @@
 
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
  {
-     // Return NO if you do not want the specified item to be editable.
      return YES;
  }
 
@@ -332,9 +331,30 @@
     [self.tableView setEditing:editing animated:YES];
     if (editing) {
         self.navigationController.editButtonItem.enabled = NO;
+        for (UITableViewCell *cell in self.tableView.visibleCells) { // loop through the visible cells and animate their imageViews
+            [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                cell.contentView.frame = CGRectMake(30, cell.contentView.frame.origin.y, cell.contentView.frame.size.width, cell.contentView.frame.size.height);
+            } completion:^(BOOL finished) {
+                cell.contentView.frame = CGRectMake(30, cell.contentView.frame.origin.y, cell.contentView.frame.size.width, cell.contentView.frame.size.height);
+            }];
+        }
     } else {
         self.navigationController.editButtonItem.enabled = YES;
+//        for (UITableViewCell *cell in self.tableView.visibleCells) { // loop through the visible cells and animate their imageViews
+//            [UIView animateWithDuration:0.5 animations:^{
+//                cell.frame = CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
+//            }];
+//        }
     }
+}
+
+-(BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath

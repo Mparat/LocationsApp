@@ -6,6 +6,12 @@
 // project.
 
 
+// LayerKit
+#define COCOAPODS_POD_AVAILABLE_LayerKit
+#define COCOAPODS_VERSION_MAJOR_LayerKit 0
+#define COCOAPODS_VERSION_MINOR_LayerKit 7
+#define COCOAPODS_VERSION_PATCH_LayerKit 4
+
 // MCSwipeTableViewCell
 #define COCOAPODS_POD_AVAILABLE_MCSwipeTableViewCell
 #define COCOAPODS_VERSION_MAJOR_MCSwipeTableViewCell 2

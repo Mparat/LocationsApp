@@ -4,6 +4,7 @@
 target "LocationsApp" do
 
 pod 'MCSwipeTableViewCell', '~> 2.1'
+pod 'LayerKit'
 
 end
 
