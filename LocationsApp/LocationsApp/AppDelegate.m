@@ -56,7 +56,7 @@
 //        [self loginSucessful];
 //    }
     [self checkCurrentUser];
-    [self.window makeKeyAndVisible];
+//    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -69,6 +69,7 @@
     else{
         [self loginSucessful];
     }
+    [self.window makeKeyAndVisible];
 }
 
 -(UINavigationController *)navigationController
@@ -223,8 +224,6 @@
     
     me.messageRecipients = [NSMutableArray arrayWithArray:array];
 
-
-    
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];

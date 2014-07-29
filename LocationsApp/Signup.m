@@ -7,6 +7,7 @@
 //
 
 #import "Signup.h"
+#import "AppDelegate.h"
 
 @interface Signup ()
 
@@ -106,13 +107,18 @@
     lastName.delegate = self;
     [self.view addSubview:lastName];
     
-    
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setImage:[UIImage imageNamed:@"DoneButton"] forState:UIControlStateNormal];
     [doneButton setFrame:CGRectMake(25, 375, 270, 45)];
-    [doneButton addTarget:self action:@selector(signUpViewController:shouldBeginSignUp:) forControlEvents:UIControlEventAllTouchEvents];
+    [doneButton addTarget:self action:@selector(signUpViewController:shouldBeginSignUp:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:doneButton];
     
+    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [dismissButton setImage:[UIImage imageNamed:@"CancelLoginSignup"] forState:UIControlStateNormal];
+    [dismissButton setFrame:CGRectMake(25, 31, 20, 20)];
+    [dismissButton addTarget:self action:@selector(signUpViewControllerDidCancelSignUp:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:dismissButton];
+
 }
 
 
@@ -180,8 +186,7 @@
 -(void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
 {
     NSLog(@"Sign up successful");
-//    [[[UIApplication sharedApplication] delegate] performSelector:@selector(loginSuccessful)];
-    //    [self.window setRootViewController:[self navigationController]];
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] checkCurrentUser];
 }
 
 -(void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error
@@ -192,6 +197,7 @@
 -(void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController
 {
     NSLog(@"User cancelled sign up");
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] checkCurrentUser];
 }
 
 @end

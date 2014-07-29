@@ -64,6 +64,15 @@
     loginView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"Background1"]];
     loginView.externalLogInLabel.hidden = YES;
     
+    [loginView.passwordForgottenButton setBackgroundImage:nil forState:UIControlStateNormal];
+    [loginView.passwordForgottenButton setBackgroundImage:nil forState:UIControlStateHighlighted];
+    [loginView.passwordForgottenButton setTitle:@"Forgot password?" forState:UIControlStateNormal];
+    [loginView.passwordForgottenButton setTitle:@"Forgot password?" forState:UIControlStateHighlighted];
+    [loginView.passwordForgottenButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
+
+    [loginView.dismissButton setImage:[UIImage imageNamed:@"CancelLoginSignup"] forState:UIControlStateNormal];
+    [loginView.dismissButton setImage:[UIImage imageNamed:@"CancelLoginSignup"] forState:UIControlStateHighlighted];
+
     [loginView.logInButton setBackgroundImage:[UIImage imageNamed:@"DoneButton"] forState:UIControlStateNormal];
     [loginView.logInButton setBackgroundImage:[UIImage imageNamed:@"DoneButton"] forState:UIControlStateHighlighted];
     [self.view addSubview:loginView];
@@ -90,6 +99,10 @@
     [loginView.passwordField setBorderStyle:UITextBorderStyleRoundedRect];
     loginView.passwordField.layer.borderColor = [[UIColor colorWithRed:151.0 / 255.0 green:151.0 / 255.0 blue:151.0 / 255.0 alpha:1.0] CGColor];
     
+    [loginView.passwordForgottenButton setFrame:CGRectMake(224/2, 490/2, 200/2, 14)];
+    loginView.passwordForgottenButton.titleLabel.frame = CGRectMake(0, 0, 192/2, 12);
+
+    [loginView.dismissButton setFrame:CGRectMake(25, 31, 20, 20)];
     
     [loginView.logInButton setTitle:@"" forState:UIControlStateNormal];
     [loginView.logInButton setTitle:@"" forState:UIControlStateHighlighted];
@@ -120,17 +133,8 @@
 {
     NSLog(@"Login successful");
     self.parseController.signedInUser = user;
-//    [(AppDelegate *)[[UIApplication sharedApplication] delegate] performSelector:@selector(loginSuccessful)];
-
-//    UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] loginSuccessful];
-//    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-//        //
-//    }];
-//    [self.navigationController presentViewController:controller animated:YES completion:^{
-//        //
-//    }];
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] checkCurrentUser];
     
-//    [controller loginSucessful];
 }
 
 -(void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
@@ -145,20 +149,8 @@
 
 -(void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
 {
-//    FirstView *firstView = [[FirstView alloc] init];
-//    [loginView removeFromSuperview];
-//    [parseLoginVC dismissViewControllerAnimated:YES completion:^{
-//        //
-//    }];
-//    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:0] animated:NO];
-//    [self.navigationController pushViewController:firstView animated:YES];
-    UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] navigationController];
-    [parseLoginVC dismissViewControllerAnimated:YES completion:^{
-        [loginView removeFromSuperview];
-    }];
-    [self.navigationController presentViewController:controller animated:YES completion:^{
-        //
-    }];
+    NSLog(@"User cancelled sign up");
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] checkCurrentUser];
 }
 
 @end

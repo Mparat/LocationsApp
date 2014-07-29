@@ -158,43 +158,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LoginView.m"
-            timestampString = "428306320.849078"
+            timestampString = "428368698.498872"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "156"
-            endingLineNumber = "156"
-            landmarkName = "-logInViewControllerDidCancelLogIn:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[LoginView logInViewControllerDidCancelLogIn:]"
-                  moduleName = "LocationsApp"
-                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LoginView.m"
-                  timestampString = "428306754.988916"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "156"
-                  endingLineNumber = "156"
-                  offsetFromSymbolStart = "216">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__47-[LoginView logInViewControllerDidCancelLogIn:]_block_invoke"
-                  moduleName = "LocationsApp"
-                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LoginView.m"
-                  timestampString = "428306754.989088"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "156"
-                  endingLineNumber = "156"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
+            startingLineNumber = "166"
+            endingLineNumber = "166">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -204,43 +172,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LoginView.m"
-            timestampString = "428306371.576726"
+            timestampString = "428368698.498872"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
-            landmarkName = "-logInViewControllerDidCancelLogIn:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[LoginView logInViewControllerDidCancelLogIn:]"
-                  moduleName = "LocationsApp"
-                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LoginView.m"
-                  timestampString = "428306754.989808"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "159"
-                  endingLineNumber = "159"
-                  offsetFromSymbolStart = "328">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__47-[LoginView logInViewControllerDidCancelLogIn:]_block_invoke121"
-                  moduleName = "LocationsApp"
-                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LoginView.m"
-                  timestampString = "428306754.989977"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "161"
-                  endingLineNumber = "161"
-                  offsetFromSymbolStart = "8">
-               </Location>
-            </Locations>
+            startingLineNumber = "169"
+            endingLineNumber = "169">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -250,13 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LoginView.m"
-            timestampString = "428306572.234319"
+            timestampString = "428368698.498872"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "-logInViewControllerDidCancelLogIn:"
-            landmarkType = "5">
+            startingLineNumber = "171"
+            endingLineNumber = "171">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
