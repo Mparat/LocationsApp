@@ -21,5 +21,7 @@
 
 
 -(UINavigationController *)navigationController;
+-(void)loginSuccessful;
+-(void)checkCurrentUser;
 
 @end

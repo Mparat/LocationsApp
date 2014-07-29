@@ -56,32 +56,9 @@
 
 -(void) addNavBar
 {
-    UIButton *done = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-    [done setTitle:@"Done" forState:UIControlStateNormal];
-    [done setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [done addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
-
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithCustomView:done];
-//    self.navigationItem.rightBarButtonItem = doneButton;
-    
     self.navigationItem.title = [NSString stringWithFormat:@"%@", self.recipient.firstName];
-                                
-
-//    self.navigationController.navigationBar.opaque = YES;
-//    self.navigationController.navigationBar.translucent = YES;
-////    [[UINavigationBar appearance] setBarStyle:UIBarStyleBlackTranslucent];
-//    self.navigationController.navigationBar.barTintColor = [UIColor clearColor];
-//    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-
-}
-
--(void)done
-{
-    OptionsView *options = [[OptionsView alloc] init];
-    [self.navigationController pushViewController:options animated:YES];
 }
 
 

@@ -9,14 +9,15 @@
 #import "AppDelegate.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import <CoreLocation/CoreLocation.h>
+#import <QuartzCore/QuartzCore.h>
 #import "HomepageTVC.h"
 #import "MessageVC.h"
-#import "Login.h"
 #import "AddressBookTVC.h"
 #import "AddContacts.h"
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "User.h"
+#import "FirstView.h"
 #import <LayerKit/LayerKit.h>
 
 @implementation AppDelegate
@@ -48,15 +49,26 @@
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     [PFFacebookUtils initializeFacebook];
     
+//    if (![PFUser currentUser]) {
+//        [self.window setRootViewController:[self navigationController]];
+//    }
+//    else{
+//        [self loginSucessful];
+//    }
+    [self checkCurrentUser];
+    [self.window makeKeyAndVisible];
+    
+    return YES;
+}
+
+-(void)checkCurrentUser
+{
     if (![PFUser currentUser]) {
         [self.window setRootViewController:[self navigationController]];
     }
     else{
         [self loginSucessful];
     }
-    [self.window makeKeyAndVisible];
-    
-    return YES;
 }
 
 -(UINavigationController *)navigationController
@@ -74,7 +86,11 @@
 
     [self configureLoginView:parseLoginVC];
     [self configureSignupView:parseSignupVC];
-    return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
+    
+    FirstView *firstView = [[FirstView alloc] init];
+    return [[UINavigationController alloc] initWithRootViewController:firstView];
+
+//    return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
 }
 
 -(void)configureLoginView:(PFLogInViewController *)loginViewController
@@ -111,7 +127,6 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
 // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 
 }
