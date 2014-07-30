@@ -8,12 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "parseUser.h"
 
 @interface SearchCell : UITableViewCell
 
 @property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) NSString *username;
+@property (nonatomic, strong) parseUser *person;
+
 
 -(void)placeSubviewsForCell:(NSString *)name;
+
+-(void)initWithContact:(parseUser *)user;
+
 
 @end

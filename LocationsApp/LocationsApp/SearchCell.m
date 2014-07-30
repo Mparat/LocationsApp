@@ -21,6 +21,8 @@
 @synthesize signedInUser = _signedInUser;
 @synthesize name = _name;
 @synthesize actualName = _actualName;
+@synthesize person = _person;
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -43,30 +45,18 @@
     // Configure the view for the selected state
 }
 
--(void)placeSubviewsForCell:(NSString *)name
+-(void)initWithContact:(parseUser *)user
 {
-    [self initWithUsername:name];
+    [self placeNames:user];
 }
 
--(void)initWithUsername:(NSString *)username
+-(void)placeNames:(parseUser *)user
 {
-    self.name = [[UILabel alloc] init];
-    self.name.text = username;
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.name.font, NSFontAttributeName, nil];
-    self.name.frame = CGRectMake(self.name.frame.origin.x,
-                                     self.name.frame.origin.y,
-                                     [self.name.text sizeWithAttributes:dict].width,
-                                     [self.name.text sizeWithAttributes:dict].height);
-    
-    self.name.frame = CGRectMake(70, 20, self.name.frame.size.width, 16);
-    self.name.font = [UIFont fontWithName:@"Helvetica" size:16];
-    self.name.textColor = [UIColor blackColor];
-    [self addSubview:self.name];
-    
-    self.username = self.name.text;
-
-
-
+    [self.textLabel setText:[NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName]];
+    UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedCircle"]];
+    unselected.frame = CGRectMake(256+20, 19.5, 29, 29);
+    [self addSubview:unselected];
 }
+
 
 @end

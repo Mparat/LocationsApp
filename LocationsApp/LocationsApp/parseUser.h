@@ -1,19 +1,18 @@
 //
-//  Contact.h
+//  parseUser.h
 //  LocationsApp
 //
-//  Created by Meera Parat on 6/11/14.
+//  Created by Meera Parat on 7/30/14.
 //  Copyright (c) 2014 Meera Parat. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface Contact : NSObject <NSCoding>
+@interface parseUser : NSObject
 
 @property (nonatomic, strong) NSString *firstName;
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSString *username;
-@property BOOL exists;
 
 
 @end

@@ -34,12 +34,15 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
-@synthesize parseUserNumbers = _parseUserNumbers;
-@synthesize parseUserUsernames = _parseUserUsernames;
+@synthesize parseUsernames = _parseUsernames;
+@synthesize parseFirstNames = _parseFirstNames;
+@synthesize parseLastNames = _parseLastNames;
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
 @synthesize me = _me;
 @synthesize friends = _friends;
+@synthesize parseUsers = _parseUsers;
+
 
 #define contactCell @"contactCell"
 #define friendsArray @"friendsArray"
@@ -59,7 +62,7 @@
     [self addNavBar];
     [self addSearchBar];
     [self addRecipientsView];
-    [self getContacts];
+//    [self getContacts];
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     selectedContacts = [NSMutableArray array];
 
@@ -76,10 +79,13 @@
     [self addNavBar];
 
     self.clearsSelectionOnViewWillAppear = NO;
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    NSData *data = [defaults objectForKey:self.me.username];
-//    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-//    [self.me.messageRecipients addObjectsFromArray:array];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [defaults objectForKey:[NSString stringWithFormat:@"%@friends", self.me.username]];
+    if ([self.me.friends count] != 0) {
+        self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,69 +94,30 @@
     // Dispose of any resources that can be recreate
 }
 
--(void)getContacts
-{
-    CFErrorRef error;
-    self.addressBook = ABAddressBookCreateWithOptions(NULL, &error);
-    
-    __block BOOL accessGranted = NO;
-    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            @autoreleasepool {
-                // Write your code here...
-                // Fetch data from SQLite DB
-            }
-        });
-        
-        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
-            accessGranted = granted;
-            dispatch_semaphore_signal(sema);
-        });
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    }
-    else { // we're on iOS 5 or older
-        accessGranted = YES;
-    }
-    
-    if (accessGranted) {
-        ABRecordRef source = ABAddressBookCopyDefaultSource(self.addressBook);
-        self.contacts = ABAddressBookCopyArrayOfAllPeopleInSource(self.addressBook, source);
-        
-        for (int i = 0; i < CFArrayGetCount(self.contacts); i++) {
-            ABRecordRef person = CFArrayGetValueAtIndex(self.contacts, i); // person
-            NSString *first = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
-            if (first == NULL) {
-                first = @"";
-            }
-            NSString *last = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
-            if (last == NULL) {
-                last = @"";
-            }
-            ABMultiValueRef phones =(__bridge ABMultiValueRef)((__bridge NSString*)ABRecordCopyValue(person, kABPersonPhoneProperty)); // list of phones
-            for (int j = 0; j < ABMultiValueGetCount(phones); j++) {
-                for (int k = 0; k < [self.parseUserNumbers count]; k++) {
-                    NSString *number = [NSString stringWithFormat:@"1%@", (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
-                    NSCharacterSet *toExclude = [NSCharacterSet characterSetWithCharactersInString:@"/.()- "];
-                    number = [[number componentsSeparatedByCharactersInSet:toExclude] componentsJoinedByString: @""];
-
-                    if ([[self.parseUserNumbers objectAtIndex:k] isEqualToString:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)] || [[self.parseUserNumbers objectAtIndex:k] isEqualToString:number]) {
-                        Contact *newContact = [[Contact alloc]init];
-                        newContact.firstName = first;
-                        newContact.lastName = last;
-                        newContact.phoneNumber = [self.parseUserNumbers objectAtIndex:k];
-                        newContact.username = [self.parseUserUsernames objectAtIndex:k];
-                        [self.me.friends addObject:newContact];
-                    }
-                }
-            }
-        }
-    }
-}
-
+//-(void)getContacts
+//{
+//    
+//                for (int k = 0; k < [self.parseUserNumbers count]; k++) {
+//                    NSString *number = [NSString stringWithFormat:@"1%@", (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
+//                    NSCharacterSet *toExclude = [NSCharacterSet characterSetWithCharactersInString:@"/.()- "];
+//                    number = [[number componentsSeparatedByCharactersInSet:toExclude] componentsJoinedByString: @""];
+//
+//                    if ([[self.parseUserNumbers objectAtIndex:k] isEqualToString:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)] || [[self.parseUserNumbers objectAtIndex:k] isEqualToString:number]) {
+//                        Contact *newContact = [[Contact alloc]init];
+//                        newContact.firstName = first;
+//                        newContact.lastName = last;
+//                        newContact.phoneNumber = [self.parseUserNumbers objectAtIndex:k];
+//                        newContact.username = [self.parseUserUsernames objectAtIndex:k];
+//                        [self.me.friends addObject:newContact];
+//                    }
+//    }
+//}
+//
 
 -(void)addNavBar
 {
+    [self addPlusButton];
+    
     UIButton *settings = [[UIButton alloc] init];
     [settings setImage:[UIImage imageNamed:@"Settings"] forState:UIControlStateNormal];
     [settings addTarget:self action:@selector(toSettings) forControlEvents:UIControlEventTouchUpInside];
@@ -167,6 +134,7 @@
     self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
 }
 
+
 -(void)addSearchBar
 {
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
@@ -178,7 +146,7 @@
     self.searchController.delegate = self;
     
     CGPoint offset = CGPointMake(0, self.view.frame.size.height);
-    //CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
+//    CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
     self.tableView.contentOffset = offset;
     self.searchResults = [NSMutableArray array];
 }
@@ -194,10 +162,8 @@
         }
     }
     if (cancelButton) {
-        [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
+//        [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
     }
-    
-    // this is where to put the code to make sure the footer view is above the keyboard --> textfieldDidbeginediting, or something like that...
 }
 
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
@@ -211,24 +177,15 @@
     [self.searchResults removeAllObjects];
     [self.tableView reloadData];
 
-    
     NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
     NSMutableArray *filter1 = [NSMutableArray arrayWithArray:self.me.friends];
     [filter1 filterUsingPredicate:predicate1]; // filtered Names
 
     NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"self beginswith[cd] %@", searchTerm];
-    NSMutableArray *filter2 = [NSMutableArray arrayWithArray:self.parseUserUsernames];
+    NSMutableArray *filter2 = [NSMutableArray arrayWithArray:self.parseUsernames];
     [filter2 filterUsingPredicate:predicate2]; // filtered usernames from Parse
 
-    
     [self.searchResults addObjectsFromArray:filter1];
-//    [self.searchResults addObjectsFromArray:filter2];
-    
-//    for (int i = 0; i < [filter2 count]; i++) {
-//        for (int j = 0; j < [filter1 count]; j++) {
-//            if
-//        }
-//    }
 }
 
 -(void)toSettings
@@ -239,14 +196,20 @@
 
 -(void)addFriends
 {
+//    CGPoint offset = CGPointMake(0, -64); // height offset is the height of the navigationBar --> decided from the logout button height.
+//    self.tableView.contentOffset = offset;
+
     AddContacts *add = [[AddContacts alloc] init];
     add.locationManager = self.locationManager;
     add.parseController = self.parseController;
+    add.me = self.me;
     add.signedInUser = self.signedInUser;
-    add.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:add] animated:NO completion:^{
-        //
-    }];
+    add.parseUsernames = self.parseUsernames;
+    add.parseFirstNames = self.parseFirstNames;
+    add.parseLastNames = self.parseLastNames;
+    add.parseUsers = self.parseUsers;
+
+    [self.navigationController pushViewController:add animated:YES];
 }
 
 -(void)addRecipientsView
@@ -300,6 +263,8 @@
     [footer removeFromSuperview];
     self.navigationItem.rightBarButtonItem = nil;
     selectedContactsLabel.text = @"";
+    
+    [self addPlusButton];
 }
 
 #pragma mark - Table view data source
@@ -472,12 +437,27 @@
         [footer removeFromSuperview];
         self.navigationItem.rightBarButtonItem = nil;
         selectedContactsLabel.text = @"";
+        [self addPlusButton];
+        
     }
     else{
 //        [self.view addSubview:footer];
         [self.navigationController.view addSubview:footer];
         self.navigationItem.rightBarButtonItem = cancelSelectionButton;
     }
+}
+
+-(void)addPlusButton
+{
+    addNew = [[UIButton alloc] init];
+    [addNew setImage:[UIImage imageNamed:@"AddNew"] forState:UIControlStateNormal];
+    [addNew addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
+    UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 58, 58)];
+    [addNew setFrame:CGRectMake(15, 0, 58, 58)];
+    [view2 addSubview:addNew];
+    
+    UIBarButtonItem *addNewButton = [[UIBarButtonItem alloc] initWithCustomView:view2];
+    self.navigationItem.rightBarButtonItem = addNewButton;
 }
 
 

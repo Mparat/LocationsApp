@@ -21,6 +21,7 @@
     UIView *footer;
     UILabel *selectedContactsLabel;
     UIButton *send;
+    UIButton *addNew;
     UIBarButtonItem *cancelSelectionButton;
     BOOL checked;
 }
@@ -29,8 +30,11 @@
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) PFUser *signedInUser;
 
-@property (nonatomic, strong) NSArray *parseUserNumbers;
-@property (nonatomic, strong) NSArray *parseUserUsernames;
+@property (nonatomic, strong) NSMutableArray *parseUsernames;
+@property (nonatomic, strong) NSMutableArray *parseFirstNames;
+@property (nonatomic, strong) NSMutableArray *parseLastNames;
+@property (nonatomic, strong) NSMutableArray *parseUsers;
+
 
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic) CFArrayRef contacts;

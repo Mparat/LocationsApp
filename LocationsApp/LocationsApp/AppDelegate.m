@@ -19,13 +19,16 @@
 #import "User.h"
 #import "FirstView.h"
 #import <LayerKit/LayerKit.h>
+#import "parseUser.h"
 
 @implementation AppDelegate
 
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
-@synthesize parseUserNumbers = _parseUserNumbers;
-@synthesize parseUserUsernames = _parseUserUsernames;
+@synthesize parseUsernames = _parseUsernames;
+@synthesize parseFirstNames = _parseFirstNames;
+@synthesize parseLastNames = _parseLastNames;
+@synthesize parseUsers = _parseUsers;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -47,16 +50,8 @@
     [Parse setApplicationId:@"WJyPfvSQq1rKoGMlyTp13xNliwIiPyZz8RyaRXwy"
                   clientKey:@"r46J9MvgvF6pbnmO7PUsatJbseIbWJM2zqBjSvC4"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    [PFFacebookUtils initializeFacebook];
     
-//    if (![PFUser currentUser]) {
-//        [self.window setRootViewController:[self navigationController]];
-//    }
-//    else{
-//        [self loginSucessful];
-//    }
     [self checkCurrentUser];
-//    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -74,58 +69,10 @@
 
 -(UINavigationController *)navigationController
 {
-    PFLogInViewController *parseLoginVC = [[PFLogInViewController alloc] init];
-    [parseLoginVC setDelegate:self];
-    
-    PFSignUpViewController *parseSignupVC = [[PFSignUpViewController alloc] init];
-    [parseSignupVC setDelegate:self];
-    
-    [parseLoginVC setSignUpController:parseSignupVC];
-    [parseLoginVC setFields:PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsSignUpButton | PFLogInFieldsUsernameAndPassword];
-    
-    [parseSignupVC setFields:PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsAdditional | PFSignUpFieldsDismissButton | PFSignUpFieldsSignUpButton];
-
-    [self configureLoginView:parseLoginVC];
-    [self configureSignupView:parseSignupVC];
-    
     FirstView *firstView = [[FirstView alloc] init];
     return [[UINavigationController alloc] initWithRootViewController:firstView];
-
-//    return [[UINavigationController alloc] initWithRootViewController:parseLoginVC];
 }
 
--(void)configureLoginView:(PFLogInViewController *)loginViewController
-{
-    PFLogInView *view = loginViewController.logInView;
-    view.backgroundColor = [UIColor whiteColor];
-    view.usernameField.backgroundColor = [UIColor grayColor];
-    view.passwordField.backgroundColor = [UIColor grayColor];
-    view.usernameField.borderStyle = UITextBorderStyleRoundedRect;
-    view.passwordField.borderStyle = UITextBorderStyleRoundedRect;
-    view.passwordField.textColor = [UIColor whiteColor];
-    view.usernameField.textColor = [UIColor whiteColor];
-    
-    UILabel *title = [[UILabel alloc] init];
-    title.text = @"Title";
-    [title sizeToFit];
-    view.logo = title;
-}
-
--(void)configureSignupView:(PFSignUpViewController *)signupViewController
-{
-    PFSignUpView *view = signupViewController.signUpView;
-    [view.additionalField setPlaceholder:@"Name"];
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    return [FBAppCall handleOpenURL:url
-                  sourceApplication:sourceApplication
-                        withSession:[PFFacebookUtils session]];
-}
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -154,74 +101,45 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-
-#pragma mark - Parse Login delegate methods
-
-// on click of "submit" button, i'm guessing
-// Sent to the delegate to determine whether the log in request should be submitted to the server.
--(BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password
-{
-    if (username && password && username.length != 0 && password.length != 0) {
-        return YES;
-        // begin login process;
-    }
-    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                message:@"Make sure you fill out all of the information!"
-                               delegate:nil
-                      cancelButtonTitle:@"Ok"
-                      otherButtonTitles:nil] show];
-    return NO; // Interrupt login process
-}
-
-
-- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
-{
-    NSLog(@"Login successful");
-    self.parseController.signedInUser = user;
-    [self loginSucessful];
-}
-
--(void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
-{
-    NSLog(@"Login attempt failed with error: %@", error);
-    [[[UIAlertView alloc] initWithTitle:@"Error"
-                                message:@"Username or password incorrect"
-                               delegate:nil
-                      cancelButtonTitle:@"Ok"
-                      otherButtonTitles:nil] show];
-}
-
--(void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
-{
-    NSLog(@"Login was cancelled");
-}
-
 -(void)loginSucessful
 {
     self.parseController.signedInUser = [PFUser currentUser];
     PFQuery *query = [PFUser query];
-    [query whereKeyExists:@"phoneNumber"];
+    [query whereKeyExists:@"username"]; //email address --> use to send messages, use as user ID for app
     [query whereKey:@"username" notEqualTo:self.parseController.signedInUser.username];
-    self.parseUserNumbers = [NSMutableArray array];
-    self.parseUserUsernames = [NSMutableArray array];
+    self.parseUsernames = [NSMutableArray array];
+    self.parseFirstNames = [NSMutableArray array];
+    self.parseLastNames = [NSMutableArray array];
+    self.parseUsers = [NSMutableArray array];
 
     NSArray *users = [query findObjects];
     for (int i = 0; i < [users count]; i++) {
-        NSString *number = [[users objectAtIndex:i] objectForKey:@"phoneNumber"];
         NSString *username = [[users objectAtIndex:i] objectForKey:@"username"];
-        [self.parseUserNumbers addObject:number];
-        [self.parseUserUsernames addObject:username];
+        NSString *firstName = [[users objectAtIndex:i] objectForKey:@"firstName"];
+        NSString *lastName = [[users objectAtIndex:i] objectForKey:@"lastName"];
+        parseUser *person = [[parseUser alloc] init];
+        person.username = username;
+        person.firstName = firstName;
+        person.lastName = lastName;
+        [self.parseUsers addObject:person];
+//        [self.parseUsernames addObject:username];
+//        [self.parseFirstNames addObject:firstName];
+//        [self.parseLastNames addObject:lastName];
     }
     
     User *me = [[User alloc] init];
-    me.username = self.parseController.signedInUser.username;
-    me.phoneNumber = [self.parseController.signedInUser objectForKey:@"phoneNumber"];
-    me.friends = [NSMutableArray array];
+    me.username = self.parseController.signedInUser.username; //email
+//    me.phoneNumber = [self.parseController.signedInUser objectForKey:@"phoneNumber"];
+//    me.friends = [NSMutableArray array];
+    
+    NSUserDefaults *friends = [NSUserDefaults standardUserDefaults];
+    NSData *data2 = [friends objectForKey:[NSString stringWithFormat:@"%@friends", me.username]];
+    NSArray *array2 = [NSKeyedUnarchiver unarchiveObjectWithData:data2];
+    me.friends = [NSMutableArray arrayWithArray:array2];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [defaults objectForKey:me.username];
     NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    
     me.messageRecipients = [NSMutableArray arrayWithArray:array];
 
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
@@ -236,8 +154,10 @@
     contacts.parseController = self.parseController;
     contacts.signedInUser = self.parseController.signedInUser;
     contacts.me = me;
-    contacts.parseUserNumbers = self.parseUserNumbers;
-    contacts.parseUserUsernames = self.parseUserUsernames;
+    contacts.parseUsernames = self.parseUsernames;
+    contacts.parseFirstNames = self.parseFirstNames;
+    contacts.parseLastNames = self.parseLastNames;
+    contacts.parseUsers = self.parseUsers;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
@@ -264,24 +184,6 @@
     [controller2 setTabBarItem:addNew];
 
     [self.window setRootViewController:tabBarController];
-}
-
-#pragma mark - Parse Sign up delegate methods
-
--(void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
-{
-    NSLog(@"Sign up successful");
-    [self.window setRootViewController:[self navigationController]];
-}
-
--(void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error
-{
-    NSLog(@"Sign up failed with error: %@", error);
-}
-
--(void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController
-{
-    NSLog(@"User cancelled sign up");
 }
 
 @end

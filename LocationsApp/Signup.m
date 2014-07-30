@@ -59,6 +59,7 @@
     [parseSignupVC setDelegate:self];
     [parseSignupVC setFields:PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsSignUpButton | PFSignUpFieldsDismissButton];
 
+    
     email = [[UITextField alloc] init];
     [email setFrame:CGRectMake(25, 390/2, 270, 45)];
     [email setPlaceholder:@"Email"];
@@ -95,6 +96,8 @@
     firstName.layer.borderColor = [[UIColor colorWithRed:151.0 / 255.0 green:151.0 / 255.0 blue:151.0 / 255.0 alpha:1.0] CGColor];
     firstName.delegate = self;
     [self.view addSubview:firstName];
+    [firstName becomeFirstResponder];
+
     
     lastName = [[UITextField alloc] init];
     [lastName setFrame:CGRectMake(350/2, 125, 120, 45)];

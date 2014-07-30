@@ -12,7 +12,6 @@
 
 @synthesize firstName = _firstName;
 @synthesize lastName = _lastName;
-@synthesize phoneNumber = _phoneNumber;
 @synthesize username = _username;
 @synthesize exists = _exists;
 
@@ -23,7 +22,6 @@
     }
     self.firstName = [decoder decodeObjectForKey:@"firstName"];
     self.lastName = [decoder decodeObjectForKey:@"lastName"];
-    self.phoneNumber = [decoder decodeObjectForKey:@"phoneNumber"];
     self.username = [decoder decodeObjectForKey:@"username"];
     self.exists = [decoder decodeObjectForKey:@"exists"];
 
@@ -34,7 +32,6 @@
 {
     [aCoder encodeObject:self.firstName forKey:@"firstName"];
     [aCoder encodeObject:self.lastName forKey:@"lastName"];
-    [aCoder encodeObject:self.phoneNumber forKey:@"phoneNumber"];
     [aCoder encodeObject:self.username forKey:@"username"];
     [aCoder encodeBool:self.exists forKey:@"exists"];
 }

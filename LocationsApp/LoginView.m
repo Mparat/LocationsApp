@@ -12,7 +12,6 @@
 #import "HomepageTVC.h"
 #import "AddressBookTVC.h"
 #import "AppDelegate.h"
-#import "SignupView.h"
 
 @interface LoginView ()
 
@@ -56,8 +55,6 @@
     parseLoginVC = [[PFLogInViewController alloc] init];
     [parseLoginVC setDelegate:self];
     [parseLoginVC setFields:PFLogInFieldsLogInButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsUsernameAndPassword | PFLogInFieldsDismissButton];
-    SignupView *signupView = [[SignupView alloc] init];
-    [parseLoginVC setSignUpController:signupView.parseSignupVC];
     loginView = parseLoginVC.logInView;
     loginView.frame = self.view.frame;
     loginView.logo = nil;
@@ -85,6 +82,9 @@
     [loginView.usernameField setFrame:CGRectMake(25, 125, 270, 45)];
     [loginView.usernameField setPlaceholder:@"Email"];
 //    loginView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:34.0]}];
+    loginView.usernameField.keyboardType = UIKeyboardTypeEmailAddress;
+    loginView.usernameField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    loginView.usernameField.autocorrectionType = UITextAutocorrectionTypeNo;
     loginView.usernameField.textAlignment = NSTextAlignmentLeft;
     [loginView.usernameField setTextColor:[UIColor colorWithRed:151.0 / 255.0 green:151.0 / 255.0 blue:151.0 / 255.0 alpha:1.0]];
     [loginView.usernameField setBackgroundColor:[UIColor whiteColor]];
