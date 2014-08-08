@@ -34,9 +34,6 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
-@synthesize parseUsernames = _parseUsernames;
-@synthesize parseFirstNames = _parseFirstNames;
-@synthesize parseLastNames = _parseLastNames;
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
 @synthesize me = _me;
@@ -94,26 +91,6 @@
     // Dispose of any resources that can be recreate
 }
 
-//-(void)getContacts
-//{
-//    
-//                for (int k = 0; k < [self.parseUserNumbers count]; k++) {
-//                    NSString *number = [NSString stringWithFormat:@"1%@", (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)];
-//                    NSCharacterSet *toExclude = [NSCharacterSet characterSetWithCharactersInString:@"/.()- "];
-//                    number = [[number componentsSeparatedByCharactersInSet:toExclude] componentsJoinedByString: @""];
-//
-//                    if ([[self.parseUserNumbers objectAtIndex:k] isEqualToString:(__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, j)] || [[self.parseUserNumbers objectAtIndex:k] isEqualToString:number]) {
-//                        Contact *newContact = [[Contact alloc]init];
-//                        newContact.firstName = first;
-//                        newContact.lastName = last;
-//                        newContact.phoneNumber = [self.parseUserNumbers objectAtIndex:k];
-//                        newContact.username = [self.parseUserUsernames objectAtIndex:k];
-//                        [self.me.friends addObject:newContact];
-//                    }
-//    }
-//}
-//
-
 -(void)addNavBar
 {
     [self addPlusButton];
@@ -166,6 +143,11 @@
     }
 }
 
+-(void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+    [self.tableView reloadData];
+}
+
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
     [self filterResults:searchString];
@@ -181,32 +163,23 @@
     NSMutableArray *filter1 = [NSMutableArray arrayWithArray:self.me.friends];
     [filter1 filterUsingPredicate:predicate1]; // filtered Names
 
-    NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"self beginswith[cd] %@", searchTerm];
-    NSMutableArray *filter2 = [NSMutableArray arrayWithArray:self.parseUsernames];
-    [filter2 filterUsingPredicate:predicate2]; // filtered usernames from Parse
-
     [self.searchResults addObjectsFromArray:filter1];
 }
 
 -(void)toSettings
 {
     SettingsTVC *settings = [[SettingsTVC alloc] init];
+    settings.apiManager = self.apiManager;
     [self.navigationController pushViewController:settings animated:YES];
 }
 
 -(void)addFriends
 {
-//    CGPoint offset = CGPointMake(0, -64); // height offset is the height of the navigationBar --> decided from the logout button height.
-//    self.tableView.contentOffset = offset;
-
     AddContacts *add = [[AddContacts alloc] init];
     add.locationManager = self.locationManager;
     add.parseController = self.parseController;
     add.me = self.me;
     add.signedInUser = self.signedInUser;
-    add.parseUsernames = self.parseUsernames;
-    add.parseFirstNames = self.parseFirstNames;
-    add.parseLastNames = self.parseLastNames;
     add.parseUsers = self.parseUsers;
 
     [self.navigationController pushViewController:add animated:YES];
@@ -220,7 +193,7 @@
     send = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     send.frame = CGRectMake(251, 0, 58, 58);
     [send setBackgroundImage:[UIImage imageNamed:@"AskCell"] forState:UIControlStateNormal];
-    [send addTarget:self action:@selector(askLocation) forControlEvents:UIControlEventTouchUpInside];
+    [send addTarget:self action:@selector(sendAskMessage) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:send];
     
     selectedContactsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, 250, 20)];
@@ -238,8 +211,17 @@
     cancelSelectionButton = [[UIBarButtonItem alloc] initWithCustomView:cancelSelection];
 }
 
--(void)askLocation
+-(void)sendAskMessage
 {
+    Contact *sender = [[Contact alloc] init];
+    sender.firstName = self.me.firstName;
+    sender.lastName = self.me.lastName;
+    sender.username = self.me.username;
+    sender.userID = self.me.userID;
+    [selectedContacts addObject:sender];
+    [self.apiManager sendAskMessageToRecipients:selectedContacts];
+    [self cancelSelection];
+    
     [self.me.messageRecipients addObject:selectedContacts];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
@@ -346,11 +328,17 @@
             [defaults synchronize];
         }
         if (new == false) {
-            NSLog(@"Send a \"ask\" message");
+            NSLog(@"Send a \"ask\" message to an already created message recipient");
         }
         ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{
-            //
+            Contact *sender = [[Contact alloc] init];
+            sender.firstName = self.me.firstName;
+            sender.lastName = self.me.lastName;
+            sender.username = self.me.username;
+            sender.userID = self.me.userID;
+            NSArray *allParticipants = [NSArray arrayWithObjects:((ContactCell *)cell).contact, sender, nil];
+            [self.apiManager sendAskMessageToRecipients:allParticipants];
         }];
     }];
     
@@ -375,6 +363,13 @@
         }
         if (new == false) {
             NSLog(@"Send a \"tell\" message to an already created message recipient");
+            Contact *sender = [[Contact alloc] init];
+            sender.firstName = self.me.firstName;
+            sender.lastName = self.me.lastName;
+            sender.username = self.me.username;
+            sender.userID = self.me.userID;
+            NSArray *allParticipants = [NSArray arrayWithObjects:((ContactCell *)cell).contact, sender, nil];
+            [self.apiManager sendTellMessageToRecipients:allParticipants];
         }
         ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{

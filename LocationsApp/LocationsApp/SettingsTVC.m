@@ -106,7 +106,11 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryNone;
     
-    [PFUser logOut];
+//    [PFUser logOut];
+    [self.apiManager deauthenticateWithCompletion:^(BOOL success, NSError *error) {
+        self.tableView = nil;
+        NSLog(@"Deauthenticated...");
+    }];
     UINavigationController *controller = [(AppDelegate *) [[UIApplication sharedApplication] delegate] navigationController];
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         //

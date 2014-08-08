@@ -25,15 +25,12 @@
 
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
-@synthesize parseUsernames = _parseUsernames;
-@synthesize parseFirstNames = _parseFirstNames;
-@synthesize parseLastNames = _parseLastNames;
 @synthesize parseUsers = _parseUsers;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    LYRClient *layerClient = [LYRClient clientWithAppID:[[NSUUID alloc] initWithUUIDString:@"4ecc1f16-0c5e-11e4-ac3e-276b00000a10"]];
+    LYRClient *layerClient = [LYRClient clientWithAppID:[[NSUUID alloc] initWithUUIDString:@"12cc3ec0-18fb-11e4-9b60-a56d020003a5"]];
     [layerClient connectWithCompletion:^(BOOL success, NSError *error) {
         if (success) {
             NSLog(@"Sucessfully connected to Layer!");
@@ -41,6 +38,9 @@
             NSLog(@"Failed connection to Layer with error: %@", error);
         }
     }];
+    self.apiManager = [[LayerAPIManager alloc] init];
+    self.apiManager.layerClient = layerClient;
+
     self.locationManager = [[LocationManagerController alloc] init];
     [self.locationManager launchLocationManager];
     
@@ -62,7 +62,7 @@
         [self.window setRootViewController:[self navigationController]];
     }
     else{
-        [self loginSucessful];
+        [self loginSuccessful];
     }
     [self.window makeKeyAndVisible];
 }
@@ -101,15 +101,22 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
--(void)loginSucessful
+-(void)loginSuccessful
 {
+    PFUser *user = [PFUser currentUser];
+    NSString *email = user.email;
+    NSString *password = user.password;
+    
+    if (!self.apiManager.layerClient.authenticatedUserID) {
+        [self.apiManager authenticateWithEmail:email password:password completion:^(PFUser *user, NSError *error) {
+            //
+        }];
+    }
+    
     self.parseController.signedInUser = [PFUser currentUser];
     PFQuery *query = [PFUser query];
     [query whereKeyExists:@"username"]; //email address --> use to send messages, use as user ID for app
     [query whereKey:@"username" notEqualTo:self.parseController.signedInUser.username];
-    self.parseUsernames = [NSMutableArray array];
-    self.parseFirstNames = [NSMutableArray array];
-    self.parseLastNames = [NSMutableArray array];
     self.parseUsers = [NSMutableArray array];
 
     NSArray *users = [query findObjects];
@@ -117,20 +124,20 @@
         NSString *username = [[users objectAtIndex:i] objectForKey:@"username"];
         NSString *firstName = [[users objectAtIndex:i] objectForKey:@"firstName"];
         NSString *lastName = [[users objectAtIndex:i] objectForKey:@"lastName"];
-        parseUser *person = [[parseUser alloc] init];
+        NSString *userID = ((PFUser *)[users objectAtIndex:i]).objectId;
+        Contact *person = [[Contact alloc] init];
+        person.userID = userID;
         person.username = username;
         person.firstName = firstName;
         person.lastName = lastName;
         [self.parseUsers addObject:person];
-//        [self.parseUsernames addObject:username];
-//        [self.parseFirstNames addObject:firstName];
-//        [self.parseLastNames addObject:lastName];
     }
     
     User *me = [[User alloc] init];
+    me.firstName = [self.parseController.signedInUser objectForKey:@"firstName"];
+    me.lastName = [self.parseController.signedInUser objectForKey:@"lastName"];
     me.username = self.parseController.signedInUser.username; //email
-//    me.phoneNumber = [self.parseController.signedInUser objectForKey:@"phoneNumber"];
-//    me.friends = [NSMutableArray array];
+    me.userID = self.parseController.signedInUser.objectId;
     
     NSUserDefaults *friends = [NSUserDefaults standardUserDefaults];
     NSData *data2 = [friends objectForKey:[NSString stringWithFormat:@"%@friends", me.username]];
@@ -146,6 +153,7 @@
     [homepage setLocationManager:self.locationManager];
     [homepage setParseController:self.parseController];
     homepage.signedInUser = self.parseController.signedInUser;
+    homepage.apiManager = self.apiManager;
     homepage.me = me;
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
 
@@ -153,10 +161,8 @@
     contacts.locationManager = self.locationManager;
     contacts.parseController = self.parseController;
     contacts.signedInUser = self.parseController.signedInUser;
+    contacts.apiManager = self.apiManager;
     contacts.me = me;
-    contacts.parseUsernames = self.parseUsernames;
-    contacts.parseFirstNames = self.parseFirstNames;
-    contacts.parseLastNames = self.parseLastNames;
     contacts.parseUsers = self.parseUsers;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
 

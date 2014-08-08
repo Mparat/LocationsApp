@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import <AddressBook/AddressBook.h>
+#import "LayerAPIManager.h"
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
@@ -30,9 +31,8 @@
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) PFUser *signedInUser;
 
-@property (nonatomic, strong) NSMutableArray *parseUsernames;
-@property (nonatomic, strong) NSMutableArray *parseFirstNames;
-@property (nonatomic, strong) NSMutableArray *parseLastNames;
+@property (nonatomic, strong) LayerAPIManager *apiManager;
+
 @property (nonatomic, strong) NSMutableArray *parseUsers;
 
 

@@ -15,5 +15,6 @@
 @synthesize username = _username;
 @synthesize friends = _friends;
 @synthesize messageRecipients = _messageRecipients;
+@synthesize userID = _userID;
 
 @end

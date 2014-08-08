@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <LayerKit/LayerKit.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "User.h"
 #import "Contact.h"
+#import "LayerAPIManager.h"
 
 @interface MapVC : UIViewController 
 
@@ -21,5 +23,8 @@
 
 @property (nonatomic, strong) User *me;
 @property (nonatomic, strong) Contact *recipient;
+
+@property (nonatomic, strong) LYRConversation *conversation;
+@property (nonatomic, strong) LayerAPIManager *apiManager;
 
 @end

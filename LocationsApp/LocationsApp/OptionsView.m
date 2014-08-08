@@ -155,6 +155,7 @@
     mapView.parseController = self.parseController;
     mapView.signedInUser = self.signedInUser;
     mapView.recipient = self.recipient;
+    mapView.conversation = self.conversation;
     [self.navigationController pushViewController:mapView animated:YES];
 }
 

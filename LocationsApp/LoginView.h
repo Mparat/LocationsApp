@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import "ParseController.h"
 #import "LocationManagerController.h"
+#import "LayerAPIManager.h"
 
 
 @interface LoginView : UIViewController <PFLogInViewControllerDelegate, UITextFieldDelegate>

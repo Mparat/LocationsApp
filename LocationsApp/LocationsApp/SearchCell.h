@@ -9,17 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "parseUser.h"
+#import "Contact.h"
 
 @interface SearchCell : UITableViewCell
 
-@property (nonatomic, strong) PFUser *signedInUser;
-@property (nonatomic, strong) NSString *username;
-@property (nonatomic, strong) parseUser *person;
+@property (nonatomic, strong) Contact *person;
 
-
--(void)placeSubviewsForCell:(NSString *)name;
-
--(void)initWithContact:(parseUser *)user;
+-(void)initWithContact:(Contact *)user;
 
 
 @end

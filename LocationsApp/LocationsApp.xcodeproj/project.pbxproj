@@ -53,7 +53,11 @@
 		E09829E51964A62700E75625 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E09829E41964A62700E75625 /* MessageCell.m */; };
 		E0B3C3B91975FACB00106D72 /* SettingsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B3C3B81975FACB00106D72 /* SettingsTVC.m */; };
 		E0B3C3BC1975FD4C00106D72 /* LogoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B3C3BB1975FD4C00106D72 /* LogoutCell.m */; };
+		E0B852EC199435E40061B0C1 /* LATabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B852EB199435E40061B0C1 /* LATabBarController.m */; };
+		E0CC473E1991F44F007C4DBA /* MapViewAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CC473D1991F44F007C4DBA /* MapViewAnnotation.m */; };
 		E0E560A41989625F001BF0E8 /* parseUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E0E560A31989625F001BF0E8 /* parseUser.m */; };
+		E0EFA3CC198D735500549487 /* LayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA3CB198D735500549487 /* LayerController.m */; };
+		E0EFA3CF198D770800549487 /* LayerAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA3CE198D770800549487 /* LayerAPIManager.m */; };
 		E0EFD2CA1986C90B0025F898 /* FirstView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD2C91986C90B0025F898 /* FirstView.m */; };
 		E0EFD2CE1986D0DC0025F898 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD2CD1986D0DC0025F898 /* LoginView.m */; };
 		E0EFD2D4198712450025F898 /* Signup.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD2D3198712450025F898 /* Signup.m */; };
@@ -142,8 +146,16 @@
 		E0B3C3B81975FACB00106D72 /* SettingsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsTVC.m; sourceTree = "<group>"; };
 		E0B3C3BA1975FD4C00106D72 /* LogoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoutCell.h; sourceTree = "<group>"; };
 		E0B3C3BB1975FD4C00106D72 /* LogoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutCell.m; sourceTree = "<group>"; };
+		E0B852EA199435E40061B0C1 /* LATabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LATabBarController.h; sourceTree = "<group>"; };
+		E0B852EB199435E40061B0C1 /* LATabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LATabBarController.m; sourceTree = "<group>"; };
+		E0CC473C1991F44F007C4DBA /* MapViewAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewAnnotation.h; sourceTree = "<group>"; };
+		E0CC473D1991F44F007C4DBA /* MapViewAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewAnnotation.m; sourceTree = "<group>"; };
 		E0E560A21989625F001BF0E8 /* parseUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parseUser.h; sourceTree = "<group>"; };
 		E0E560A31989625F001BF0E8 /* parseUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = parseUser.m; sourceTree = "<group>"; };
+		E0EFA3CA198D735500549487 /* LayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerController.h; sourceTree = "<group>"; };
+		E0EFA3CB198D735500549487 /* LayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerController.m; sourceTree = "<group>"; };
+		E0EFA3CD198D770800549487 /* LayerAPIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerAPIManager.h; sourceTree = "<group>"; };
+		E0EFA3CE198D770800549487 /* LayerAPIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerAPIManager.m; sourceTree = "<group>"; };
 		E0EFD2C81986C90B0025F898 /* FirstView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstView.h; sourceTree = "<group>"; };
 		E0EFD2C91986C90B0025F898 /* FirstView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstView.m; sourceTree = "<group>"; };
 		E0EFD2CC1986D0DC0025F898 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
@@ -251,12 +263,13 @@
 				14AB33141942816400B8E20D /* Main_iPhone.storyboard */,
 				14AB33171942816400B8E20D /* Main_iPad.storyboard */,
 				E0EFD2CB1986C90F0025F898 /* LoginSignupControllers */,
-				E0F091E61965EA0800E27499 /* BlurImage */,
 				14C666711946B4D800341F0D /* Controllers */,
-				14C6666919466B2000341F0D /* People */,
-				14AB33411942931C00B8E20D /* Views */,
+				14AB33411942931C00B8E20D /* ViewControllers */,
 				14AB33401942930F00B8E20D /* TableViewCells */,
+				E0CC473F1991F456007C4DBA /* Views */,
 				E09829E61964A62D00E75625 /* CollectionViewCells */,
+				14C6666919466B2000341F0D /* People */,
+				E0F091E61965EA0800E27499 /* BlurImage */,
 				14AB331D1942816400B8E20D /* Images.xcassets */,
 				14AB33091942816400B8E20D /* Supporting Files */,
 			);
@@ -307,7 +320,7 @@
 			name = TableViewCells;
 			sourceTree = "<group>";
 		};
-		14AB33411942931C00B8E20D /* Views */ = {
+		14AB33411942931C00B8E20D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				14AB333A194281D400B8E20D /* HomepageTVC.h */,
@@ -327,7 +340,7 @@
 				14AB33451942ECAB00B8E20D /* MessageVC.h */,
 				14AB33461942ECAB00B8E20D /* MessageVC.m */,
 			);
-			name = Views;
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 		14C6666919466B2000341F0D /* People */ = {
@@ -346,10 +359,16 @@
 		14C666711946B4D800341F0D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E0B852EA199435E40061B0C1 /* LATabBarController.h */,
+				E0B852EB199435E40061B0C1 /* LATabBarController.m */,
 				14C666781947A60A00341F0D /* LocationManagerController.h */,
 				14C666791947A60A00341F0D /* LocationManagerController.m */,
 				14315C60194A12D700378EA5 /* ParseController.h */,
 				14315C61194A12D700378EA5 /* ParseController.m */,
+				E0EFA3CA198D735500549487 /* LayerController.h */,
+				E0EFA3CB198D735500549487 /* LayerController.m */,
+				E0EFA3CD198D770800549487 /* LayerAPIManager.h */,
+				E0EFA3CE198D770800549487 /* LayerAPIManager.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -361,6 +380,15 @@
 				E09829E41964A62700E75625 /* MessageCell.m */,
 			);
 			name = CollectionViewCells;
+			sourceTree = "<group>";
+		};
+		E0CC473F1991F456007C4DBA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E0CC473C1991F44F007C4DBA /* MapViewAnnotation.h */,
+				E0CC473D1991F44F007C4DBA /* MapViewAnnotation.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		E0EFD2CB1986C90F0025F898 /* LoginSignupControllers */ = {
@@ -544,7 +572,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#Settings\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Settings.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Settings.imageset --formats=\"png\"\n#AddNew\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AddNew.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AddNew.imageset --formats=\"png\"\n#UnselectedContacts\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedContacts.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedContacts.imageset --formats=\"png\"\n#SelectedContacts\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedContacts.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedContacts.imageset --formats=\"png\"\n#UnselectedMessages\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedMessages.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedMessages.imageset --formats=\"png\"\n#SelectedMessage\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedMessages.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedMessages.imageset --formats=\"png\"\n#AskCell\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AskCell.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AskCell.imageset --formats=\"png\"\n#TellCell\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellCell.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellCell.imageset --formats=\"png\"\n#New\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/New.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/New.imageset --formats=\"png\"\n#TellUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellUnselected.imageset --formats=\"png\"\n#TellSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellSelected.imageset --formats=\"png\"\n#AskUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AskUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AskUnselected.imageset --formats=\"png\"\n#AskSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AskSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AskSelected.imageset --formats=\"png\"\n#MapUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/MapUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/MapUnselected.imageset --formats=\"png\"\n#MapSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/MapSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/MapSelected.imageset --formats=\"png\"\n#TextUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TextUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TextUnselected.imageset --formats=\"png\"\n#TextSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TextSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TextSelected.imageset --formats=\"png\"\n#DirectionsUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DirectionsUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DirectionsUnselected.imageset --formats=\"png\"\n#DirectionsSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DirectionsSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DirectionsSelected.imageset --formats=\"png\"\n#UnreadCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnreadCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnreadCircle.imageset --formats=\"png\"\n#ReadCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/ReadCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/ReadCircle.imageset --formats=\"png\"\n#UnselectedCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedCircle.imageset --formats=\"png\"\n#SelectedCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedCircle.imageset --formats=\"png\"\n#DownArrow\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DownArrow.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DownArrow.imageset --formats=\"png\"\n#UpArrow\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UpArrow.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UpArrow.imageset --formats=\"png\"\n#Close\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Close.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Close.imageset --formats=\"png\"\n\n#Background0\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Background0.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Background0.imageset --formats=\"png\"\n#LoginButton\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/LoginButton.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/LoginButton.imageset --formats=\"png\"\n#SignupButton\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SignupButton.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SignupButton.imageset --formats=\"png\"\n#DoneButton\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DoneButton.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DoneButton.imageset --formats=\"png\"\n#CancelLoginSignup\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/CancelLoginSignup.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/CancelLoginSignup.imageset --formats=\"png\"\n\n#Background1\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Background1.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Background1.imageset --formats=\"png\"\n\n#Background2\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Background2.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Background2.imageset --formats=\"png\"\n\n\n\n# AppIcon\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AppIcon.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AppIcon.appiconset --formats=\"png\"\n#LaunchImage\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/LaunchImage.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/LaunchImage.launchimage --formats=\"png\"\n";
+			shellScript = "#Settings\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Settings.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Settings.imageset --formats=\"png\"\n#AddNew\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AddNew.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AddNew.imageset --formats=\"png\"\n#UnselectedContacts\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedContacts.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedContacts.imageset --formats=\"png\"\n#SelectedContacts\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedContacts.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedContacts.imageset --formats=\"png\"\n#UnselectedMessages\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedMessages.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedMessages.imageset --formats=\"png\"\n#SelectedMessage\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedMessages.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedMessages.imageset --formats=\"png\"\n#AskCell\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AskCell.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AskCell.imageset --formats=\"png\"\n#TellCell\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellCell.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellCell.imageset --formats=\"png\"\n#New\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/New.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/New.imageset --formats=\"png\"\n#TellUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellUnselected.imageset --formats=\"png\"\n#TellSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TellSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TellSelected.imageset --formats=\"png\"\n#AskUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AskUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AskUnselected.imageset --formats=\"png\"\n#AskSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AskSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AskSelected.imageset --formats=\"png\"\n#MapUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/MapUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/MapUnselected.imageset --formats=\"png\"\n#MapSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/MapSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/MapSelected.imageset --formats=\"png\"\n#TextUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TextUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TextUnselected.imageset --formats=\"png\"\n#TextSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/TextSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/TextSelected.imageset --formats=\"png\"\n#DirectionsUnselected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DirectionsUnselected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DirectionsUnselected.imageset --formats=\"png\"\n#DirectionsSelected\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DirectionsSelected.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DirectionsSelected.imageset --formats=\"png\"\n#UnreadCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnreadCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnreadCircle.imageset --formats=\"png\"\n#ReadCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/ReadCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/ReadCircle.imageset --formats=\"png\"\n#UnselectedCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedCircle.imageset --formats=\"png\"\n#SelectedCircle\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SelectedCircle.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SelectedCircle.imageset --formats=\"png\"\n#DownArrow\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DownArrow.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DownArrow.imageset --formats=\"png\"\n#UpArrow\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UpArrow.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UpArrow.imageset --formats=\"png\"\n#Close\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Close.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Close.imageset --formats=\"png\"\n\n#Background0\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Background0.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Background0.imageset --formats=\"png\"\n#LoginButton\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/LoginButton.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/LoginButton.imageset --formats=\"png\"\n#SignupButton\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/SignupButton.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/SignupButton.imageset --formats=\"png\"\n#DoneButton\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/DoneButton.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/DoneButton.imageset --formats=\"png\"\n#CancelLoginSignup\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/CancelLoginSignup.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/CancelLoginSignup.imageset --formats=\"png\"\n\n#Background1\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Background1.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Background1.imageset --formats=\"png\"\n\n#Background2\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/Background2.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/Background2.imageset --formats=\"png\"\n\n#UnselectedNewContact\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/UnselectedNewContact.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/UnselectedNewContact.imageset --formats=\"png\"\n\n\n# AppIcon\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/AppIcon.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/AppIcon.appiconset --formats=\"png\"\n#LaunchImage\nsketchtool export artboards \"$PROJECT_DIR\"/\"Graphics Resources/LaunchImage.sketch\" --output=\"$PROJECT_DIR\"/\"$PROJECT_NAME\"/Images.xcassets/LaunchImage.launchimage --formats=\"png\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -562,11 +590,14 @@
 				144BA0C4194F80A000977673 /* SearchCell.m in Sources */,
 				144BA0BE194F68A600977673 /* AddContacts.m in Sources */,
 				E0EFD2D4198712450025F898 /* Signup.m in Sources */,
+				E0EFA3CF198D770800549487 /* LayerAPIManager.m in Sources */,
+				E0EFA3CC198D735500549487 /* LayerController.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				E0E560A41989625F001BF0E8 /* parseUser.m in Sources */,
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6667A1947A60A00341F0D /* LocationManagerController.m in Sources */,
 				E0F091E21964F0A900E27499 /* APLViewController.m in Sources */,
+				E0B852EC199435E40061B0C1 /* LATabBarController.m in Sources */,
 				E09829E219648B4E00E75625 /* MessageCVC.m in Sources */,
 				1482D1FD1950C88200B8F957 /* AddressBookTVC.m in Sources */,
 				14315C5C1949297E00378EA5 /* MapVC.m in Sources */,
@@ -577,6 +608,7 @@
 				E0EFD2CA1986C90B0025F898 /* FirstView.m in Sources */,
 				14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */,
 				14315C62194A12D700378EA5 /* ParseController.m in Sources */,
+				E0CC473E1991F44F007C4DBA /* MapViewAnnotation.m in Sources */,
 				E0644B28195A3FC30012CAF7 /* OptionsView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

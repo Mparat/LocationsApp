@@ -7,6 +7,7 @@
 //
 
 #import "LocationManagerController.h"
+#import "MapViewAnnotation.h"
 
 
 @implementation LocationManagerController
@@ -68,6 +69,7 @@
     NSLog(@"Updating locations failed with error: %@", error);
 }
 
+
 // Location methods
 
 -(CLLocation *)fetchCurrentLocation
@@ -75,29 +77,7 @@
     return (CLLocation *)[self.locations objectAtIndex:([self.locations count]-1)];
 }
 
--(NSString *)returnLocationName:(CLLocation *)location forIndexPath:(NSIndexPath *)path
-{
-    if (!self.geocoder) {
-        self.geocoder = [[CLGeocoder alloc] init];
-    }
-    NSLog(@"%d", kCLErrorGeocodeFoundNoResult);
-    [self.geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        if ([placemarks count] > 0) {
-            self.placemark = [placemarks lastObject];
-            [self.delegate placemarkUpdated:self.placemark.name forIndexPath:path];
-        }
-    }];
-    NSLog(@"placemark? %@", self.placemark);
-    return self.placemark.name;
-//    return [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
-//            self.placemark.subThoroughfare, self.placemark.thoroughfare,
-//            self.placemark.postalCode, self.placemark.locality,
-//            self.placemark.administrativeArea,
-//            self.placemark.country];
-//    return self.placemark.subLocality;
-}
-
--(NSString *)returnMyLocationName:(CLLocation *)location
+-(NSString *)returnLocationName:(CLLocation *)location
 {
     if (!self.geocoder) {
         self.geocoder = [[CLGeocoder alloc] init];
@@ -118,14 +98,27 @@
             self.placemark.country];
 }
 
+-(CLLocation *)getLocationFromData:(NSData *)data
+{
+    NSDictionary *coords = [NSJSONSerialization JSONObjectWithData:data options:nil error:nil];
+    CLLocationDegrees lat = [[coords objectForKey:@"lat"] doubleValue];
+    CLLocationDegrees lon = [[coords objectForKey:@"lon"] doubleValue];
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+    return location;
+}
+
 #pragma mark - MKMapView delegate methods
 
--(MKMapView *)displayMap:(UIView *)view
+-(MKMapView *)displayMap:(UIView *)view withAnnotations:(NSMutableArray *)annotations
 {
     self.map = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)];
     [self.map setDelegate:self];
 
     self.map.showsUserLocation = YES;
+    [self.map addAnnotations:annotations];
+    
+    [annotations addObject:self.map.userLocation];
+    [self.map showAnnotations:annotations animated:YES];
     
     MKCoordinateRegion mapRegion; // structure that defines which map region to display
     CLLocation *location = [self fetchCurrentLocation];
@@ -133,9 +126,42 @@
     mapRegion.span.latitudeDelta = 0.2;
     mapRegion.span.longitudeDelta = 0.2;
     
+    
     [self.map setRegion:mapRegion animated:YES];
 
     return self.map;
+}
+
+//- (void)zoomToLocation
+//{
+//    CLLocationCoordinate2D zoomLocation;
+//    zoomLocation.latitude = 13.03297;
+//    zoomLocation.longitude= 80.26518;
+//    
+//    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 7.5*METERS_PER_MILE,7.5*METERS_PER_MILE);
+//    [self.mapview setRegion:viewRegion animated:YES];
+//    
+//    [self.mapview regionThatFits:viewRegion];
+//}
+
+//MKCoordinateRegion coordinateRegionForCoordinates(CLLocationCoordinate2D *coords, NSUInteger coordCount) {
+//    MKMapRect r = MKMapRectNull;
+//    for (NSUInteger i=0; i < coordCount; ++i) {
+//        MKMapPoint p = MKMapPointForCoordinate(coords[i]);
+//        r = MKMapRectUnion(r, MKMapRectMake(p.x, p.y, 0, 0));
+//    }
+//    return MKCoordinateRegionForMapRect(r);
+//}
+
+-(NSMutableArray *)createAnnotationsFromMessages:(NSArray *)array
+{
+    NSMutableArray *retVal = [NSMutableArray array];
+    for (int i = 0; i < [array count]; i++) {
+        NSData *data = [((LYRMessage *)[array objectAtIndex:i]).parts lastObject];
+        MapViewAnnotation *annotation = [[MapViewAnnotation alloc] initWithTitle:@"title" AndCoordinate:[self getLocationFromData:data].coordinate];
+        [retVal addObject:annotation];
+    }
+    return retVal;
 }
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation

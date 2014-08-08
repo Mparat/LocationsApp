@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+#import <LayerKit/LayerKit.h>
+#import "LayerAPIManager.h"
 #import "User.h"
 #import "Contact.h"
-#import <Parse/Parse.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "MCSwipeTableViewCell.h"
@@ -23,6 +25,8 @@
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
+@property (nonatomic, strong) LYRClient *layerClient;
+@property (nonatomic, strong) LayerAPIManager *apiManager;
 
 @property (nonatomic, strong) PFUser *signedInUser;
 

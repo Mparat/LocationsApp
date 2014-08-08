@@ -10,17 +10,11 @@
 
 @interface SearchCell ()
 
-@property (nonatomic, strong) UILabel *name;
-@property (nonatomic, strong) UILabel *actualName;
-
 @end
 
 
 @implementation SearchCell
 
-@synthesize signedInUser = _signedInUser;
-@synthesize name = _name;
-@synthesize actualName = _actualName;
 @synthesize person = _person;
 
 
@@ -45,16 +39,16 @@
     // Configure the view for the selected state
 }
 
--(void)initWithContact:(parseUser *)user
+-(void)initWithContact:(Contact *)user
 {
     [self placeNames:user];
 }
 
--(void)placeNames:(parseUser *)user
+-(void)placeNames:(Contact *)user
 {
     [self.textLabel setText:[NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName]];
-    UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedCircle"]];
-    unselected.frame = CGRectMake(256+20, 19.5, 29, 29);
+    UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedNewContact"]];
+    unselected.frame = CGRectMake(256+20, 19, 29, 29);
     [self addSubview:unselected];
 }
 

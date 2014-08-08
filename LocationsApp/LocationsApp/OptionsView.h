@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import <LayerKit/LayerKit.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
 #import "Contact.h"
@@ -22,5 +23,7 @@
 @property (nonatomic, strong) Contact *recipient;
 
 @property (nonatomic, strong) PFUser *signedInUser;
+
+@property (nonatomic, strong) LYRConversation *conversation;
 
 @end

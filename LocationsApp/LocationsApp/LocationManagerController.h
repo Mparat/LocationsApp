@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import <Parse/Parse.h>
+#import <LayerKit/LayerKit.h>
 
 @class LocationManagerController;
 
@@ -32,10 +33,13 @@
 
 -(void)launchLocationManager;
 -(CLLocation *)fetchCurrentLocation;
--(NSString *)returnLocationName:(CLLocation *)location forIndexPath:(NSIndexPath *)path;
--(NSString *)returnMyLocationName:(CLLocation *)location;
+-(NSString *)returnLocationName:(CLLocation *)location;
+-(CLLocation *)getLocationFromData:(NSData *)data;
+-(NSArray *)createAnnotationsFromMessages:(NSArray *)array;
 
--(MKMapView *)displayMap:(UIView *)view;
+
+-(MKMapView *)displayMap:(UIView *)view withAnnotations:(NSArray *)annotations;
+
 
 
 

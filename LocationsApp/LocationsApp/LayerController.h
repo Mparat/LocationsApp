@@ -1,19 +1,19 @@
 //
-//  SettingsTVC.h
+//  LayerController.h
 //  LocationsApp
 //
-//  Created by Meera Parat on 7/15/14.
+//  Created by Meera Parat on 8/2/14.
 //  Copyright (c) 2014 Meera Parat. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <Parse/Parse.h>
+#import <Foundation/Foundation.h>
 #import <LayerKit/LayerKit.h>
 #import "LayerAPIManager.h"
 
 
-@interface SettingsTVC : UITableViewController
+@interface LayerController : NSObject <LYRClientDelegate>
 
+@property (nonatomic, strong) LYRClient *layerClient;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
 
 @end

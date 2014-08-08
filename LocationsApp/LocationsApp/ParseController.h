@@ -18,15 +18,11 @@
 @end
 
 
-@interface ParseController : NSObject <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
+@interface ParseController : NSObject
 
 @property (nonatomic, weak) id<ParseControllerDelegate> delegate;
 @property (nonatomic, strong) PFUser *signedInUser;
 
 -(void)launchParse;
-
--(void)FBloginUser;
-//-(void)FBlogoutUser;
-
 
 @end

@@ -25,6 +25,8 @@
 @property (nonatomic, strong) UISearchDisplayController *searchController;
 @property (nonatomic, strong) NSMutableArray *searchResults;
 
+@property (nonatomic, strong) NSArray *conversations;
+
 @end
 
 @implementation HomepageTVC
@@ -69,6 +71,8 @@
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
+    
+    [self fetchLayerConversations];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [defaults objectForKey:self.me.username];
@@ -183,6 +187,7 @@
     }
     else{
         return [self.me.messageRecipients count];
+        //return [self.conversations count];
     }
 }
 
@@ -191,6 +196,7 @@
     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:section];
     if ([path compare:self.expandedIndexPath] == NSOrderedSame) {
         return [[self.me.messageRecipients objectAtIndex:path.section] count]+1;
+//        return [((LYRConversation *)[self.conversations objectAtIndex:path.section]).participants];
     }
     else{
         return 1;
@@ -217,13 +223,23 @@
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path inTableView:(UITableView *)tableView
 {
     CLLocation *current = [self.locationManager fetchCurrentLocation];
-    NSString *text = [self.locationManager returnMyLocationName:current];
-//    NSString *text = [self.locationManager returnLocationName:current forIndexPath:path];
-//    NSDate *date = current.timestamp;
+    NSString *text = [self.locationManager returnLocationName:current];
+
+    LYRConversation *conversation = [self.conversations objectAtIndex:path.row];
+    LYRMessage *lastMessage = [[self.layerClient messagesForConversation:conversation] lastObject]; //location or text....hmm, mybe can tag the location messages? and only call these
+    [cell createCellWith:conversation message:lastMessage layerClient:self.layerClient];
+    
+    NSSet *participants = conversation.participants; // count size of nsset to tell to group or single to decide if drop down needed
+    if (participants.count > 2) {
+        //group message
+    }
+    else{
+        //individual message
+    }
     
     Contact *recipient = [[Contact alloc] init];
     
-    if ((self.expandedIndexPath != nil) && (path.section == self.expandedIndexPath.section) && (path.row != 0)) {
+    if ((self.expandedIndexPath != nil) && (path.section == self.expandedIndexPath.section) && (path.row != 0)) { //expanded section, row w/ individual names
         Contact *recipient = [[Contact alloc] init];
         recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
         ((HomepageChatCell *)cell).contact = recipient;
@@ -239,8 +255,6 @@
         else{
             if ([([self.me.messageRecipients objectAtIndex:path.section]) isKindOfClass:[NSMutableArray class]]) {
                 [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:path.section] Location:@"" Date:[NSDate date]]; //
-                //            recipient = [[self.me.messageRecipients objectAtIndex:path.row] objectAtIndex:0];
-                //            cell.contact = recipient;
                 [self downArrow:cell];
             }
             else{
@@ -267,6 +281,8 @@
 
 -(void)configureSwipeViews:(HomepageChatCell *)cell
 {
+    //all  these cells have conversations w/ metadata already (metadata has names of all participants)
+    
     UIView *askView = [self viewWithImageName:@"AskCell"];
     UIColor *greenColor = [UIColor colorWithRed:42.0 / 255.0 green:192.0 / 255.0 blue:124.0 / 255.0 alpha:1.0];
     
@@ -276,14 +292,14 @@
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
         [cell swipeToOriginWithCompletion:^{
-            //
+            [self.apiManager sendAskMessageToRecipients:((HomepageChatCell *)cell).participants];
         }];
     }];
     
     [cell setSwipeGestureWithView:tellView color:purpleColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
         [cell swipeToOriginWithCompletion:^{
-            //
+            [self.apiManager sendTellMessageToRecipients:((HomepageChatCell *)cell).participants];
         }];
     }];
     
@@ -299,7 +315,6 @@
     return imageView;
 }
 
-
 - (void) placemarkUpdated:(NSString *)location forIndexPath:(NSIndexPath *)path
 {
     [self.tableView reloadData];
@@ -314,6 +329,7 @@
     options.me = self.me;
     options.parseController = self.parseController;
     options.locationManager = self.locationManager;
+    options.conversation = [self.conversations objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:options animated:NO];
 //    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
 //        //
@@ -340,11 +356,6 @@
         }
     } else {
         self.navigationController.editButtonItem.enabled = YES;
-//        for (UITableViewCell *cell in self.tableView.visibleCells) { // loop through the visible cells and animate their imageViews
-//            [UIView animateWithDuration:0.5 animations:^{
-//                cell.frame = CGRectMake(0, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
-//            }];
-//        }
     }
 }
 
@@ -376,16 +387,6 @@
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.tableView.editing) {
-//        [tableView beginUpdates];
-//        if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
-//            self.expandedIndexPath = nil;
-//            for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
-//                [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
-//                                      withRowAnimation:UITableViewRowAnimationTop];
-//                newRow = false;
-//            }
-//        }
-//        [tableView endUpdates];
         return UITableViewCellEditingStyleDelete;
     }
     return UITableViewCellEditingStyleNone;
@@ -394,7 +395,7 @@
 
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView beginUpdates]; // triggers heightforrow..and rowsinsection
+    [tableView beginUpdates]; // clicked to close //triggers heightforrow..and rowsinsection
     if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
         self.expandedIndexPath = nil;
         for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
@@ -460,6 +461,15 @@
     cell.accessoryView = button;
 }
 
+
+-(void)fetchLayerConversations
+{
+    if (self.conversations) {
+        self.conversations = nil;
+    }
+    NSSet *convos = (NSSet *)[self.layerClient conversationsForIdentifiers:nil];
+    self.conversations = [[convos allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"lastMessage.sentAt" ascending:NO]]];
+}
 
 #pragma mark - MCSwipeTableViewCellDelegate // not being called..
 
