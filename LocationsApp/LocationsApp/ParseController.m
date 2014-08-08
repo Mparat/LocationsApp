@@ -7,7 +7,6 @@
 //
 
 #import "ParseController.h"
-#import <FacebookSDK/FacebookSDK.h>
 #import "User.h"
 
 @implementation ParseController

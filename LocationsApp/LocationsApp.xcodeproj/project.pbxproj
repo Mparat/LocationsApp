@@ -56,7 +56,7 @@
 		E0B852EC199435E40061B0C1 /* LATabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B852EB199435E40061B0C1 /* LATabBarController.m */; };
 		E0CC473E1991F44F007C4DBA /* MapViewAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CC473D1991F44F007C4DBA /* MapViewAnnotation.m */; };
 		E0E560A41989625F001BF0E8 /* parseUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E0E560A31989625F001BF0E8 /* parseUser.m */; };
-		E0EFA3CC198D735500549487 /* LayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA3CB198D735500549487 /* LayerController.m */; };
+		E0EFA3CC198D735500549487 /* LayerClientController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA3CB198D735500549487 /* LayerClientController.m */; };
 		E0EFA3CF198D770800549487 /* LayerAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA3CE198D770800549487 /* LayerAPIManager.m */; };
 		E0EFD2CA1986C90B0025F898 /* FirstView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD2C91986C90B0025F898 /* FirstView.m */; };
 		E0EFD2CE1986D0DC0025F898 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFD2CD1986D0DC0025F898 /* LoginView.m */; };
@@ -152,8 +152,8 @@
 		E0CC473D1991F44F007C4DBA /* MapViewAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewAnnotation.m; sourceTree = "<group>"; };
 		E0E560A21989625F001BF0E8 /* parseUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parseUser.h; sourceTree = "<group>"; };
 		E0E560A31989625F001BF0E8 /* parseUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = parseUser.m; sourceTree = "<group>"; };
-		E0EFA3CA198D735500549487 /* LayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerController.h; sourceTree = "<group>"; };
-		E0EFA3CB198D735500549487 /* LayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerController.m; sourceTree = "<group>"; };
+		E0EFA3CA198D735500549487 /* LayerClientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerClientController.h; sourceTree = "<group>"; };
+		E0EFA3CB198D735500549487 /* LayerClientController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerClientController.m; sourceTree = "<group>"; };
 		E0EFA3CD198D770800549487 /* LayerAPIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerAPIManager.h; sourceTree = "<group>"; };
 		E0EFA3CE198D770800549487 /* LayerAPIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayerAPIManager.m; sourceTree = "<group>"; };
 		E0EFD2C81986C90B0025F898 /* FirstView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstView.h; sourceTree = "<group>"; };
@@ -365,8 +365,8 @@
 				14C666791947A60A00341F0D /* LocationManagerController.m */,
 				14315C60194A12D700378EA5 /* ParseController.h */,
 				14315C61194A12D700378EA5 /* ParseController.m */,
-				E0EFA3CA198D735500549487 /* LayerController.h */,
-				E0EFA3CB198D735500549487 /* LayerController.m */,
+				E0EFA3CA198D735500549487 /* LayerClientController.h */,
+				E0EFA3CB198D735500549487 /* LayerClientController.m */,
 				E0EFA3CD198D770800549487 /* LayerAPIManager.h */,
 				E0EFA3CE198D770800549487 /* LayerAPIManager.m */,
 			);
@@ -591,7 +591,7 @@
 				144BA0BE194F68A600977673 /* AddContacts.m in Sources */,
 				E0EFD2D4198712450025F898 /* Signup.m in Sources */,
 				E0EFA3CF198D770800549487 /* LayerAPIManager.m in Sources */,
-				E0EFA3CC198D735500549487 /* LayerController.m in Sources */,
+				E0EFA3CC198D735500549487 /* LayerClientController.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				E0E560A41989625F001BF0E8 /* parseUser.m in Sources */,
 				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,

@@ -15,6 +15,9 @@
 
 @property (nonatomic, strong) LYRClient *layerClient;
 
+-(id)initWithLayerClient:(LYRClient *)client;
+
+
 -(void)authenticateWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(PFUser *user, NSError *error))completion;
 -(void)registerUser:(PFUser *)user completion:(void(^)(PFUser *user, NSError *error))completion;
 //- (BOOL)resumeSession:(LSSession *)session error:(NSError **)error;

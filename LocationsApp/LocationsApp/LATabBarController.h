@@ -7,7 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ParseController.h"
+#import "LayerClientController.h"
+#import "LocationManagerController.h"
 
 @interface LATabBarController : UITabBarController
+
+@property (nonatomic, strong) ParseController *parseController;
+@property(nonatomic, strong) LayerClientController *layerClientController;
+@property (nonatomic, strong) LocationManagerController *locationManager;
+
+-(void)loadParseUsers;
+-(void)initViews;
+
 
 @end

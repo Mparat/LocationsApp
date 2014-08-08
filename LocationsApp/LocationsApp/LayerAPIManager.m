@@ -8,15 +8,16 @@
 
 #import "LayerAPIManager.h"
 #import "Contact.h"
+#import "LayerClientController.h"
 
 @implementation LayerAPIManager
 
 
--(id)init
+-(id)initWithLayerClient:(LYRClient *)client
 {
     self = [super init];
     if (self) {
-        //
+        self.layerClient = client;
     }
     return self;
 }
@@ -28,41 +29,48 @@
 
 -(void)authenticateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(PFUser *, NSError *))completion
 {
+    NSParameterAssert(completion);
+
     [self.layerClient requestAuthenticationNonceWithCompletion:^(NSString *nonce, NSError *error) {
         if (!nonce) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(nil, error);
                 NSLog(@"No nonce");
             });
+            completion(nil, error);
             return;
         }
         if (error) {
             NSLog(@"Error requesting nonce: %@", error);
+            completion(nil, error);
             return;
         }
-        PFUser *user = [PFUser currentUser];
-        NSString *userID  = user.objectId;
-        [PFCloud callFunctionInBackground:@"generateToken"
-                           withParameters:@{@"nonce" : nonce,
-                                            @"userID" : userID}
-                                    block:^(NSString *token, NSError *error) {
-            if (error) {
-                NSLog(@"Parse Cloud function failed to be called to generate token with error: %@", error);
-            }
-            else{
-                NSLog(@"token is: %@",  token);
-                [self.layerClient authenticateWithIdentityToken:token completion:^(NSString *authenticatedUserID, NSError *error) {
-                    if (error) {
-                        //
-                    }
-                    else{
-                        NSLog(@"authenticated with token");
-                    }
-                }];
-            }
-        }];
+        else{
+            PFUser *user = [PFUser currentUser];
+            NSString *userID  = user.objectId;
+            [PFCloud callFunctionInBackground:@"generateToken"
+                               withParameters:@{@"nonce" : nonce,
+                                                @"userID" : userID}
+                                        block:^(NSString *token, NSError *error) {
+                                            if (error) {
+                                                NSLog(@"Parse Cloud function failed to be called to generate token with error: %@", error);
+                                                completion(nil, error);
+                                            }
+                                            else{
+                                                NSLog(@"token is: %@",  token);
+                                                [self.layerClient authenticateWithIdentityToken:token completion:^(NSString *authenticatedUserID, NSError *error) {
+                                                    if (error) {
+                                                        completion(nil, error);
+                                                    }
+                                                    else{
+                                                        NSLog(@"authenticated with token");
+                                                    }
+                                                }];
+                                                completion([PFUser currentUser], nil);
+                                            }
+                                        }];
+        }
     }];
-    NSLog(@"client: %@", self.layerClient);
 }
 
 -(void)deauthenticateWithCompletion:(void (^)(BOOL, NSError *))completion

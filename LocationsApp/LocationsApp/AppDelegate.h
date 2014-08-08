@@ -10,17 +10,14 @@
 #import <Parse/Parse.h>
 #import "LocationManagerController.h"
 #import "ParseController.h"
-#import "LayerAPIManager.h"
+#import "LayerClientController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
-
-@property (nonatomic, strong) NSMutableArray *parseUsers;
-
-@property (nonatomic, strong) LayerAPIManager *apiManager;
+@property (nonatomic, strong) LayerClientController *layerClientController;
 
 
 -(UINavigationController *)navigationController;

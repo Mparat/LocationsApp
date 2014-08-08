@@ -184,11 +184,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429002711.264178"
+            timestampString = "429224217.735701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "-authenticateWithEmail:password:completion:"
             landmarkType = "5">
          </BreakpointContent>
@@ -200,11 +200,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429002711.264178"
+            timestampString = "429224217.735701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "-authenticateWithEmail:password:completion:"
             landmarkType = "5">
          </BreakpointContent>
@@ -215,13 +215,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerController.m"
-            timestampString = "429062342.40345"
+            filePath = "LocationsApp/LayerClientController.m"
+            timestampString = "429222811.600079"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "36"
             endingLineNumber = "36"
-            landmarkName = "-layerClient:didAuthenticateAsUserID:"
+            landmarkName = "-layerClient:didReceiveAuthenticationChallengeWithNonce:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -231,61 +231,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429063598.919366"
+            filePath = "LocationsApp/AppDelegate.m"
+            timestampString = "429223843.792358"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "-authenticateWithEmail:password:completion:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429063736.328328"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
-            landmarkName = "-authenticateWithEmail:password:completion:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429063738.285994"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "-authenticateWithEmail:password:completion:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429128905.180492"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
-            landmarkName = "-authenticateWithEmail:password:completion:"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "-loginSuccessful"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

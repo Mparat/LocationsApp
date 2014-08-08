@@ -1,5 +1,5 @@
 //
-//  LayerController.h
+//  LayerClientController.h
 //  LocationsApp
 //
 //  Created by Meera Parat on 8/2/14.
@@ -11,9 +11,14 @@
 #import "LayerAPIManager.h"
 
 
-@interface LayerController : NSObject <LYRClientDelegate>
+@interface LayerClientController : NSObject <LYRClientDelegate>
 
 @property (nonatomic, strong) LYRClient *layerClient;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
+
+-(id)initWithLayerClient:(LYRClient *)client;
+
+-(void)initAPIManager;
+
 
 @end

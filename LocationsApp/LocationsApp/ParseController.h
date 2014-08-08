@@ -22,6 +22,7 @@
 
 @property (nonatomic, weak) id<ParseControllerDelegate> delegate;
 @property (nonatomic, strong) PFUser *signedInUser;
+@property (nonatomic, strong) NSMutableArray *parseUsers;
 
 -(void)launchParse;
 

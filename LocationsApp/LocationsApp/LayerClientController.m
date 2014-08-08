@@ -1,27 +1,32 @@
 //
-//  LayerController.m
+//  LayerClientController.m
 //  LocationsApp
 //
 //  Created by Meera Parat on 8/2/14.
 //  Copyright (c) 2014 Meera Parat. All rights reserved.
 //
 
-#import "LayerController.h"
+#import "LayerClientController.h"
 
-@implementation LayerController
+@implementation LayerClientController
 
 @synthesize layerClient = _layerClient;
 @synthesize apiManager = _apiManager;
 
 
--(id)init
+-(id)initWithLayerClient:(LYRClient *)client
 {
     self = [super init];
     if (self) {
+        self.layerClient = client;
         self.layerClient.delegate = self;
-//        self.apiManager = ;
     }
     return self;
+}
+
+-(void)initAPIManager
+{
+    self.apiManager = [[LayerAPIManager alloc] initWithLayerClient:self.layerClient];
 }
 
 #pragma mark Layer Client delegate methods
@@ -33,7 +38,7 @@
 
 - (void)layerClient:(LYRClient *)client didAuthenticateAsUserID:(NSString *)userID
 {
-    NSLog(@"Layer Client did recieve authentication nonce");
+    NSLog(@"Layer Client did authenticate as userID");
 }
 
 - (void)layerClientDidDeauthenticate:(LYRClient *)client

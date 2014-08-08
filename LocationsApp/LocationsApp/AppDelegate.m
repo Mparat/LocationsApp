@@ -20,12 +20,14 @@
 #import "FirstView.h"
 #import <LayerKit/LayerKit.h>
 #import "parseUser.h"
+#import "LayerClientController.h"
+#import "LATabBarController.h"
 
 @implementation AppDelegate
 
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
-@synthesize parseUsers = _parseUsers;
+@synthesize layerClientController = _layerClientController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -38,9 +40,13 @@
             NSLog(@"Failed connection to Layer with error: %@", error);
         }
     }];
-    self.apiManager = [[LayerAPIManager alloc] init];
-    self.apiManager.layerClient = layerClient;
-
+//    self.apiManager = [[LayerAPIManager alloc] init];
+//    self.apiManager.layerClient = layerClient;
+    
+    self.layerClientController = [[LayerClientController alloc] initWithLayerClient:layerClient];
+//    self.layerClientController.layerClient = layerClient;
+    [self.layerClientController initAPIManager];
+    
     self.locationManager = [[LocationManagerController alloc] init];
     [self.locationManager launchLocationManager];
     
@@ -106,90 +112,99 @@
     PFUser *user = [PFUser currentUser];
     NSString *email = user.email;
     NSString *password = user.password;
-    
-    if (!self.apiManager.layerClient.authenticatedUserID) {
-        [self.apiManager authenticateWithEmail:email password:password completion:^(PFUser *user, NSError *error) {
-            //
+
+    LATabBarController *tabBarController = [[LATabBarController alloc] init];
+    tabBarController.locationManager = self.locationManager;
+    tabBarController.parseController = self.parseController;
+    tabBarController.layerClientController = self.layerClientController;
+    [tabBarController loadParseUsers];
+
+    if (!self.layerClientController.apiManager.layerClient.authenticatedUserID) {
+        [self.layerClientController.apiManager authenticateWithEmail:email password:password completion:^(PFUser *user, NSError *error) {
+            if (!error) {
+                [tabBarController initViews];
+                [self.window setRootViewController:tabBarController];
+            }
         }];
     }
     
-    self.parseController.signedInUser = [PFUser currentUser];
-    PFQuery *query = [PFUser query];
-    [query whereKeyExists:@"username"]; //email address --> use to send messages, use as user ID for app
-    [query whereKey:@"username" notEqualTo:self.parseController.signedInUser.username];
-    self.parseUsers = [NSMutableArray array];
-
-    NSArray *users = [query findObjects];
-    for (int i = 0; i < [users count]; i++) {
-        NSString *username = [[users objectAtIndex:i] objectForKey:@"username"];
-        NSString *firstName = [[users objectAtIndex:i] objectForKey:@"firstName"];
-        NSString *lastName = [[users objectAtIndex:i] objectForKey:@"lastName"];
-        NSString *userID = ((PFUser *)[users objectAtIndex:i]).objectId;
-        Contact *person = [[Contact alloc] init];
-        person.userID = userID;
-        person.username = username;
-        person.firstName = firstName;
-        person.lastName = lastName;
-        [self.parseUsers addObject:person];
-    }
-    
-    User *me = [[User alloc] init];
-    me.firstName = [self.parseController.signedInUser objectForKey:@"firstName"];
-    me.lastName = [self.parseController.signedInUser objectForKey:@"lastName"];
-    me.username = self.parseController.signedInUser.username; //email
-    me.userID = self.parseController.signedInUser.objectId;
-    
-    NSUserDefaults *friends = [NSUserDefaults standardUserDefaults];
-    NSData *data2 = [friends objectForKey:[NSString stringWithFormat:@"%@friends", me.username]];
-    NSArray *array2 = [NSKeyedUnarchiver unarchiveObjectWithData:data2];
-    me.friends = [NSMutableArray arrayWithArray:array2];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey:me.username];
-    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    me.messageRecipients = [NSMutableArray arrayWithArray:array];
-
-    HomepageTVC *homepage = [[HomepageTVC alloc] init];
-    [homepage setLocationManager:self.locationManager];
-    [homepage setParseController:self.parseController];
-    homepage.signedInUser = self.parseController.signedInUser;
-    homepage.apiManager = self.apiManager;
-    homepage.me = me;
-    UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
-
-    AddressBookTVC *contacts = [[AddressBookTVC alloc] init];
-    contacts.locationManager = self.locationManager;
-    contacts.parseController = self.parseController;
-    contacts.signedInUser = self.parseController.signedInUser;
-    contacts.apiManager = self.apiManager;
-    contacts.me = me;
-    contacts.parseUsers = self.parseUsers;
-    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
-
-    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    
-    NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];
-    tabBarController.viewControllers = controllers;
-    
-    UIImage *unselectedContacts = [UIImage imageNamed:@"UnselectedContacts"];
-    UIImage *selectedContacts = [UIImage imageNamed:@"SelectedContacts"];
-    UIImage *unselectedMessages = [UIImage imageNamed:@"UnselectedMessages"];
-    UIImage *selectedMessages = [UIImage imageNamed:@"SelectedMessages"];
-    UIColor *red = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
-
-    selectedMessages = [selectedMessages imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    controller1.tabBarController.tabBar.selectedImageTintColor = red;
-
-    selectedContacts = [selectedContacts imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    controller2.tabBarController.tabBar.selectedImageTintColor = red;
-
-    UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:unselectedMessages selectedImage:selectedMessages];
-    UITabBarItem *addNew = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:unselectedContacts selectedImage:selectedContacts];
-
-    [controller1 setTabBarItem:chats];
-    [controller2 setTabBarItem:addNew];
-
-    [self.window setRootViewController:tabBarController];
+//    self.parseController.signedInUser = [PFUser currentUser];
+//    PFQuery *query = [PFUser query];
+//    [query whereKeyExists:@"username"]; //email address --> use to send messages, use as user ID for app
+//    [query whereKey:@"username" notEqualTo:self.parseController.signedInUser.username];
+//    self.parseController.parseUsers = [NSMutableArray array];
+//
+//    NSArray *users = [query findObjects];
+//    for (int i = 0; i < [users count]; i++) {
+//        NSString *username = [[users objectAtIndex:i] objectForKey:@"username"];
+//        NSString *firstName = [[users objectAtIndex:i] objectForKey:@"firstName"];
+//        NSString *lastName = [[users objectAtIndex:i] objectForKey:@"lastName"];
+//        NSString *userID = ((PFUser *)[users objectAtIndex:i]).objectId;
+//        Contact *person = [[Contact alloc] init];
+//        person.userID = userID;
+//        person.username = username;
+//        person.firstName = firstName;
+//        person.lastName = lastName;
+//        [self.parseController.parseUsers addObject:person];
+//    }
+//    
+//    User *me = [[User alloc] init];
+//    me.firstName = [self.parseController.signedInUser objectForKey:@"firstName"];
+//    me.lastName = [self.parseController.signedInUser objectForKey:@"lastName"];
+//    me.username = self.parseController.signedInUser.username; //email
+//    me.userID = self.parseController.signedInUser.objectId;
+//    
+//    NSUserDefaults *friends = [NSUserDefaults standardUserDefaults];
+//    NSData *data2 = [friends objectForKey:[NSString stringWithFormat:@"%@friends", me.username]];
+//    NSArray *array2 = [NSKeyedUnarchiver unarchiveObjectWithData:data2];
+//    me.friends = [NSMutableArray arrayWithArray:array2];
+//    
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    NSData *data = [defaults objectForKey:me.username];
+//    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    me.messageRecipients = [NSMutableArray arrayWithArray:array];
+//
+//    HomepageTVC *homepage = [[HomepageTVC alloc] init];
+//    [homepage setLocationManager:self.locationManager];
+//    [homepage setParseController:self.parseController];
+//    homepage.signedInUser = self.parseController.signedInUser;
+//    homepage.apiManager = self.apiManager;
+//    homepage.me = me;
+//    UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
+//
+//    AddressBookTVC *contacts = [[AddressBookTVC alloc] init];
+//    contacts.locationManager = self.locationManager;
+//    contacts.parseController = self.parseController;
+//    contacts.signedInUser = self.parseController.signedInUser;
+//    contacts.apiManager = self.apiManager;
+//    contacts.me = me;
+//    contacts.parseUsers = self.parseUsers;
+//    UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
+//
+//    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+//    
+//    NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];
+//    tabBarController.viewControllers = controllers;
+//    
+//    UIImage *unselectedContacts = [UIImage imageNamed:@"UnselectedContacts"];
+//    UIImage *selectedContacts = [UIImage imageNamed:@"SelectedContacts"];
+//    UIImage *unselectedMessages = [UIImage imageNamed:@"UnselectedMessages"];
+//    UIImage *selectedMessages = [UIImage imageNamed:@"SelectedMessages"];
+//    UIColor *red = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
+//
+//    selectedMessages = [selectedMessages imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    controller1.tabBarController.tabBar.selectedImageTintColor = red;
+//
+//    selectedContacts = [selectedContacts imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    controller2.tabBarController.tabBar.selectedImageTintColor = red;
+//
+//    UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:unselectedMessages selectedImage:selectedMessages];
+//    UITabBarItem *addNew = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:unselectedContacts selectedImage:selectedContacts];
+//
+//    [controller1 setTabBarItem:chats];
+//    [controller2 setTabBarItem:addNew];
+//
+//    [self.window setRootViewController:tabBarController];
 }
 
 @end
