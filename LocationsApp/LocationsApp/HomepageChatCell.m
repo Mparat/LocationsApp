@@ -21,8 +21,6 @@
 @implementation HomepageChatCell
 
 @synthesize user = _user;
-@synthesize contact = _contact;
-@synthesize height = _height;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -43,48 +41,36 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
--(void)createCellWith:(LYRConversation *)conversation message:(LYRMessage *)lastMessage layerClient:(LYRClient *)client
+-(void)createCellWith:(LYRConversation *)conversation person:(NSArray *)person layerClient:(LYRClient *)client
 {
-    self.participants = [NSArray arrayWithArray: [conversation.metadata objectForKey:@"participants"]]; //array of all Contacts/participants with all info
-    NSMutableArray *recipients = [NSMutableArray arrayWithArray:self.participants];
-    for (int i = 0; i < [self.participants count]; i++) {
-        if ([((Contact *)[recipients objectAtIndex:i]).userID isEqualToString:client.authenticatedUserID]) {
-            [recipients removeObject:[recipients objectAtIndex:i]];
-        }
-    }
-    
-    NSData *data = [lastMessage.parts lastObject];
-    NSString *location = [self.locationManager returnLocationName:[self.locationManager getLocationFromData:data]];
+    self.conversation = conversation;
+
+    LYRMessage *lastMessage = [[client messagesForConversation:conversation] lastObject];
+    LYRMessagePart *part2 = [lastMessage.parts objectAtIndex:1];
+    NSData *data = part2.data;
+    NSString *locationText = [self.locationManager returnLocationName:[self.locationManager getLocationFromData:data]];
+        
+    NSString *name = [NSString stringWithFormat:@"%@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
 
     NSDate *date = lastMessage.sentAt;
-    [self placeSubviewsForGroupMessageCell:recipients Location:location Date:date]; //recipients is an array of Contacts - participants in conversation, minus layerClient.
+    [self setContactInfoWithName:name Location:locationText Date:date];
 }
 
--(void)placeSubviewsForCellWithName:(Contact *)recipient Location:(NSString *)text Date:(NSDate *)date
+-(void)createGroupCellWithNames:(NSArray *)firstNames conversation:(LYRConversation *)conversation
 {
-    [self setContactInfoWithName:recipient.firstName Location:text Date:date];
-}
-
--(void)placeSubviewsForGroupMessageCell:(NSArray *)recipients Location:(NSString *)text Date:(NSDate *)date
-{
-    NSString *names = [NSString stringWithFormat:@"%@", ((Contact *)[recipients objectAtIndex:0]).firstName];;
-    for (int i = 1 ; i < [recipients count]; i++) {
-            names = [NSString stringWithFormat:@"%@, %@", names, ((Contact *)[recipients objectAtIndex:i]).firstName];
+    self.conversation = conversation;
+    NSString *names = [NSString stringWithFormat:@"%@", [firstNames objectAtIndex:0]];;
+    for (int i = 1 ; i < [firstNames count]; i++) {
+        names = [NSString stringWithFormat:@"%@, %@", names, [firstNames objectAtIndex:i]];
     }
-    if ([recipients count] > 0) {
-        date = nil;
-    }
-    [self setContactInfoWithName:names Location:text Date:date];
+    [self setContactInfoWithName:names Location:@"" Date:nil];
 }
 
 -(void)setContactInfoWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date
 {    
     NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-//    [timeFormat setDateFormat:@"hh:mm a"];
     [timeFormat setTimeStyle:NSDateFormatterShortStyle];
     NSString *theTime = [timeFormat stringFromDate:date];
 

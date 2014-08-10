@@ -33,7 +33,7 @@
 
 @property (nonatomic, strong) LayerAPIManager *apiManager;
 
-@property (nonatomic, strong) NSMutableArray *parseUsers;
+//@property (nonatomic, strong) NSMutableArray *parseUsers;
 
 
 @property (nonatomic) ABAddressBookRef addressBook;

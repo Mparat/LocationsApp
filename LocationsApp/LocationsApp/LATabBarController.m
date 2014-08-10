@@ -97,9 +97,7 @@
     contacts.me = me;
 //    contacts.parseUsers = self.parseUsers;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
-    
-//    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    
+        
     NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];
     self.viewControllers = controllers;
     

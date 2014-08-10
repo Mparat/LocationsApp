@@ -134,7 +134,6 @@
     NSLog(@"Login successful");
     self.parseController.signedInUser = user;
     [(AppDelegate *)[[UIApplication sharedApplication] delegate] checkCurrentUser];
-    
 }
 
 -(void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error

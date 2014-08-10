@@ -64,44 +64,61 @@
                                                     }
                                                     else{
                                                         NSLog(@"authenticated with token");
+                                                        completion([PFUser currentUser], nil);
                                                     }
                                                 }];
-                                                completion([PFUser currentUser], nil);
+                                                
                                             }
+                                            
                                         }];
         }
     }];
 }
 
--(void)deauthenticateWithCompletion:(void (^)(BOOL, NSError *))completion
+-(void)logoutWithCompletion:(void (^)(BOOL, NSError *))completion
 {
     [PFUser logOut];
-    if (completion){
-        [self.layerClient deauthenticate];
-        NSLog(@"User deauthenticated");
-    }
+    [self.layerClient deauthenticateWithCompletion:^(BOOL success, NSError *error) {
+        if (success) {
+            NSLog(@"User deauthenticated");
+            completion(YES, nil);
+        }
+    }];
 }
 
--(void)sendAskMessageToRecipients:(NSArray *)recipients //this actually is just a notification... not a messagePart in the convo.......
+-(void)sendAskMessageToRecipients:(NSMutableDictionary *)recipients //this actually is just a notification... not a messagePart in the convo.......
 {
     // filter recipients into new array with only other participants userIDs
-    NSMutableArray *uids = [NSMutableArray array];
-    for (int i = 0; i < [recipients count]; i++) {
-        if (![self.layerClient.authenticatedUserID isEqualToString:((Contact *)[recipients objectAtIndex:i]).userID]) {
-            [uids addObject:((Contact *)[recipients objectAtIndex:i]).userID];
-        }
-    }
-    LYRConversation *conversation = [self.layerClient conversationForParticipants:uids];
+    NSArray *uids = [recipients allKeys];
     
-    // if conversation is new (will happen only once, from  AddressBookTVC), assign metadata to it
-    if (conversation.metadata == NULL) {
-        NSDictionary *metadata = @{@"participants" : recipients};
-        [self.layerClient setMetadata:metadata onObject:conversation];
+    LYRConversation *conversation = [[LYRConversation alloc] init];
+    if ([self.layerClient conversationForParticipants:uids] != nil) {
+        conversation = [self.layerClient conversationForParticipants:uids];
     }
-    LYRMessagePart *messagePart = [LYRMessagePart messagePartWithText:@"just a notification asking.. hmm"];
-    LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[messagePart]];
+    else {
+        conversation = [LYRConversation conversationWithParticipants:uids];
+    }
     
-    // constructed the message for the conversation. Now send it.
+    static NSString *const MIMETypeArray = @"participants";
+    
+    NSData *recipientData = [NSJSONSerialization dataWithJSONObject:recipients options:nil error:nil];
+    LYRMessagePart *recipientArr = [LYRMessagePart messagePartWithMIMEType:MIMETypeArray data:recipientData];
+    
+    
+    // MIME type declaration
+    static NSString *const MIMETypeLocation = @"location";
+    CLLocation *current = [self.locationManager fetchCurrentLocation];
+    
+    // Creates a message part with latitude and longitude strings
+    NSDictionary *location = [NSMutableDictionary dictionary];
+    [location setValue:[NSNumber numberWithDouble:current.coordinate.latitude] forKey:@"lat"];
+    [location setValue:[NSNumber numberWithDouble:current.coordinate.longitude] forKey:@"lon"];
+    
+    NSData *locationData = [NSJSONSerialization dataWithJSONObject:location options:nil error:nil];
+    LYRMessagePart *locationPart = [LYRMessagePart messagePartWithMIMEType:MIMETypeLocation data:locationData];
+    
+    LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, locationPart]];
+    
     BOOL success = [self.layerClient sendMessage:message error:nil];
     if (success) {
         NSLog(@"Message send succesfull");
@@ -109,37 +126,39 @@
         NSLog(@"Message send failed");
     }
 }
-
--(void)sendTellMessageToRecipients:(NSArray *)recipients
+-(void)sendTellMessageToRecipients:(NSMutableDictionary *)recipients
 {
-    NSMutableArray *uids = [NSMutableArray array];
-    for (int i = 0; i < [recipients count]; i++) {
-        if (![self.layerClient.authenticatedUserID isEqualToString:((Contact *)[recipients objectAtIndex:i]).userID]) {
-            [uids addObject:((Contact *)[recipients objectAtIndex:i]).userID];
-        }
+    // filter recipients into new array with only other participants userIDs
+    NSArray *uids = [recipients allKeys];
+    
+    LYRConversation *conversation = [[LYRConversation alloc] init];
+    if ([self.layerClient conversationForParticipants:uids] != nil) {
+        conversation = [self.layerClient conversationForParticipants:uids];
+    }
+    else {
+        conversation = [LYRConversation conversationWithParticipants:uids];
     }
     
-    LYRConversation *conversation = [self.layerClient conversationForParticipants:uids];
-    if (conversation.metadata == NULL) {
-        NSDictionary *metadata = @{@"participants" : recipients};
-        [self.layerClient setMetadata:metadata onObject:conversation];
-    }
-    CLLocation *current = [self.locationManager fetchCurrentLocation];
+    static NSString *const MIMETypeArray = @"participants";
     
-//    NSString *text = [self.locationManager returnMyLocationName:current];
+    NSData *recipientData = [NSJSONSerialization dataWithJSONObject:recipients options:nil error:nil];
+    LYRMessagePart *recipientArr = [LYRMessagePart messagePartWithMIMEType:MIMETypeArray data:recipientData];
+  
 
     // MIME type declaration
     static NSString *const MIMETypeLocation = @"location";
-    
+    CLLocation *current = [self.locationManager fetchCurrentLocation];
+
     // Creates a message part with latitude and longitude strings
-    NSDictionary *location = @{@"lat"  :  [NSNumber numberWithDouble:current.coordinate.latitude],
-                               @"lon"  :  [NSNumber numberWithDouble:current.coordinate.longitude]};
+    NSDictionary *location = [NSMutableDictionary dictionary];
+    [location setValue:[NSNumber numberWithDouble:current.coordinate.latitude] forKey:@"lat"];
+    [location setValue:[NSNumber numberWithDouble:current.coordinate.longitude] forKey:@"lon"];
     
     NSData *locationData = [NSJSONSerialization dataWithJSONObject:location options:nil error:nil];
-    LYRMessagePart *messagePart = [LYRMessagePart messagePartWithMIMEType:MIMETypeLocation data:locationData];
+    LYRMessagePart *locationPart = [LYRMessagePart messagePartWithMIMEType:MIMETypeLocation data:locationData];
     
-//    LYRMessagePart *messagePart = [LYRMessagePart messagePartWithText:text];
-    LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[messagePart]];
+    LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, locationPart]];
+
     BOOL success = [self.layerClient sendMessage:message error:nil];
     if (success) {
         NSLog(@"Message send succesfull");
@@ -148,16 +167,24 @@
     }
 }
 
--(NSMutableArray *)returnParticipants:(LYRConversation *)conversation
+-(NSMutableDictionary *)returnParticipantDictionary:(LYRConversation *)conversation
 {
-    NSArray *participants = [NSArray arrayWithArray: [conversation.metadata objectForKey:@"participants"]]; //array of all Contacts/participants with all info
-    NSMutableArray *recipients = [NSMutableArray arrayWithArray:participants];
-    for (int i = 0; i < [participants count]; i++) {
-        if ([((Contact *)[recipients objectAtIndex:i]).userID isEqualToString:self.layerClient.authenticatedUserID]) {
-            [recipients removeObject:[recipients objectAtIndex:i]];
+    LYRMessage *lastMessage = [[self.layerClient messagesForConversation:conversation] lastObject];
+    LYRMessagePart *part1 = [lastMessage.parts objectAtIndex:0];
+    NSData *contacts = part1.data;
+    NSMutableDictionary *recipientInfo = [NSJSONSerialization JSONObjectWithData:contacts options:nil error:nil];
+    return recipientInfo;
+}
+
+-(NSMutableArray *)recipientUserIDs:(LYRConversation *)conversation
+{
+    NSMutableArray *ret = [NSMutableArray array];
+    for (NSString *userID in conversation.participants) {
+        if (![userID isEqualToString:self.layerClient.authenticatedUserID]) {
+            [ret addObject:userID];
         }
     }
-    return recipients;
+    return ret;
 }
 
 

@@ -26,13 +26,10 @@
 
 @implementation AddContacts
 
-@synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
 @synthesize className = _className;
 @synthesize me = _me;
-@synthesize parseUsers = _parseUsers;
-
 
 
 #define searchCell @"searchCell"
@@ -96,7 +93,7 @@
     [self.tableView reloadData];
     
     NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
-    NSMutableArray *filter1 = [NSMutableArray arrayWithArray:self.parseUsers];
+    NSMutableArray *filter1 = [NSMutableArray arrayWithArray:self.parseController.parseUsers];
     [filter1 filterUsingPredicate:predicate1]; // filtered users w/ searched firstNames of all parse users
 
     [self.searchResults addObjectsFromArray:filter1]; //array of "parseUsers" w/ firstName, lastName, username
@@ -162,6 +159,7 @@
     Contact *user = [self.searchResults objectAtIndex:path.row];
     [(SearchCell *)cell initWithContact:user];
     cell.person = user;
+    
     // check the current username result w/ all the usernames in your friendsArray
     // if the cell in question is a user that you are already friends with, then marked them w/ a checmark.
     for (int i = 0; i < [self.me.friends count]; i++) {
@@ -186,6 +184,7 @@
 -(void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    cell.userInteractionEnabled = YES;
     if (((SearchCell *)cell).accessoryView == nil) {
         UIImageView *selected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SelectedCircle"]];
         ((SearchCell *)cell).accessoryView = selected;
@@ -201,7 +200,8 @@
     else{
         ((SearchCell *)cell).accessoryView = nil;
         [cell setBackgroundColor: [UIColor whiteColor]];
-//        [self.me.friends removeObject:((SearchCell *)cell).person];
+        [self.me.friends removeObject:((SearchCell *)cell).person];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.friends];

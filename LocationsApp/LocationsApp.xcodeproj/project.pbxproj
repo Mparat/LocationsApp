@@ -54,6 +54,7 @@
 		E0B3C3B91975FACB00106D72 /* SettingsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B3C3B81975FACB00106D72 /* SettingsTVC.m */; };
 		E0B3C3BC1975FD4C00106D72 /* LogoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B3C3BB1975FD4C00106D72 /* LogoutCell.m */; };
 		E0B852EC199435E40061B0C1 /* LATabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B852EB199435E40061B0C1 /* LATabBarController.m */; };
+		E0B852EF1995ECA30061B0C1 /* ConversationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B852EE1995ECA30061B0C1 /* ConversationController.m */; };
 		E0CC473E1991F44F007C4DBA /* MapViewAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CC473D1991F44F007C4DBA /* MapViewAnnotation.m */; };
 		E0E560A41989625F001BF0E8 /* parseUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E0E560A31989625F001BF0E8 /* parseUser.m */; };
 		E0EFA3CC198D735500549487 /* LayerClientController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA3CB198D735500549487 /* LayerClientController.m */; };
@@ -148,6 +149,8 @@
 		E0B3C3BB1975FD4C00106D72 /* LogoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutCell.m; sourceTree = "<group>"; };
 		E0B852EA199435E40061B0C1 /* LATabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LATabBarController.h; sourceTree = "<group>"; };
 		E0B852EB199435E40061B0C1 /* LATabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LATabBarController.m; sourceTree = "<group>"; };
+		E0B852ED1995ECA30061B0C1 /* ConversationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationController.h; sourceTree = "<group>"; };
+		E0B852EE1995ECA30061B0C1 /* ConversationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationController.m; sourceTree = "<group>"; };
 		E0CC473C1991F44F007C4DBA /* MapViewAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewAnnotation.h; sourceTree = "<group>"; };
 		E0CC473D1991F44F007C4DBA /* MapViewAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewAnnotation.m; sourceTree = "<group>"; };
 		E0E560A21989625F001BF0E8 /* parseUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parseUser.h; sourceTree = "<group>"; };
@@ -369,6 +372,8 @@
 				E0EFA3CB198D735500549487 /* LayerClientController.m */,
 				E0EFA3CD198D770800549487 /* LayerAPIManager.h */,
 				E0EFA3CE198D770800549487 /* LayerAPIManager.m */,
+				E0B852ED1995ECA30061B0C1 /* ConversationController.h */,
+				E0B852EE1995ECA30061B0C1 /* ConversationController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -585,6 +590,7 @@
 				14C66668194669FF00341F0D /* User.m in Sources */,
 				E0EFD2CE1986D0DC0025F898 /* LoginView.m in Sources */,
 				E0B3C3B91975FACB00106D72 /* SettingsTVC.m in Sources */,
+				E0B852EF1995ECA30061B0C1 /* ConversationController.m in Sources */,
 				E0B3C3BC1975FD4C00106D72 /* LogoutCell.m in Sources */,
 				14315C4D19490A0400378EA5 /* Contact.m in Sources */,
 				144BA0C4194F80A000977673 /* SearchCell.m in Sources */,

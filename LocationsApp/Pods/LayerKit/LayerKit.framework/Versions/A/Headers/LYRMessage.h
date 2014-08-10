@@ -87,24 +87,6 @@ extern NSString *const LYRMessagePushNotificationSoundNameKey;
 @property (nonatomic, readonly) BOOL isDeleted;
 
 /**
- @abstract A dictionary of metadata about the message synchronized among all participants.
- 
- @discussion The metadata is a free-form structure for embedding synchronized data about the conversation that is
- to be shared among the participants. For example, a message might be designated as important by embedding a Boolean value
- within the metadata dictionary.
- */
-@property (nonatomic, readonly) NSDictionary *metadata;
-
-/**
- @abstract A dictionary of private, user-specific information about the message.
- 
- @discussion The user info is a free-form structure for embedding data about the conversation that is synchronized between all the devices
- of the authenticated user, but is not shared with any other participants. For example, an applicatication may wish to flag a message for
- future follow-up by the user by embedding a Boolean value into the user info dictionary.
- */
-@property (nonatomic, readonly) NSDictionary *userInfo;
-
-/**
  @abstract The date and time that the message was originally sent.
  */
 @property (nonatomic, readonly) NSDate *sentAt;

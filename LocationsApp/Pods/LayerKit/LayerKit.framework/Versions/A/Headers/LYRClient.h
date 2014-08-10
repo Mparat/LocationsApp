@@ -48,7 +48,7 @@ extern NSString *const LYRClientObjectsDidChangeNotification;
 extern NSString *const LYRClientObjectChangesUserInfoKey;
 
 /**
- The `LYRClientDelegate` protocol provides a method for notifying the adopting delegate about information changes.
+ @abstract The `LYRClientDelegate` protocol provides a method for notifying the adopting delegate about information changes.
  */
 @protocol LYRClientDelegate <NSObject>
 
@@ -57,9 +57,9 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
 /**
  @abstract Tells the delegate that the server has issued an authentication challenge to the client and a new Identity Token must be submitted.
  @discussion At any time during the lifecycle of a Layer client session the server may issue an authentication challenge and require that
-    the client confirm its identity. When such a challenge is encountered, the client will immediately become deauthenticated and will no
-    longer be able to interact with communication services until reauthenticated. The nonce value issued with the challenge must be submitted
-    to the remote identity provider in order to obtain a new Identity Token.
+ the client confirm its identity. When such a challenge is encountered, the client will immediately become deauthenticated and will no
+ longer be able to interact with communication services until reauthenticated. The nonce value issued with the challenge must be submitted
+ to the remote identity provider in order to obtain a new Identity Token.
  @see LayerClient#authenticateWithIdentityToken:completion:
  @param client The client that received the authentication challenge.
  @param nonce The nonce value associated with the challenge.
@@ -98,8 +98,17 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
 
 @end
 
-
+/**
+ @abstract The `LYRClient` class is the primary interface for developer interaction with the Layer platform.
+ @discussion The `LYRClient` class and related classes provide an API for rich messaging via the Layer platform. This API supports the exchange of multi-part Messages within multi-user Conversations and advanced features such
+ as mutation of the participants, deletion of messages or the entire conversation, and the attachment of free-form user defined metadata. The API is sychronization based, fully supporting offline usage and providing full access
+ to the history of messages across devices.
+ */
 @interface LYRClient : NSObject
+
+///----------------------------
+/// @name Initializing a Client
+///----------------------------
 
 /**
  @abstract Creates and returns a new Layer client instance.
@@ -116,10 +125,15 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
  */
 @property (nonatomic, copy, readonly) NSUUID *appID;
 
+///--------------------------------
+/// @name Managing Connection State
+///--------------------------------
+
 /**
  @abstract Signals the receiver to establish a network connection and initiate synchronization.
  @discussion If the client has previously established an authenticated identity then the session is resumed and synchronization is activated.
- @param completion An optional block to be executed once connection state is determined. The block has no return value and accepts two arguments: a Boolean value indicating if the connection was made successfully and an error object that, upon failure, indicates the reason that connection was unsuccessful.
+ @param completion An optional block to be executed once connection state is determined. The block has no return value and accepts two arguments: a Boolean value indicating if the connection was made 
+ successfully and an error object that, upon failure, indicates the reason that connection was unsuccessful.
 */
 - (void)connectWithCompletion:(void (^)(BOOL success, NSError *error))completion;
 
@@ -160,15 +174,15 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
 /**
  @abstract Authenticates the client by submitting an Identity Token to Layer for evaluation.
  @discussion Authenticating a Layer client requires the submission of an Identity Token from a remote backend application that has been designated to act as an
-    Identity Provider on behalf of your application. The Identity Token is a JSON Web Signature (JWS) string that encodes a cryptographically signed set of claims
-    about the identity of a Layer client. An Identity Token must be obtained from your provider via an application defined mechanism (most commonly a JSON over HTTP
-    request). Once an Identity Token has been obtained, it must be submitted to Layer via this method in ordr to authenticate the client and begin utilizing communication 
-    services. Upon successful authentication, the client remains in an authenticated state until explicitly deauthenticated by a call to `deauthenticateWithCompletion:` or
-    via a server-issued authentication challenge.
+ Identity Provider on behalf of your application. The Identity Token is a JSON Web Signature (JWS) string that encodes a cryptographically signed set of claims
+ about the identity of a Layer client. An Identity Token must be obtained from your provider via an application defined mechanism (most commonly a JSON over HTTP
+ request). Once an Identity Token has been obtained, it must be submitted to Layer via this method in ordr to authenticate the client and begin utilizing communication
+ services. Upon successful authentication, the client remains in an authenticated state until explicitly deauthenticated by a call to `deauthenticateWithCompletion:` or
+ via a server-issued authentication challenge.
  @param identityToken A string object encoding a JSON Web Signature that asserts a set of claims about the identity of the client. Must be obtained from a remote identity
-    provider and include a nonce value that was previously obtained by a call to `requestAuthenticationNonceWithCompletion:` or via a server initiated authentication challenge.
+ provider and include a nonce value that was previously obtained by a call to `requestAuthenticationNonceWithCompletion:` or via a server initiated authentication challenge.
  @param completion A block to be called upon completion of the asynchronous request for authentication. The block takes two parameters: a string encoding the remote user ID that
-    was authenticated (or `nil` if authentication was unsuccessful) and an error object that upon failure describes the nature of the failure.
+ was authenticated (or `nil` if authentication was unsuccessful) and an error object that upon failure describes the nature of the failure.
  @see http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-25
  */
 - (void)authenticateWithIdentityToken:(NSString *)identityToken completion:(void (^)(NSString *authenticatedUserID, NSError *error))completion;
@@ -176,7 +190,7 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
 /**
  @abstract Deauthenticates the client, disposing of any previously established user identity and disallowing access to the Layer communication services until a new identity is established. All existing messaging data is purged from the database.
  */
-- (void)deauthenticate;
+- (void)deauthenticateWithCompletion:(void (^)(BOOL success, NSError *error))completion;
 
 ///-------------------------------------------------------
 /// @name Registering For and Receiving Push Notifications

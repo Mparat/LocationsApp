@@ -64,7 +64,7 @@
 
 -(void)collectUniqueMessages
 {
-    NSMutableArray *participants = [self.apiManager returnParticipants:self.conversation];
+    NSMutableArray *participants = [self.apiManager recipientUserIDs:self.conversation];
     NSOrderedSet *messages = [self.apiManager.layerClient messagesForConversation:self.conversation];
     NSMutableArray *array = [NSMutableArray array];
     [self findUniqueMessages:messages participants:participants count:[messages count]-1 array:array]; //array contains the last messagae from each user that isn't the client/user.me

@@ -21,11 +21,14 @@
 -(void)authenticateWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(PFUser *user, NSError *error))completion;
 -(void)registerUser:(PFUser *)user completion:(void(^)(PFUser *user, NSError *error))completion;
 //- (BOOL)resumeSession:(LSSession *)session error:(NSError **)error;
-- (void)deauthenticateWithCompletion:(void(^)(BOOL success, NSError *error))completion;
+- (void)logoutWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 
--(void)sendAskMessageToRecipients:(NSArray *)recipients;
--(void)sendTellMessageToRecipients:(NSArray *)recipients;
--(NSMutableArray *)returnParticipants:(LYRConversation *)conversation;
+-(void)sendAskMessageToRecipients:(NSMutableDictionary *)recipients;
+-(void)sendTellMessageToRecipients:(NSMutableDictionary *)recipients;
+
+-(NSMutableDictionary *)returnParticipantDictionary:(LYRConversation *)conversation;
+-(NSMutableArray *)recipientUserIDs:(LYRConversation *)conversation;
+
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 

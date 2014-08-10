@@ -21,10 +21,6 @@
 
 @interface HomepageTVC () <UISearchDisplayDelegate, UISearchBarDelegate, MCSwipeTableViewCellDelegate>
 
-@property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, strong) UISearchDisplayController *searchController;
-@property (nonatomic, strong) NSMutableArray *searchResults;
-
 @property (nonatomic, strong) NSArray *conversations;
 
 @end
@@ -59,7 +55,6 @@
     
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
-//    [self addSearchBar];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     newRow = false;
@@ -71,14 +66,8 @@
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
-    
+    self.layerClient = self.apiManager.layerClient;
     [self fetchLayerConversations];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey:self.me.username];
-    if ([self.me.messageRecipients count] != 0) {
-        self.me.messageRecipients = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    }
     
     self.navigationController.navigationBarHidden = NO;
     if (self.tableView.editing) {
@@ -108,95 +97,37 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 58, 58)];
     [settings setFrame:CGRectMake(15, 0, 58, 58)];
     [view addSubview:settings];
-
     
     UIBarButtonItem *newMessageButton = [[UIBarButtonItem alloc] initWithCustomView:view];
     self.navigationItem.rightBarButtonItem = newMessageButton;
-
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.editButtonItem.tintColor = [UIColor whiteColor];
     self.navigationItem.title = @"";
 
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:10.0]};
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-}
-
--(void)addSearchBar
-{
-    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-    self.tableView.tableHeaderView = self.searchBar;
-    self.searchController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
-    
-    self.searchController.searchResultsDataSource = self;
-    self.searchController.searchResultsDelegate = self;
-    self.searchController.delegate = self;
-    
-//    CGPoint offset = CGPointMake(0, self.view.frame.size.height);
-    CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
-    self.tableView.contentOffset = offset;
-    self.searchResults = [NSMutableArray array];
 }
 
 -(void)createNewMessage
 {
     [self.navigationController.tabBarController setSelectedIndex:1]; // to Contacts page
-    // tab bar button for this page should be selected/highlighted
-}
-
-#pragma mark - Search Bar Delegate controls
--(void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
-{
-    UIButton *cancelButton;
-    UIView *topView = self.searchBar.subviews[0];
-    for (UIView *subView in topView.subviews) {
-        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
-            cancelButton = (UIButton*)subView;
-        }
-    }
-    if (cancelButton) {
-        [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
-    }
-}
-
--(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    [self filterResults:searchString];
-    return YES;
-}
-
--(void)filterResults:(NSString *)searchTerm
-{
-    [self.searchResults removeAllObjects];
-    [self.tableView reloadData];
-
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
-    NSMutableArray *filter = [NSMutableArray arrayWithArray:self.me.messageRecipients];
-    [filter filterUsingPredicate:predicate]; // filtered Names
-    
-    [self.searchResults addObjectsFromArray:filter];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tableView == self.searchController.searchResultsTableView) {
-        return [self.searchResults count];
-    }
-    else{
-        return [self.me.messageRecipients count];
-        //return [self.conversations count];
-    }
+    return [self.conversations count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:section];
     if ([path compare:self.expandedIndexPath] == NSOrderedSame) {
-        return [[self.me.messageRecipients objectAtIndex:path.section] count]+1;
-//        return [((LYRConversation *)[self.conversations objectAtIndex:path.section]).participants];
+//        return [[self.me.messageRecipients objectAtIndex:path.section] count]+1;
+        return [((LYRConversation *)[self.conversations objectAtIndex:path.section]).participants count];
+//        return 1;
     }
     else{
         return 1;
@@ -215,57 +146,59 @@
     cell = nil;
     if (cell == nil) {
         cell = [[HomepageChatCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:chatCell];
+        ((HomepageChatCell *)cell).locationManager = self.locationManager;
     }
     [self configureCell:cell atIndexPath:indexPath inTableView:tableView];
     return cell;
 }
 
+-(NSArray *)personFromConversation:(LYRConversation *)conversation forUserID:(NSString *)uid
+{
+    LYRMessage *lastMessage = [[self.layerClient messagesForConversation:conversation] lastObject];
+    LYRMessagePart *part1 = [lastMessage.parts objectAtIndex:0];
+    NSData *contacts = part1.data;
+    NSMutableDictionary *recipientInfo = [NSJSONSerialization JSONObjectWithData:contacts options:nil error:nil];
+    return [recipientInfo objectForKey:uid];
+}
+
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path inTableView:(UITableView *)tableView
 {
-    CLLocation *current = [self.locationManager fetchCurrentLocation];
-    NSString *text = [self.locationManager returnLocationName:current];
-
-    LYRConversation *conversation = [self.conversations objectAtIndex:path.row];
-    LYRMessage *lastMessage = [[self.layerClient messagesForConversation:conversation] lastObject]; //location or text....hmm, mybe can tag the location messages? and only call these
-    [cell createCellWith:conversation message:lastMessage layerClient:self.layerClient];
-    
-    NSSet *participants = conversation.participants; // count size of nsset to tell to group or single to decide if drop down needed
-    if (participants.count > 2) {
-        //group message
-    }
-    else{
-        //individual message
-    }
-    
-    Contact *recipient = [[Contact alloc] init];
-    
-    if ((self.expandedIndexPath != nil) && (path.section == self.expandedIndexPath.section) && (path.row != 0)) { //expanded section, row w/ individual names
-        Contact *recipient = [[Contact alloc] init];
-        recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
-        ((HomepageChatCell *)cell).contact = recipient;
-        [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
+    LYRConversation *conversation = [self.conversations objectAtIndex:path.section];
+        
+    if ((self.expandedIndexPath != nil) && (path.section == self.expandedIndexPath.section) && (path.row != 0)) { //expanded cells, start at path.row index 1
+        
+//        Contact *recipient = [[Contact alloc] init];
+//        recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
+//        ((HomepageChatCell *)cell).contact = recipient;
+//        [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
+       
+        NSArray *person = [self personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:(path.row-1)]];
+        
+        [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
         cell.backgroundColor = [UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:1.0];
     }
     else{
-        if (tableView == self.searchController.searchResultsTableView) {
-            recipient = [self.searchResults objectAtIndex:path.section];
-            cell.contact = recipient;
-            [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:@"location" Date:[NSDate date]];
+        if ([conversation.participants count] > 2) { //group message cell
+            [(HomepageChatCell *)cell createGroupCellWithNames:[self groupNameFromConversation:conversation] conversation:conversation];
+            [self downArrow:cell];
         }
-        else{
-            if ([([self.me.messageRecipients objectAtIndex:path.section]) isKindOfClass:[NSMutableArray class]]) {
-                [(HomepageChatCell *)cell placeSubviewsForGroupMessageCell:[self.me.messageRecipients objectAtIndex:path.section] Location:@"" Date:[NSDate date]]; //
-                [self downArrow:cell];
-            }
-            else{
-                recipient = [self.me.messageRecipients objectAtIndex:path.section];
-                cell.contact = recipient;
-                [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:text Date:[NSDate date]]; // current date+time
-            }
+        else{ //single person cell
+            NSArray *person = [self personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:0]];
+            [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
         }
     }
 
     [self configureSwipeViews:cell];
+}
+
+-(NSMutableArray *)groupNameFromConversation:(LYRConversation *)conversation
+{
+    NSMutableArray *names = [NSMutableArray array];
+    for (int i = 0; i < [[self.apiManager recipientUserIDs:conversation] count]; i++) {
+        NSArray *temp = [self personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:i]];
+        [names addObject:[temp objectAtIndex:1]];
+    }
+    return names;
 }
 
 - (void)accessoryButtonTapped:(id)sender event:(id)event {
@@ -281,8 +214,6 @@
 
 -(void)configureSwipeViews:(HomepageChatCell *)cell
 {
-    //all  these cells have conversations w/ metadata already (metadata has names of all participants)
-    
     UIView *askView = [self viewWithImageName:@"AskCell"];
     UIColor *greenColor = [UIColor colorWithRed:42.0 / 255.0 green:192.0 / 255.0 blue:124.0 / 255.0 alpha:1.0];
     
@@ -292,20 +223,24 @@
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
         [cell swipeToOriginWithCompletion:^{
-            [self.apiManager sendAskMessageToRecipients:((HomepageChatCell *)cell).participants];
+            NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
+            [self.apiManager sendAskMessageToRecipients:convoContacts];
+            [self.tableView reloadData];
         }];
     }];
     
     [cell setSwipeGestureWithView:tellView color:purpleColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
         [cell swipeToOriginWithCompletion:^{
-            [self.apiManager sendTellMessageToRecipients:((HomepageChatCell *)cell).participants];
+            NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
+            [self.apiManager sendTellMessageToRecipients:convoContacts];
+            [self.tableView reloadData];
         }];
     }];
     
     cell.defaultColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
     cell.firstTrigger = 0.25;
-    cell.secondTrigger = 0.6;    
+//    cell.secondTrigger = 0.6;    
 }
 
 - (UIView *)viewWithImageName:(NSString *)imageName {

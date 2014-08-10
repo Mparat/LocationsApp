@@ -8,17 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-#import "LocationManagerController.h"
 #import "ParseController.h"
 
 @interface AddContacts : PFQueryTableViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) User *me;
-
-@property (nonatomic, strong) NSMutableArray *parseUsers;
 
 @property (nonatomic, strong) NSString *className;
 

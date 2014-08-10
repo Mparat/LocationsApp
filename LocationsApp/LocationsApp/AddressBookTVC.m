@@ -38,7 +38,6 @@
 @synthesize contacts = _contacts;
 @synthesize me = _me;
 @synthesize friends = _friends;
-@synthesize parseUsers = _parseUsers;
 
 
 #define contactCell @"contactCell"
@@ -59,7 +58,6 @@
     [self addNavBar];
     [self addSearchBar];
     [self addRecipientsView];
-//    [self getContacts];
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     selectedContacts = [NSMutableArray array];
 
@@ -176,11 +174,9 @@
 -(void)addFriends
 {
     AddContacts *add = [[AddContacts alloc] init];
-    add.locationManager = self.locationManager;
     add.parseController = self.parseController;
     add.me = self.me;
     add.signedInUser = self.signedInUser;
-    add.parseUsers = self.parseUsers;
 
     [self.navigationController pushViewController:add animated:YES];
 }
@@ -214,19 +210,13 @@
 -(void)sendAskMessage
 {
     Contact *sender = [[Contact alloc] init];
+    sender.userID = self.me.userID;
     sender.firstName = self.me.firstName;
     sender.lastName = self.me.lastName;
-    sender.username = self.me.username;
-    sender.userID = self.me.userID;
     [selectedContacts addObject:sender];
-    [self.apiManager sendAskMessageToRecipients:selectedContacts];
-    [self cancelSelection];
-    
-    [self.me.messageRecipients addObject:selectedContacts];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
-    [defaults setObject:data forKey:self.me.username];
-    [defaults synchronize];
+    NSArray *allParticipants = [NSArray arrayWithArray:selectedContacts];
+    [self.apiManager sendAskMessageToRecipients:[self createParticipantDict:allParticipants]];
+    [selectedContacts removeObject:sender];
     [self cancelSelection];
 }
 
@@ -299,6 +289,18 @@
     [self configureSwipeViews:cell];
 }
 
+-(NSMutableDictionary *)createParticipantDict:(NSArray *)contacts
+{
+    NSMutableDictionary *everyone = [NSMutableDictionary dictionary];
+    for (int i = 0; i < [contacts count]; i++) {
+        Contact *temp = (Contact *)[contacts objectAtIndex:i];
+        NSArray *arr = [NSArray arrayWithObjects:temp.userID, temp.firstName, temp.lastName, nil];
+        [everyone setValue:arr forKey:(NSString *)temp.userID];
+        }
+    
+    return everyone;
+}
+
 -(void)configureSwipeViews:(ContactCell *)cell
 {
     UIView *askView = [self viewWithImageName:@"AskCell"];
@@ -306,80 +308,33 @@
     
     UIView *tellView = [self viewWithImageName:@"TellCell"];
     UIColor *purpleColor = [UIColor colorWithRed:177.0 / 255.0 green:74.0 / 255.0 blue:223.0 / 255.0 alpha:1.0];
-
     
     [cell setSwipeGestureWithView:askView color:greenColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"Ask\" cell");
-        BOOL new = true;
-        for (int i = 0; i < [self.me.messageRecipients count]; i++){
-            if (![[self.me.messageRecipients objectAtIndex:i] isKindOfClass:[NSMutableArray class]]){
-                if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
-                    NSLog(@"contact exits");
-                    new = false;
-                }
-            }
-        }
-        if (new == true) {
-            [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
-            
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
-            [defaults setObject:data forKey:self.me.username];
-            [defaults synchronize];
-        }
-        if (new == false) {
-            NSLog(@"Send a \"ask\" message to an already created message recipient");
-        }
-        ((ContactCell *)cell).contact.exists = YES;
         [cell swipeToOriginWithCompletion:^{
             Contact *sender = [[Contact alloc] init];
             sender.firstName = self.me.firstName;
             sender.lastName = self.me.lastName;
-            sender.username = self.me.username;
             sender.userID = self.me.userID;
             NSArray *allParticipants = [NSArray arrayWithObjects:((ContactCell *)cell).contact, sender, nil];
-            [self.apiManager sendAskMessageToRecipients:allParticipants];
+            [self.apiManager sendAskMessageToRecipients:[self createParticipantDict:allParticipants]];
         }];
     }];
     
     [cell setSwipeGestureWithView:tellView color:purpleColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
         NSLog(@"Did swipe \"tell\" cell");
-        BOOL new = true;
-        for (int i = 0; i < [self.me.messageRecipients count]; i++){
-            if (![[self.me.messageRecipients objectAtIndex:i] isKindOfClass:[NSMutableArray class]]){
-                if ([((ContactCell *)cell).contact.username isEqualToString:((Contact *)[self.me.messageRecipients objectAtIndex:i]).username]) {
-                    NSLog(@"contact exits");
-                    new = false;
-                }
-            }
-        }
-        if (new == true) {
-            [self.me.messageRecipients addObject:((ContactCell *)cell).contact];
-            
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
-            [defaults setObject:data forKey:self.me.username];
-            [defaults synchronize];
-        }
-        if (new == false) {
-            NSLog(@"Send a \"tell\" message to an already created message recipient");
+        [cell swipeToOriginWithCompletion:^{
             Contact *sender = [[Contact alloc] init];
             sender.firstName = self.me.firstName;
             sender.lastName = self.me.lastName;
-            sender.username = self.me.username;
             sender.userID = self.me.userID;
             NSArray *allParticipants = [NSArray arrayWithObjects:((ContactCell *)cell).contact, sender, nil];
-            [self.apiManager sendTellMessageToRecipients:allParticipants];
-        }
-        ((ContactCell *)cell).contact.exists = YES;
-        [cell swipeToOriginWithCompletion:^{
-            //
+            [self.apiManager sendTellMessageToRecipients:[self createParticipantDict:allParticipants]];
         }];
     }];
     
     cell.defaultColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
     cell.firstTrigger = 0.25;
-//    cell.secondTrigger = 0.6;
 }
 
 - (UIView *)viewWithImageName:(NSString *)imageName {

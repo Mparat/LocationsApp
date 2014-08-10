@@ -38,23 +38,8 @@
 @property (nonatomic, readonly) NSSet *participants;
 
 /**
- @abstract A dictionary of metadata about the conversation synchronized among all participants.
- @discussion The metadata is a free-form structure for embedding synchronized data about the conversation that is
- to be shared among the participants. For example, a conversation may have a topic that is assigned by the participants represented
- as a string value within the metadata dictionary.
- */
-@property (nonatomic, readonly) NSDictionary *metadata;
-
-/**
- @abstract A dictionary of private, user-specific information about the conversation.
- @discussion The user info is a free-form structure for embedding data about the conversation that is synchronized between all the devices
- of the authenticated user, but is not shared with any other participants. For example, an applicatication may wish to designate certain
- conversations as being favorites of the current user or all the user to annotate the conversation with contextual notes for future reference.
- */
-@property (nonatomic, readonly) NSDictionary *userInfo;
-
-/**
  @abstract The date and time that the conversation was created.
+ @discussion This value specifies the time that receiver was locally created and will vary across devices.
  */
 @property (nonatomic, readonly) NSDate *createdAt;
 

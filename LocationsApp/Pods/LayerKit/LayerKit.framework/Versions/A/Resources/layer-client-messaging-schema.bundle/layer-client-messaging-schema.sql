@@ -12,9 +12,10 @@ CREATE TABLE conversation_participants (
   FOREIGN KEY(event_database_identifier) REFERENCES events(database_identifier) ON DELETE CASCADE
 );
 
-CREATE TABLE conversations (
+CREATE TABLE "conversations" (
   database_identifier INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   stream_database_identifier INTEGER UNIQUE,
+  created_at DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   deleted_at DATETIME,
   object_identifier TEXT UNIQUE NOT NULL,
   FOREIGN KEY(stream_database_identifier) REFERENCES streams(database_identifier) ON DELETE CASCADE
@@ -258,3 +259,5 @@ INSERT INTO schema_migrations (version) VALUES (20140715104949748);
 INSERT INTO schema_migrations (version) VALUES (20140717013309255);
 
 INSERT INTO schema_migrations (version) VALUES (20140717021208447);
+
+INSERT INTO schema_migrations (version) VALUES (20140806143305965);

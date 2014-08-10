@@ -17,17 +17,13 @@
 @interface HomepageChatCell : MCSwipeTableViewCell 
 
 @property (nonatomic, strong) User *user;
-@property (nonatomic, strong) Contact *contact;
-@property CGFloat height;
 @property (nonatomic, strong) LYRClient *layerClient;
-@property (nonatomic, strong) NSArray *participants;
+@property (nonatomic, strong) LYRConversation *conversation;
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
 
+-(void)createCellWith:(LYRConversation *)conversation person:(NSArray *)person layerClient:(LYRClient *)client;
+-(void)createGroupCellWithNames:(NSArray *)firstNames conversation:(LYRConversation *)conversation;
 
--(void)placeSubviewsForCellWithName:(Contact *)recipient Location:(NSString *)text Date:(NSDate *)date;
--(void)placeSubviewsForGroupMessageCell:(NSArray *)recipients Location:(NSString *)text Date:(NSDate *)date;
-
--(void)createCellWith:(LYRConversation *)conversation message:(LYRMessage *)lastMessage layerClient:(LYRClient *)client;
 
 @end
