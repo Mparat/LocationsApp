@@ -66,6 +66,7 @@
         [self.window setRootViewController:[self navigationController]];
     }
     else{
+        self.parseController.signedInUser = [PFUser currentUser];
         [self loginSuccessful];
     }
     [self.window makeKeyAndVisible];
@@ -114,25 +115,15 @@
     if (!self.layerClientController.apiManager.layerClient.authenticatedUserID) {
         [self.layerClientController.apiManager authenticateWithEmail:email password:password completion:^(PFUser *user, NSError *error) {
             if (!error) {
-                LATabBarController *tabBarController = [[LATabBarController alloc] init];
-                tabBarController.locationManager = self.locationManager;
-                tabBarController.parseController = self.parseController;
-                tabBarController.layerClientController = self.layerClientController;
+                LATabBarController *tabBarController = [LATabBarController initWithParseController:self.parseController locationManager:self.locationManager clientController:self.layerClientController];
                 [tabBarController loadParseUsers];
-
-                [tabBarController initViews];
                 [self.window setRootViewController:tabBarController];
             }
         }];
     }
     else {
-        LATabBarController *tabBarController = [[LATabBarController alloc] init];
-        tabBarController.locationManager = self.locationManager;
-        tabBarController.parseController = self.parseController;
-        tabBarController.layerClientController = self.layerClientController;
+        LATabBarController *tabBarController = [LATabBarController initWithParseController:self.parseController locationManager:self.locationManager clientController:self.layerClientController];
         [tabBarController loadParseUsers];
-
-        [tabBarController initViews];
         [self.window setRootViewController:tabBarController];
     }
 }

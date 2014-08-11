@@ -41,11 +41,11 @@
 
 #define contactCell @"contactCell"
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithStyle:(UITableViewStyle)style me:(User *)me
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        self.me = me;
     }
     return self;
 }
@@ -74,7 +74,7 @@
     self.clearsSelectionOnViewWillAppear = NO;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey: self.me.username];
+    NSData *data = [defaults objectForKey: self.apiManager.layerClient.authenticatedUserID];
     if ([self.me.friends count] != 0) {
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }

@@ -20,5 +20,7 @@
 -(void)loadParseUsers;
 -(void)initViews;
 
++(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager clientController:(LayerClientController *)layerClientController;
+
 
 @end

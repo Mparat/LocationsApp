@@ -23,6 +23,8 @@
     int number;
 }
 
+- (id)initWithStyle:(UITableViewStyle)style me:(User *)me;
+
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) LYRClient *layerClient;

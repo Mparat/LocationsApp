@@ -37,21 +37,20 @@
 
 #define chatCell @"chatCell"
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithStyle:(UITableViewStyle)style me:(User *)me
 {
     self = [super initWithStyle:style];
     if (self) {
-        //
+        self.me = me;
     }
     return self;
 }
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.locationManager.delegate = self;
-    self.parseController.delegate = self;
+//    self.locationManager.delegate = self;
+//    self.parseController.delegate = self;
     self.layerClient = self.apiManager.layerClient;
 
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
@@ -62,7 +61,7 @@
 
     [self fetchLayerConversations];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey: self.me.username];
+    NSData *data = [defaults objectForKey: self.layerClient.authenticatedUserID];
     if ([self.me.friends count] != 0) {
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
@@ -78,7 +77,7 @@
     [self fetchLayerConversations];
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey: self.me.username];
+    NSData *data = [defaults objectForKey: self.layerClient.authenticatedUserID];
     if ([self.me.friends count] != 0) {
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
@@ -162,7 +161,7 @@
     [self.me.friends addObjectsFromArray:newFriends];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.friends];
-    [defaults setObject:data forKey: self.me.username];
+    [defaults setObject:data forKey: self.layerClient.authenticatedUserID];
     [defaults synchronize];
 }
 
@@ -170,6 +169,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    [self fetchLayerConversations];
     return [self.conversations count];
 }
 
@@ -250,6 +250,7 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendAskMessageToRecipients:convoContacts];
+            [self fetchLayerConversations];
             [self editCellCircle:cell];
             [self.tableView reloadData];
         }];
@@ -260,6 +261,7 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendTellMessageToRecipients:convoContacts];
+            [self fetchLayerConversations];
             [self editCellCircle:cell];
             [self.tableView reloadData];
         }];
@@ -275,11 +277,6 @@
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.contentMode = UIViewContentModeCenter;
     return imageView;
-}
-
-- (void) placemarkUpdated:(NSString *)location forIndexPath:(NSIndexPath *)path
-{
-    [self.tableView reloadData];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -337,7 +334,7 @@
          [self.me.messageRecipients removeObjectAtIndex:indexPath.section];
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
          NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.messageRecipients];
-         [defaults setObject:data forKey:self.me.username];
+         [defaults setObject:data forKey:self.layerClient.authenticatedUserID];
          [defaults synchronize];
 
          [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
@@ -408,15 +405,16 @@
 
 -(void)editCellCircle:(UITableViewCell *)cell
 {
-    if (![((HomepageChatCell *)cell).message.sentByUserID isEqual:self.layerClient.authenticatedUserID]) {
-        UIImageView *unread = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnreadCircle"]];
-        unread.frame = CGRectMake(15, 19.5, 29, 29);
-        [cell addSubview:unread];
-    }
-    else {
+    LYRMessage *lastMessageEver = [[self.layerClient messagesForConversation: [self.conversations lastObject]]lastObject];
+    if ([lastMessageEver.sentByUserID isEqual:self.layerClient.authenticatedUserID]) {
         UIImageView *read = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ReadCircle"]];
         read.frame = CGRectMake(15, 19.5, 29, 29);
         [cell addSubview:read];
+    }
+    else {
+        UIImageView *unread = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnreadCircle"]];
+        unread.frame = CGRectMake(15, 19.5, 29, 29);
+        [cell addSubview:unread];
     }
 }
 
@@ -452,23 +450,6 @@
             //
         }];
     }
-}
-
-#pragma mark - MCSwipeTableViewCellDelegate // not being called..
-
-// Called when the user starts swiping the cell.
-- (void)swipeTableViewCellDidStartSwiping:(MCSwipeTableViewCell *)cell{
-    
-}
-
-// Called when the user ends swiping the cell.
-- (void)swipeTableViewCellDidEndSwiping:(MCSwipeTableViewCell *)cell{
-    
-}
-
-// Called during a swipe.
-- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didSwipeWithPercentage:(CGFloat)percentage{
-    
 }
 
 

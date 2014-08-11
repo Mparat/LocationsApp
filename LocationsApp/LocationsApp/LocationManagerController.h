@@ -17,7 +17,6 @@
 
 @protocol LocationManagerControllerDelegate <NSObject>
 
--(void)placemarkUpdated:(NSString *)location forIndexPath:(NSIndexPath *)path;
 
 @end
 

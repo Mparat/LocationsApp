@@ -52,7 +52,6 @@
                                                 completion(nil, error);
                                             }
                                             else{
-                                                NSLog(@"token is: %@",  token);
                                                 [self.layerClient authenticateWithIdentityToken:token completion:^(NSString *authenticatedUserID, NSError *error) {
                                                     if (error) {
                                                         completion(nil, error);
@@ -90,10 +89,9 @@
 //    [uids removeObject:self.layerClient.authenticatedUserID];
     
     LYRConversation *conversation = [[LYRConversation alloc] init];
-    if ([self.layerClient conversationForParticipants:uids] != nil) {
+    if ([self.layerClient conversationForParticipants:uids]) {
         conversation = [self.layerClient conversationForParticipants:uids];
-    }
-    else {
+    } else {
         conversation = [LYRConversation conversationWithParticipants:uids];
     }
     

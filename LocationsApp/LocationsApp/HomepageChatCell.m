@@ -50,7 +50,7 @@
     self.conversation = conversation;
     self.layerClient = client;
     BOOL found = NO;
-    for (NSUInteger i = [[client messagesForConversation:conversation]count]; i > 0; i--) {
+    NSUInteger i = [[client messagesForConversation:conversation]count];
         while (found == NO) {
             for (NSString *uid in conversation.participants) {
                 if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
@@ -60,11 +60,13 @@
                     }
                     else if (i-1 == 0){
                         self.message = [[client messagesForConversation:conversation]lastObject];
+                        found = YES;
                     }
                 }
             }
+            i--;
         }
-    }
+    
     
     [self.theirLastMessages addObject:self.message];
 
@@ -87,7 +89,7 @@
     self.conversation = conversation;
     self.layerClient = client;
     BOOL found = NO;
-    for (NSUInteger i = [[client messagesForConversation:conversation]count]; i > 0; i--) {
+    NSUInteger i = [[client messagesForConversation:conversation]count];
         while (found == NO) {
             for (NSString *uid in conversation.participants) {
                 if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
@@ -97,11 +99,13 @@
                     }
                     else if (i-1 == 0){
                         [self.theirLastMessages addObject:[[client messagesForConversation:conversation]lastObject]];
+                        found = YES;
                     }
                 }
             }
+            i--;
         }
-    }
+    
 
 
     self.conversation = conversation;

@@ -183,13 +183,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429415044.677671"
+            filePath = "LocationsApp/LocationManagerController.m"
+            timestampString = "429465503.732601"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "-sendAskMessageToRecipients:"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "-mapView:viewForAnnotation:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -199,13 +199,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429415044.677671"
+            filePath = "LocationsApp/LocationManagerController.m"
+            timestampString = "429465533.239936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
-            landmarkName = "-sendAskMessageToRecipients:"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
+            landmarkName = "-mapView:viewForAnnotation:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -215,41 +215,57 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocationsApp/HomepageChatCell.m"
-            timestampString = "429427159.367132"
+            filePath = "LocationsApp/LocationManagerController.m"
+            timestampString = "429465541.099483"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "-createCellWith:person:layerClient:"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "-createAnnotationsFromMessages:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LocationsApp/LocationManagerController.m"
+            timestampString = "429465600.018028"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
+            landmarkName = "-createAnnotationsFromMessages:"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "-[HomepageChatCell createCellWith:person:layerClient:]"
+                  symbolName = "-[LocationManagerController createAnnotationsFromMessages:]"
                   moduleName = "LocationsApp"
-                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LocationsApp/HomepageChatCell.m"
-                  timestampString = "429436584.408692"
+                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LocationsApp/LocationManagerController.m"
+                  timestampString = "429475052.115435"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "73"
-                  endingLineNumber = "73"
-                  offsetFromSymbolStart = "1656">
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "628">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__54-[HomepageChatCell createCellWith:person:layerClient:]_block_invoke"
+                  symbolName = "__59-[LocationManagerController createAnnotationsFromMessages:]_block_invoke"
                   moduleName = "LocationsApp"
-                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LocationsApp/HomepageChatCell.m"
-                  timestampString = "429436584.408869"
+                  urlString = "file:///Users/meeraparat/Desktop/LocationsApp/LocationsApp/LocationsApp/LocationManagerController.m"
+                  timestampString = "429475052.115622"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "73"
-                  endingLineNumber = "73"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
                   offsetFromSymbolStart = "56">
                </Location>
             </Locations>
@@ -261,61 +277,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LocationsApp/HomepageChatCell.m"
-            timestampString = "429427162.975505"
+            filePath = "LocationsApp/LocationManagerController.m"
+            timestampString = "429465711.081517"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "-createCellWith:person:layerClient:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/HomepageChatCell.m"
-            timestampString = "429427165.247467"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
-            landmarkName = "-createCellWith:person:layerClient:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/HomepageTVC.m"
-            timestampString = "429436406.650726"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "459"
-            endingLineNumber = "459"
-            landmarkName = "@implementation HomepageTVC"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LocationsApp/LayerAPIManager.m"
-            timestampString = "429429184.502666"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "-sendAskMessageToRecipients:"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "-createAnnotationsFromMessages:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

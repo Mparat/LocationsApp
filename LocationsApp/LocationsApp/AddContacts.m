@@ -194,7 +194,7 @@
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.friends];
-        [defaults setObject:data forKey: self.me.username];
+        [defaults setObject:data forKey: [PFUser currentUser].objectId];
         [defaults synchronize];
     }
     else{
@@ -206,7 +206,7 @@
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.friends];
-        [defaults setObject:data forKey: self.me.username];
+        [defaults setObject:data forKey: [PFUser currentUser].objectId];
         [defaults synchronize];
 //        [self.tableView reloadData];
     }
