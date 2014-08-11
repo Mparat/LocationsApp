@@ -46,21 +46,22 @@
     PFQuery *query = [PFUser query];
     [query whereKeyExists:@"username"]; //email address --> use to send messages, use as user ID for app
     [query whereKey:@"username" notEqualTo:self.parseController.signedInUser.username];
-    self.parseController.parseUsers = [NSMutableArray array];
-   
-    NSArray *users = [query findObjects];
-    for (int i = 0; i < [users count]; i++) {
-        NSString *username = [[users objectAtIndex:i] objectForKey:@"username"];
-        NSString *firstName = [[users objectAtIndex:i] objectForKey:@"firstName"];
-        NSString *lastName = [[users objectAtIndex:i] objectForKey:@"lastName"];
-        NSString *userID = ((PFUser *)[users objectAtIndex:i]).objectId;
-        Contact *person = [[Contact alloc] init];
-        person.userID = userID;
-        person.username = username;
-        person.firstName = firstName;
-        person.lastName = lastName;
-        [self.parseController.parseUsers addObject:person];
-    }
+
+    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
+        for (int i = 0; i < [users count]; i++) {
+            NSString *username = [[users objectAtIndex:i] objectForKey:@"username"];
+            NSString *firstName = [[users objectAtIndex:i] objectForKey:@"firstName"];
+            NSString *lastName = [[users objectAtIndex:i] objectForKey:@"lastName"];
+            NSString *userID = ((PFUser *)[users objectAtIndex:i]).objectId;
+            Contact *person = [[Contact alloc] init];
+            person.userID = userID;
+            person.username = username;
+            person.firstName = firstName;
+            person.lastName = lastName;
+            [self.parseController.parseUsers addObject:person];
+        }
+    }];
+
 }
 
 -(void)initViews
@@ -72,14 +73,9 @@
     me.userID = self.parseController.signedInUser.objectId;
     
     NSUserDefaults *friends = [NSUserDefaults standardUserDefaults];
-    NSData *data2 = [friends objectForKey:[NSString stringWithFormat:@"%@friends", me.username]];
-    NSArray *array2 = [NSKeyedUnarchiver unarchiveObjectWithData:data2];
-    me.friends = [NSMutableArray arrayWithArray:array2];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey:me.username];
-    NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    me.messageRecipients = [NSMutableArray arrayWithArray:array];
+    NSData *data1 = [friends objectForKey:me.username];
+    NSArray *array1 = [NSKeyedUnarchiver unarchiveObjectWithData:data1];
+    me.friends = [NSMutableArray arrayWithArray:array1];
     
     HomepageTVC *homepage = [[HomepageTVC alloc] init];
     [homepage setLocationManager:self.locationManager];

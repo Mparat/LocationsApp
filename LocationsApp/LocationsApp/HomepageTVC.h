@@ -37,4 +37,5 @@
 
 @property BOOL newRow;
 
+
 @end

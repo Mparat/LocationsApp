@@ -22,11 +22,6 @@
     return self;
 }
 
--(void)registerUser:(PFUser *)user completion:(void (^)(PFUser *, NSError *))completion
-{
-    
-}
-
 -(void)authenticateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(PFUser *, NSError *))completion
 {
     NSParameterAssert(completion);
@@ -90,6 +85,9 @@
 {
     // filter recipients into new array with only other participants userIDs
     NSArray *uids = [recipients allKeys];
+//    NSArray *temp = [recipients allKeys];
+//    NSMutableArray *uids = [NSMutableArray arrayWithArray:temp];
+//    [uids removeObject:self.layerClient.authenticatedUserID];
     
     LYRConversation *conversation = [[LYRConversation alloc] init];
     if ([self.layerClient conversationForParticipants:uids] != nil) {
@@ -126,6 +124,7 @@
         NSLog(@"Message send failed");
     }
 }
+
 -(void)sendTellMessageToRecipients:(NSMutableDictionary *)recipients
 {
     // filter recipients into new array with only other participants userIDs
@@ -185,6 +184,33 @@
         }
     }
     return ret;
+}
+
+-(NSArray *)personFromConversation:(LYRConversation *)conversation forUserID:(NSString *)uid
+{
+    LYRMessage *lastMessage = [[self.layerClient messagesForConversation:conversation] lastObject];
+    LYRMessagePart *part1 = [lastMessage.parts objectAtIndex:0];
+    NSData *contacts = part1.data;
+    NSMutableDictionary *recipientInfo = [NSJSONSerialization JSONObjectWithData:contacts options:nil error:nil];
+    return [recipientInfo objectForKey:uid];
+}
+
+-(NSArray *)personFromMessage:(LYRMessage *)message forUserID:(NSString *)uid
+{
+    LYRMessagePart *recipientPart = [message.parts objectAtIndex:0];
+    NSData *data = recipientPart.data;
+    NSMutableDictionary *recipientInfo = [NSJSONSerialization JSONObjectWithData:data options:nil error:nil];
+    return [recipientInfo objectForKey:uid];
+}
+
+-(NSMutableArray *)groupNameFromConversation:(LYRConversation *)conversation
+{
+    NSMutableArray *names = [NSMutableArray array];
+    for (int i = 0; i < [[self recipientUserIDs:conversation] count]; i++) {
+        NSArray *temp = [self personFromConversation:conversation forUserID:[[self recipientUserIDs:conversation] objectAtIndex:i]];
+        [names addObject:[temp objectAtIndex:1]];
+    }
+    return names;
 }
 
 

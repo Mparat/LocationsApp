@@ -194,23 +194,30 @@
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.friends];
-        [defaults setObject:data forKey:[NSString stringWithFormat:@"%@friends", self.me.username]];
+        [defaults setObject:data forKey: self.me.username];
         [defaults synchronize];
     }
     else{
         ((SearchCell *)cell).accessoryView = nil;
+        [self deselectCell:cell];
         [cell setBackgroundColor: [UIColor whiteColor]];
         [self.me.friends removeObject:((SearchCell *)cell).person];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.friends];
-        [defaults setObject:data forKey:[NSString stringWithFormat:@"%@friends", self.me.username]];
+        [defaults setObject:data forKey: self.me.username];
         [defaults synchronize];
 //        [self.tableView reloadData];
     }
 }
 
+-(void)deselectCell:(UITableViewCell *)cell
+{
+    UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedNewContact"]];
+    unselected.frame = CGRectMake(256+20, 19, 29, 29);
+    [cell addSubview:unselected];
+}
 
 
 @end

@@ -100,10 +100,6 @@
     mapView.locationManager = self.locationManager;
     mapView.parseController = self.parseController;
     mapView.signedInUser = self.signedInUser;
-    mapView.recipient = self.recipient;
-//    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:mapView] animated:YES completion:^{
-//        //
-//    }];
     [self.navigationController pushViewController:mapView animated:YES];
 }
 

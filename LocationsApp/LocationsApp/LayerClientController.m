@@ -27,6 +27,7 @@
 -(void)initAPIManager
 {
     self.apiManager = [[LayerAPIManager alloc] initWithLayerClient:self.layerClient];
+    self.apiManager.locationManager = self.locationManager;
 }
 
 #pragma mark Layer Client delegate methods

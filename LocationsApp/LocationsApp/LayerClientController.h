@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <LayerKit/LayerKit.h>
 #import "LayerAPIManager.h"
+#import "LocationManagerController.h"
 
 
 @interface LayerClientController : NSObject <LYRClientDelegate>
 
 @property (nonatomic, strong) LYRClient *layerClient;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
+@property (nonatomic, strong) LocationManagerController *locationManager;
 
 -(id)initWithLayerClient:(LYRClient *)client;
 

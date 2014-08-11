@@ -33,13 +33,9 @@
 
 @property (nonatomic, strong) LayerAPIManager *apiManager;
 
-//@property (nonatomic, strong) NSMutableArray *parseUsers;
-
-
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic) CFArrayRef contacts;
 
 @property (nonatomic, strong) User *me;
-@property (nonatomic, strong) NSMutableArray *friends;
 
 @end

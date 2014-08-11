@@ -41,11 +41,12 @@
         }
     }];
     
-    self.layerClientController = [[LayerClientController alloc] initWithLayerClient:layerClient];
-    [self.layerClientController initAPIManager];
-    
     self.locationManager = [[LocationManagerController alloc] init];
     [self.locationManager launchLocationManager];
+    
+    self.layerClientController = [[LayerClientController alloc] initWithLayerClient:layerClient];
+    self.layerClientController.locationManager = self.locationManager;
+    [self.layerClientController initAPIManager];
     
     self.parseController = [[ParseController alloc] init];
     [self.parseController launchParse];

@@ -24,7 +24,6 @@
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize me = _me;
-@synthesize recipient = _recipient;
 @synthesize signedInUser = _signedInUser;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -110,37 +109,42 @@
 
     UIButton *close = [[UIButton alloc] initWithFrame:CGRectMake(140, 450, 40, 40)];
     [close setBackgroundImage:[UIImage imageNamed:@"Close"] forState:UIControlStateNormal];
-//    [close setBackgroundImage:[UIImage imageNamed:@"Close"] forState:UIControlStateHighlighted];
     [close addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:close];
 }
 
 -(void)toAppleMaps
 {
-    NSURL *URL = [NSURL URLWithString:@"http://maps.apple.com/?q"];
-    [[UIApplication sharedApplication] openURL:URL];
+//    NSURL *URL = [NSURL URLWithString:@"http://maps.apple.com/?q"];
+//    [[UIApplication sharedApplication] openURL:URL];
+    
+    LYRMessagePart *part = [((LYRMessage *)[self.theirLastMessages lastObject]).parts objectAtIndex:1];
+    NSData *data = part.data;
+    CLLocation *theirLastLocation = [self.locationManager getLocationFromData:data];
+    CLLocation *myLocation = [self.locationManager fetchCurrentLocation];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?daddr=%f,%f&saddr=%f,%f&t=k", theirLastLocation.coordinate.latitude, theirLastLocation.coordinate.longitude, myLocation.coordinate.latitude, myLocation.coordinate.latitude]]];
+
+    
 }
 
 -(void)tellLocation
 {
-
+    NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:self.conversation];
+    [self.apiManager sendTellMessageToRecipients:convoContacts];
 }
 
 -(void)askLocation
 {
-    
+    NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:self.conversation];
+    [self.apiManager sendAskMessageToRecipients:convoContacts];
 }
 
 -(void)sendText
 {
-//    NSString *number = self.recipient.phoneNumber;
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms:%@", number]]];
-    
     MessageCVC *message = [[MessageCVC alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
     message.locationManager = self.locationManager;
     message.parseController = self.parseController;
     message.signedInUser = self.signedInUser;
-    message.recipient = self.recipient;
     [self.navigationController pushViewController:message animated:YES];
 
 //    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:message] animated:YES completion:^{
@@ -154,8 +158,8 @@
     mapView.locationManager = self.locationManager;
     mapView.parseController = self.parseController;
     mapView.signedInUser = self.signedInUser;
-    mapView.recipient = self.recipient;
     mapView.conversation = self.conversation;
+    mapView.theirLastMessages = self.theirLastMessages;
     [self.navigationController pushViewController:mapView animated:YES];
 }
 

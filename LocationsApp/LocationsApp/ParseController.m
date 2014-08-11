@@ -15,6 +15,7 @@
 
 -(void)launchParse
 {
+    self.parseUsers = [NSMutableArray array];
     return;
 }
 

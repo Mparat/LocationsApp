@@ -11,6 +11,7 @@
 #import <MapKit/MapKit.h>
 #import <Parse/Parse.h>
 #import <LayerKit/LayerKit.h>
+#import "LayerAPIManager.h"
 
 @class LocationManagerController;
 
@@ -26,16 +27,19 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSArray *locations;
 @property (nonatomic, strong) CLLocation *current;
-@property (nonatomic, strong) CLGeocoder *geocoder;
 @property (nonatomic, strong) CLPlacemark *placemark;
 @property (nonatomic, strong) MKMapView *map;
 @property (nonatomic, weak) id<LocationManagerControllerDelegate>delegate;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) LayerAPIManager *apiManager;
+
+
 
 -(void)launchLocationManager;
 -(CLLocation *)fetchCurrentLocation;
--(NSString *)returnLocationName:(CLLocation *)location;
+-(void)returnLocationName:(CLLocation *)location completion:(void(^)(BOOL done, NSError *error))completion;
 -(CLLocation *)getLocationFromData:(NSData *)data;
--(NSArray *)createAnnotationsFromMessages:(NSArray *)array;
+-(NSArray *)createAnnotationsFromMessages:(NSMutableArray *)array;
 
 
 -(MKMapView *)displayMap:(UIView *)view withAnnotations:(NSArray *)annotations;

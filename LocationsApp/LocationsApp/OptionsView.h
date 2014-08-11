@@ -10,20 +10,25 @@
 #import <Parse/Parse.h>
 #import <LayerKit/LayerKit.h>
 #import "LocationManagerController.h"
+#import "LayerAPIManager.h"
 #import "ParseController.h"
 #import "Contact.h"
+
 #import "User.h"
 
 @interface OptionsView : UIViewController
 
+@property (nonatomic, strong) LYRClient *layerClient;
+@property (nonatomic, strong) LYRConversation *conversation;
+@property (nonatomic, strong) LYRMessage *message;
 @property (nonatomic, strong) LocationManagerController *locationManager;
+@property (nonatomic, strong) LayerAPIManager *apiManager;
+@property (nonatomic, strong) NSMutableArray *theirLastMessages;
+
 @property (nonatomic, strong) ParseController *parseController;
 
 @property (nonatomic, strong) User *me;
-@property (nonatomic, strong) Contact *recipient;
 
 @property (nonatomic, strong) PFUser *signedInUser;
-
-@property (nonatomic, strong) LYRConversation *conversation;
 
 @end

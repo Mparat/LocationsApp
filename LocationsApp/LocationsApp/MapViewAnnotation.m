@@ -12,10 +12,13 @@
 
 @synthesize coordinate=_coordinate;
 @synthesize title=_title;
--(id) initWithTitle:(NSString *) title AndCoordinate:(CLLocationCoordinate2D)coordinate
+@synthesize subtitle = _subtitle;
+
+-(id) initWithTitle:(NSString *)title subtitle:(NSString *)address andCoordinate:(CLLocationCoordinate2D)coordinate
 {
     self = [super init];
     _title = title;
+    _subtitle = address;
     _coordinate = coordinate;
     return self;
 }

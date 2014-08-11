@@ -22,9 +22,10 @@
 @property (nonatomic, strong) PFUser *signedInUser;
 
 @property (nonatomic, strong) User *me;
-@property (nonatomic, strong) Contact *recipient;
 
 @property (nonatomic, strong) LYRConversation *conversation;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
+@property (nonatomic, strong) NSMutableArray *theirLastMessages;
+
 
 @end

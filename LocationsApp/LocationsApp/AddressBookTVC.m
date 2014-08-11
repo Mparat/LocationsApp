@@ -37,11 +37,9 @@
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
 @synthesize me = _me;
-@synthesize friends = _friends;
 
 
 #define contactCell @"contactCell"
-#define friendsArray @"friendsArray"
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -76,7 +74,7 @@
     self.clearsSelectionOnViewWillAppear = NO;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey:[NSString stringWithFormat:@"%@friends", self.me.username]];
+    NSData *data = [defaults objectForKey: self.me.username];
     if ([self.me.friends count] != 0) {
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }

@@ -9,17 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 #import <LayerKit/LayerKit.h>
-#import "LocationManagerController.h"
+//#import "LocationManagerController.h"
+@class LocationManagerController;
 
 @interface LayerAPIManager : NSObject
 
 @property (nonatomic, strong) LYRClient *layerClient;
+@property (nonatomic, strong) LocationManagerController *locationManager;
 
 -(id)initWithLayerClient:(LYRClient *)client;
 
 
 -(void)authenticateWithEmail:(NSString *)email password:(NSString *)password completion:(void(^)(PFUser *user, NSError *error))completion;
--(void)registerUser:(PFUser *)user completion:(void(^)(PFUser *user, NSError *error))completion;
 //- (BOOL)resumeSession:(LSSession *)session error:(NSError **)error;
 - (void)logoutWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 
@@ -28,8 +29,8 @@
 
 -(NSMutableDictionary *)returnParticipantDictionary:(LYRConversation *)conversation;
 -(NSMutableArray *)recipientUserIDs:(LYRConversation *)conversation;
-
-
-@property (nonatomic, strong) LocationManagerController *locationManager;
+-(NSArray *)personFromConversation:(LYRConversation *)conversation forUserID:(NSString *)uid;
+-(NSArray *)personFromMessage:(LYRMessage *)message forUserID:(NSString *)uid;
+-(NSMutableArray *)groupNameFromConversation:(LYRConversation *)conversation;
 
 @end

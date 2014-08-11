@@ -20,7 +20,6 @@
 @synthesize parseController = _parseController;
 @synthesize signedInUser = _signedInUser;
 @synthesize me = _me;
-@synthesize recipient = _recipient;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -35,8 +34,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    [self.view addSubview:[self.locationManager displayMap:self.view]];
-    [self collectUniqueMessages];
+    [self.view addSubview:[self.locationManager displayMap:self.view withAnnotations:[self.locationManager createAnnotationsFromMessages:self.theirLastMessages]]];
+
     self.navigationController.navigationBarHidden = NO;
 
     [self addNavBar];
@@ -57,41 +56,16 @@
 
 -(void) addNavBar
 {
-    self.navigationItem.title = [NSString stringWithFormat:@"%@", self.recipient.firstName];
+    NSArray *names = [self.apiManager groupNameFromConversation:self.conversation];
+    NSString *title = [NSString stringWithFormat:@"%@", [names objectAtIndex:0]];;
+    for (int i = 1 ; i < [names count]; i++) {
+        title = [NSString stringWithFormat:@"%@, %@", names, [names objectAtIndex:i]];
+    }
+    self.navigationItem.title = [NSString stringWithFormat:@"%@", title];
+    
+
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
-
--(void)collectUniqueMessages
-{
-    NSMutableArray *participants = [self.apiManager recipientUserIDs:self.conversation];
-    NSOrderedSet *messages = [self.apiManager.layerClient messagesForConversation:self.conversation];
-    NSMutableArray *array = [NSMutableArray array];
-    [self findUniqueMessages:messages participants:participants count:[messages count]-1 array:array]; //array contains the last messagae from each user that isn't the client/user.me
-    
-    [self.view addSubview:[self.locationManager displayMap:self.view withAnnotations:[self.locationManager createAnnotationsFromMessages:array]]];
-    
-}
-
-
--(void)findUniqueMessages:(NSOrderedSet *)messages participants:(NSMutableArray *)participants count:(NSUInteger)index array:(NSMutableArray *)array
-{
-    if ([messages count] == 0) {
-        return;
-    }
-    if ([participants count] == 0) {
-        return;
-    }
-    for (NSString *userID in participants) {
-        if ([((LYRMessage *)[messages objectAtIndex:index]).sentByUserID isEqualToString:userID]) {
-            [array addObject:[messages objectAtIndex:index]];
-            [participants removeObject:userID];
-            [self findUniqueMessages:messages participants:participants count:index-- array:array];
-        }
-
-    }
-//    return array;
-}
-
 
 @end

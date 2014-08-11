@@ -12,9 +12,11 @@
 
 @interface MapViewAnnotation : NSObject <MKAnnotation>
 
-@property (nonatomic,copy) NSString *title;
+@property (nonatomic, copy) NSString *title;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
+@property (nonatomic, copy) NSString *subtitle;
+@property (nonatomic, strong) LYRMessage *message;
 
--(id) initWithTitle:(NSString *) title AndCoordinate:(CLLocationCoordinate2D)coordinate;
+-(id) initWithTitle:(NSString *)title subtitle:(NSString *)address andCoordinate:(CLLocationCoordinate2D)coordinate;
 
 @end

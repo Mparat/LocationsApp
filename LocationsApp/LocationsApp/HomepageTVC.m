@@ -52,14 +52,22 @@
     [super viewDidLoad];
     self.locationManager.delegate = self;
     self.parseController.delegate = self;
-    
+    self.layerClient = self.apiManager.layerClient;
+
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     newRow = false;
-    [self.tableView reloadData];
 
+    [self fetchLayerConversations];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [defaults objectForKey: self.me.username];
+    if ([self.me.friends count] != 0) {
+        self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    
+    [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -68,7 +76,13 @@
     [self addNavBar];
     self.layerClient = self.apiManager.layerClient;
     [self fetchLayerConversations];
-    
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [defaults objectForKey: self.me.username];
+    if ([self.me.friends count] != 0) {
+        self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+
     self.navigationController.navigationBarHidden = NO;
     if (self.tableView.editing) {
         [self setEditing:NO animated:NO];
@@ -101,7 +115,7 @@
     UIBarButtonItem *newMessageButton = [[UIBarButtonItem alloc] initWithCustomView:view];
     self.navigationItem.rightBarButtonItem = newMessageButton;
     
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+//    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.editButtonItem.tintColor = [UIColor whiteColor];
     self.navigationItem.title = @"";
 
@@ -112,6 +126,44 @@
 -(void)createNewMessage
 {
     [self.navigationController.tabBarController setSelectedIndex:1]; // to Contacts page
+}
+
+-(void)updateFriends:(LYRConversation *)conversation completion:(void (^)(BOOL *, NSError *))completion
+{
+    NSParameterAssert(completion);
+    NSSet *participants = conversation.participants;
+    NSMutableArray *newFriends = [NSMutableArray array];
+    for (NSString *uid in participants) {
+        if ([self.me.friends count] == 0) {
+            if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
+                NSArray *new = [self.apiManager personFromConversation:conversation forUserID:uid];
+                Contact *newFriend = [[Contact alloc] init];
+                newFriend.userID = uid;
+                newFriend.firstName = [new objectAtIndex:1];
+                newFriend.lastName = [new objectAtIndex:2];
+                [newFriends addObject:newFriend];
+            }
+        }
+        else{
+            NSMutableArray *ids = [NSMutableArray array];
+            for (int i = 0; i < [self.me.friends count]; i++) {
+                [ids addObject:((Contact *)[self.me.friends objectAtIndex:i]).userID];
+            }
+            if (![ids containsObject:uid] && ![uid isEqualToString:self.layerClient.authenticatedUserID]) {
+                NSArray *new = [self.apiManager personFromConversation:conversation forUserID:uid];
+                Contact *newFriend = [[Contact alloc] init];
+                newFriend.userID = uid;
+                newFriend.firstName = [new objectAtIndex:1];
+                newFriend.lastName = [new objectAtIndex:2];
+                [newFriends addObject:newFriend];
+            }
+        }
+    }
+    [self.me.friends addObjectsFromArray:newFriends];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.me.friends];
+    [defaults setObject:data forKey: self.me.username];
+    [defaults synchronize];
 }
 
 #pragma mark - Table view data source
@@ -125,9 +177,7 @@
 {
     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:section];
     if ([path compare:self.expandedIndexPath] == NSOrderedSame) {
-//        return [[self.me.messageRecipients objectAtIndex:path.section] count]+1;
         return [((LYRConversation *)[self.conversations objectAtIndex:path.section]).participants count];
-//        return 1;
     }
     else{
         return 1;
@@ -152,54 +202,29 @@
     return cell;
 }
 
--(NSArray *)personFromConversation:(LYRConversation *)conversation forUserID:(NSString *)uid
-{
-    LYRMessage *lastMessage = [[self.layerClient messagesForConversation:conversation] lastObject];
-    LYRMessagePart *part1 = [lastMessage.parts objectAtIndex:0];
-    NSData *contacts = part1.data;
-    NSMutableDictionary *recipientInfo = [NSJSONSerialization JSONObjectWithData:contacts options:nil error:nil];
-    return [recipientInfo objectForKey:uid];
-}
 
 -(void)configureCell:(HomepageChatCell *)cell atIndexPath:(NSIndexPath *)path inTableView:(UITableView *)tableView
 {
     LYRConversation *conversation = [self.conversations objectAtIndex:path.section];
-        
     if ((self.expandedIndexPath != nil) && (path.section == self.expandedIndexPath.section) && (path.row != 0)) { //expanded cells, start at path.row index 1
-        
-//        Contact *recipient = [[Contact alloc] init];
-//        recipient = [[self.me.messageRecipients objectAtIndex:path.section] objectAtIndex:(path.row - 1)];
-//        ((HomepageChatCell *)cell).contact = recipient;
-//        [(HomepageChatCell *)cell placeSubviewsForCellWithName:recipient Location:nil Date:[NSDate date]];
-       
-        NSArray *person = [self personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:(path.row-1)]];
-        
+        NSArray *person = [self.apiManager personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:(path.row-1)]];
         [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
         cell.backgroundColor = [UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:1.0];
     }
     else{
         if ([conversation.participants count] > 2) { //group message cell
-            [(HomepageChatCell *)cell createGroupCellWithNames:[self groupNameFromConversation:conversation] conversation:conversation];
+            [(HomepageChatCell *)cell createGroupCellWithNames:[self.apiManager groupNameFromConversation:conversation] conversation:conversation layerClient:self.layerClient];
             [self downArrow:cell];
         }
         else{ //single person cell
-            NSArray *person = [self personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:0]];
+            NSArray *person = [self.apiManager personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:0]];
             [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
         }
     }
-
+    [self editCellCircle:cell];
     [self configureSwipeViews:cell];
 }
 
--(NSMutableArray *)groupNameFromConversation:(LYRConversation *)conversation
-{
-    NSMutableArray *names = [NSMutableArray array];
-    for (int i = 0; i < [[self.apiManager recipientUserIDs:conversation] count]; i++) {
-        NSArray *temp = [self personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:i]];
-        [names addObject:[temp objectAtIndex:1]];
-    }
-    return names;
-}
 
 - (void)accessoryButtonTapped:(id)sender event:(id)event {
     NSSet *touches = [event allTouches];
@@ -225,6 +250,7 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendAskMessageToRecipients:convoContacts];
+            [self editCellCircle:cell];
             [self.tableView reloadData];
         }];
     }];
@@ -234,6 +260,7 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendTellMessageToRecipients:convoContacts];
+            [self editCellCircle:cell];
             [self.tableView reloadData];
         }];
     }];
@@ -258,13 +285,14 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    self.recipient = ((ContactCell *)cell).contact;
     OptionsView *options = [[OptionsView alloc] init];
-    options.recipient = self.recipient;
     options.me = self.me;
+    options.apiManager = self.apiManager;
     options.parseController = self.parseController;
     options.locationManager = self.locationManager;
     options.conversation = [self.conversations objectAtIndex:indexPath.row];
+    options.message = ((HomepageChatCell *)cell).message;
+    options.theirLastMessages = ((HomepageChatCell *)cell).theirLastMessages;
     [self.navigationController pushViewController:options animated:NO];
 //    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
 //        //
@@ -333,7 +361,7 @@
     [tableView beginUpdates]; // clicked to close //triggers heightforrow..and rowsinsection
     if ([indexPath compare:self.expandedIndexPath] == NSOrderedSame) {
         self.expandedIndexPath = nil;
-        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
+        for (int i = 0; i < [((LYRConversation *)[self.conversations objectAtIndex:indexPath.section]).participants count]-1; i++) {
             [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
                                     withRowAnimation:UITableViewRowAnimationTop];
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -346,7 +374,7 @@
     }
     else{ //clicked to expand. triggers heightforrow..and rowsinsection
         if (self.expandedIndexPath != nil) {
-            for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:self.expandedIndexPath.section] count]; i++) {
+            for (int i = 0; i < [((LYRConversation *)[self.conversations objectAtIndex:self.expandedIndexPath.section]).participants count]-1; i++) {
                 [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:self.expandedIndexPath.section]]
                                       withRowAnimation:UITableViewRowAnimationTop];
                 UITableViewCell *cell = [tableView cellForRowAtIndexPath:self.expandedIndexPath];
@@ -359,7 +387,7 @@
             }
         }
         self.expandedIndexPath = indexPath;
-        for (int i = 0; i < [[self.me.messageRecipients objectAtIndex:indexPath.section] count]; i++) {
+        for (int i = 0; i < [((LYRConversation *)[self.conversations objectAtIndex:indexPath.section]).participants count]-1; i++) {
             [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:i+1 inSection:indexPath.section]]
                                       withRowAnimation:UITableViewRowAnimationAutomatic];
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:self.expandedIndexPath]; //indexPath
@@ -377,6 +405,21 @@
     }
     [tableView endUpdates];
 }
+
+-(void)editCellCircle:(UITableViewCell *)cell
+{
+    if (![((HomepageChatCell *)cell).message.sentByUserID isEqual:self.layerClient.authenticatedUserID]) {
+        UIImageView *unread = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnreadCircle"]];
+        unread.frame = CGRectMake(15, 19.5, 29, 29);
+        [cell addSubview:unread];
+    }
+    else {
+        UIImageView *read = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ReadCircle"]];
+        read.frame = CGRectMake(15, 19.5, 29, 29);
+        [cell addSubview:read];
+    }
+}
+
 
 -(void)downArrow:(UITableViewCell *)cell
 {
@@ -404,6 +447,11 @@
     }
     NSSet *convos = (NSSet *)[self.layerClient conversationsForIdentifiers:nil];
     self.conversations = [[convos allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"lastMessage.sentAt" ascending:NO]]];
+    for (LYRConversation *conversation in self.conversations) {
+        [self updateFriends:conversation completion:^(BOOL *done, NSError *error) {
+            //
+        }];
+    }
 }
 
 #pragma mark - MCSwipeTableViewCellDelegate // not being called..
