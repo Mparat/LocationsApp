@@ -16,7 +16,7 @@
 #import "User.h"
 
 
-@interface AddressBookTVC : UITableViewController
+@interface AddressBookTVC : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 {
     NSMutableArray *selectedContacts;
     UIView *footer;
@@ -27,12 +27,11 @@
     BOOL checked;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style me:(User *)me;
++(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me;
 
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
-@property (nonatomic, strong) PFUser *signedInUser;
 
 @property (nonatomic, strong) LayerAPIManager *apiManager;
 

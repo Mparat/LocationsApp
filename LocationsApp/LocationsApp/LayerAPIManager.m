@@ -114,7 +114,8 @@
     LYRMessagePart *locationPart = [LYRMessagePart messagePartWithMIMEType:MIMETypeLocation data:locationData];
     
     LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, locationPart]];
-    
+    [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: @"Someone you for your location!"} onObject:message];
+
     BOOL success = [self.layerClient sendMessage:message error:nil];
     if (success) {
         NSLog(@"Message send succesfull");
@@ -156,6 +157,10 @@
     
     LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, locationPart]];
 
+    
+    // Configure the push notification text to be the same as the message text
+    [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: @"Someone told you their location!"} onObject:message];
+    
     BOOL success = [self.layerClient sendMessage:message error:nil];
     if (success) {
         NSLog(@"Message send succesfull");

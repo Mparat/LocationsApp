@@ -122,7 +122,13 @@
     NSData *data = part.data;
     CLLocation *theirLastLocation = [self.locationManager getLocationFromData:data];
     CLLocation *myLocation = [self.locationManager fetchCurrentLocation];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?daddr=%f,%f&saddr=%f,%f&t=k", theirLastLocation.coordinate.latitude, theirLastLocation.coordinate.longitude, myLocation.coordinate.latitude, myLocation.coordinate.latitude]]];
+    if (theirLastLocation != myLocation) {
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?daddr=%f,%f&saddr=%f,%f&t=k", theirLastLocation.coordinate.latitude, theirLastLocation.coordinate.longitude, myLocation.coordinate.latitude, myLocation.coordinate.latitude]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com/?q=%f,%f", theirLastLocation.coordinate.latitude, theirLastLocation.coordinate.longitude]]];
+    }
+    else{
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://maps.apple.com/?q"]];
+    }
 
     
 }
@@ -160,6 +166,7 @@
     mapView.signedInUser = self.signedInUser;
     mapView.conversation = self.conversation;
     mapView.theirLastMessages = self.theirLastMessages;
+    mapView.apiManager = self.apiManager;
     [self.navigationController pushViewController:mapView animated:YES];
 }
 

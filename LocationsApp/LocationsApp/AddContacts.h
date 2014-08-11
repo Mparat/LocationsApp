@@ -13,7 +13,6 @@
 @interface AddContacts : PFQueryTableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) ParseController *parseController;
-@property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) User *me;
 
 @property (nonatomic, strong) NSString *className;

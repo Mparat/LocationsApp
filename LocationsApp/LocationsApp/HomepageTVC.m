@@ -8,7 +8,6 @@
 
 #import "HomepageTVC.h"
 #import "HomepageChatCell.h"
-#import "MessageVC.h"
 #import "User.h"
 #import "LocationManagerController.h"
 #import "Contact.h"
@@ -27,7 +26,6 @@
 
 @implementation HomepageTVC
 
-@synthesize signedInUser = _signedInUser;
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
 @synthesize recipient = _recipient;
@@ -37,29 +35,42 @@
 
 #define chatCell @"chatCell"
 
-- (id)initWithStyle:(UITableViewStyle)style me:(User *)me
++(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me
 {
-    self = [super initWithStyle:style];
+    NSParameterAssert(parseController);
+    NSParameterAssert(locationManager);
+    NSParameterAssert(apiManager);
+    NSParameterAssert(me);
+    return [[self alloc] initWithParseController:parseController locationManager:locationManager apiManager:apiManager me:me];
+}
+
+- (id)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me
+{
+    self = [super init];
     if (self) {
-        self.me = me;
+        _parseController = parseController;
+        _locationManager = locationManager;
+        _apiManager = apiManager;
+        _me = me;
+        self.layerClient = self.apiManager.layerClient;
+        [self fetchLayerConversations];
+
+        [self uponLoad];
     }
     return self;
 }
 
-- (void)viewDidLoad
+-(void)uponLoad
 {
-    [super viewDidLoad];
-//    self.locationManager.delegate = self;
-//    self.parseController.delegate = self;
     self.layerClient = self.apiManager.layerClient;
+    [self fetchLayerConversations];
 
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     newRow = false;
-
-    [self fetchLayerConversations];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [defaults objectForKey: self.layerClient.authenticatedUserID];
     if ([self.me.friends count] != 0) {
@@ -67,6 +78,11 @@
     }
     
     [self.tableView reloadData];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -92,6 +108,7 @@
         cell.layer.shadowColor = [[UIColor blackColor] CGColor];
         cell.layer.shadowOpacity = 0.1f;
         cell.layer.shadowOffset = CGSizeMake(0, 2);
+        [self upArrow:cell];
     }
 }
 
@@ -215,14 +232,17 @@
         if ([conversation.participants count] > 2) { //group message cell
             [(HomepageChatCell *)cell createGroupCellWithNames:[self.apiManager groupNameFromConversation:conversation] conversation:conversation layerClient:self.layerClient];
             [self downArrow:cell];
+            [self configureSwipeViews:cell];
+
         }
         else{ //single person cell
             NSArray *person = [self.apiManager personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:0]];
             [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
+            [self configureSwipeViews:cell];
+
         }
     }
     [self editCellCircle:cell];
-    [self configureSwipeViews:cell];
 }
 
 
@@ -250,7 +270,7 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendAskMessageToRecipients:convoContacts];
-            [self fetchLayerConversations];
+//            [self fetchLayerConversations];
             [self editCellCircle:cell];
             [self.tableView reloadData];
         }];
@@ -261,7 +281,7 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendTellMessageToRecipients:convoContacts];
-            [self fetchLayerConversations];
+//            [self fetchLayerConversations];
             [self editCellCircle:cell];
             [self.tableView reloadData];
         }];
@@ -287,7 +307,7 @@
     options.apiManager = self.apiManager;
     options.parseController = self.parseController;
     options.locationManager = self.locationManager;
-    options.conversation = [self.conversations objectAtIndex:indexPath.row];
+    options.conversation = [self.conversations objectAtIndex:indexPath.section];
     options.message = ((HomepageChatCell *)cell).message;
     options.theirLastMessages = ((HomepageChatCell *)cell).theirLastMessages;
     [self.navigationController pushViewController:options animated:NO];
@@ -405,6 +425,7 @@
 
 -(void)editCellCircle:(UITableViewCell *)cell
 {
+    [self fetchLayerConversations];
     LYRMessage *lastMessageEver = [[self.layerClient messagesForConversation: [self.conversations lastObject]]lastObject];
     if ([lastMessageEver.sentByUserID isEqual:self.layerClient.authenticatedUserID]) {
         UIImageView *read = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ReadCircle"]];

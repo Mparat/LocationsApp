@@ -33,7 +33,6 @@
 
 @synthesize locationManager = _locationManager;
 @synthesize parseController = _parseController;
-@synthesize signedInUser = _signedInUser;
 @synthesize addressBook = _addressBook;
 @synthesize contacts = _contacts;
 @synthesize me = _me;
@@ -41,11 +40,24 @@
 
 #define contactCell @"contactCell"
 
-- (id)initWithStyle:(UITableViewStyle)style me:(User *)me
++(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me
 {
-    self = [super initWithStyle:style];
+    NSParameterAssert(parseController);
+    NSParameterAssert(locationManager);
+    NSParameterAssert(apiManager);
+    NSParameterAssert(me);
+    return [[self alloc] initWithParseController:parseController locationManager:locationManager apiManager:apiManager me:me];
+}
+
+- (id)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me
+{
+    self = [super init];
     if (self) {
-        self.me = me;
+        _parseController = parseController;
+        _locationManager = locationManager;
+        _apiManager = apiManager;
+        _me = me;
+        
     }
     return self;
 }
@@ -54,11 +66,13 @@
 {
     [super viewDidLoad];
     [self addNavBar];
-    [self addSearchBar];
+    //    [self addSearchBar];
     [self addRecipientsView];
+    [self.tableView setDelegate:self];
+    self.tableView.dataSource = self;
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     selectedContacts = [NSMutableArray array];
-
+    
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.clearsSelectionOnViewWillAppear = NO;
@@ -70,11 +84,12 @@
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
+    [self addSearchBar];
 
     self.clearsSelectionOnViewWillAppear = NO;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSData *data = [defaults objectForKey: self.apiManager.layerClient.authenticatedUserID];
+    NSData *data = [defaults objectForKey: self.me.userID];
     if ([self.me.friends count] != 0) {
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
@@ -174,7 +189,6 @@
     AddContacts *add = [[AddContacts alloc] init];
     add.parseController = self.parseController;
     add.me = self.me;
-    add.signedInUser = self.signedInUser;
 
     [self.navigationController pushViewController:add animated:YES];
 }
@@ -262,6 +276,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:contactCell];
+    cell.delegate = self;
     cell = nil;
     if (cell == nil) {
         cell = [[ContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contactCell];
@@ -283,7 +298,6 @@
         friend = [self.me.friends objectAtIndex:path.row];
     }
     [(ContactCell *)cell initWithContact:friend];
-    cell.contact = friend;
     [self configureSwipeViews:cell];
 }
 

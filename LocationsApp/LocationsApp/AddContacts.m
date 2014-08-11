@@ -27,7 +27,6 @@
 @implementation AddContacts
 
 @synthesize parseController = _parseController;
-@synthesize signedInUser = _signedInUser;
 @synthesize className = _className;
 @synthesize me = _me;
 

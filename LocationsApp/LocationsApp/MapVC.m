@@ -7,7 +7,6 @@
 //
 
 #import "MapVC.h"
-#import "MessageVC.h"
 #import "OptionsView.h"
 
 @interface MapVC ()
@@ -34,11 +33,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addNavBar];
+
     [self.view addSubview:[self.locationManager displayMap:self.view withAnnotations:[self.locationManager createAnnotationsFromMessages:self.theirLastMessages]]];
 
     self.navigationController.navigationBarHidden = NO;
-
-    [self addNavBar];
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
@@ -59,7 +58,7 @@
     NSArray *names = [self.apiManager groupNameFromConversation:self.conversation];
     NSString *title = [NSString stringWithFormat:@"%@", [names objectAtIndex:0]];;
     for (int i = 1 ; i < [names count]; i++) {
-        title = [NSString stringWithFormat:@"%@, %@", names, [names objectAtIndex:i]];
+        title = [NSString stringWithFormat:@"%@, %@", title, [names objectAtIndex:i]];
     }
     self.navigationItem.title = [NSString stringWithFormat:@"%@", title];
     

@@ -106,9 +106,6 @@
             i--;
         }
     
-
-
-    self.conversation = conversation;
     NSString *names = [NSString stringWithFormat:@"%@", [firstNames objectAtIndex:0]];;
     for (int i = 1 ; i < [firstNames count]; i++) {
         names = [NSString stringWithFormat:@"%@, %@", names, [firstNames objectAtIndex:i]];

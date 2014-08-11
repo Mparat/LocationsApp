@@ -54,21 +54,10 @@
     NSArray *array1 = [NSKeyedUnarchiver unarchiveObjectWithData:data1];
     me.friends = [NSMutableArray arrayWithArray:array1];
     
-    HomepageTVC *homepage = [[HomepageTVC alloc] initWithStyle:UITableViewStylePlain me:me];
-    [homepage setLocationManager:self.locationManager];
-    [homepage setParseController:self.parseController];
-    homepage.signedInUser = self.parseController.signedInUser;
-    homepage.apiManager = self.layerClientController.apiManager;
-    //    homepage.me = me;
+    HomepageTVC *homepage = [HomepageTVC initWithParseController:self.parseController locationManager:self.locationManager apiManager:self.layerClientController.apiManager me:me];
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
     
-    AddressBookTVC *contacts = [[AddressBookTVC alloc] initWithStyle:UITableViewStylePlain me:me];
-    contacts.locationManager = self.locationManager;
-    contacts.parseController = self.parseController;
-    contacts.signedInUser = self.parseController.signedInUser;
-    contacts.apiManager = self.layerClientController.apiManager;
-    //    contacts.me = me;
-    //    contacts.parseUsers = self.parseUsers;
+    AddressBookTVC *contacts = [AddressBookTVC initWithParseController:self.parseController locationManager:self.locationManager apiManager:self.layerClientController.apiManager me:me];
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
     
     NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];

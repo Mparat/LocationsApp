@@ -39,6 +39,7 @@
 
 -(void)placeNames:(Contact *)friend
 {
+    self.contact = friend;
     [self.textLabel setText:[NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName]];
     UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedCircle"]];
     unselected.frame = CGRectMake(256+20, 19.5, 29, 29);

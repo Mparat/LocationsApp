@@ -31,7 +31,6 @@
 		14AB33311942816400B8E20D /* LocationsAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB33301942816400B8E20D /* LocationsAppTests.m */; };
 		14AB333C194281D500B8E20D /* HomepageTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB333B194281D500B8E20D /* HomepageTVC.m */; };
 		14AB333F1942930600B8E20D /* HomepageChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB333E1942930600B8E20D /* HomepageChatCell.m */; };
-		14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB33461942ECAB00B8E20D /* MessageVC.m */; };
 		14C6664E1946353100341F0D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C6664D1946353100341F0D /* AudioToolbox.framework */; };
 		14C666501946353B00341F0D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C6664F1946353B00341F0D /* CFNetwork.framework */; };
 		14C666521946354A00341F0D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C666511946354A00341F0D /* CoreLocation.framework */; };
@@ -113,8 +112,6 @@
 		14AB333B194281D500B8E20D /* HomepageTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomepageTVC.m; sourceTree = "<group>"; };
 		14AB333D1942930600B8E20D /* HomepageChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomepageChatCell.h; sourceTree = "<group>"; };
 		14AB333E1942930600B8E20D /* HomepageChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomepageChatCell.m; sourceTree = "<group>"; };
-		14AB33451942ECAB00B8E20D /* MessageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageVC.h; sourceTree = "<group>"; };
-		14AB33461942ECAB00B8E20D /* MessageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageVC.m; sourceTree = "<group>"; };
 		14C6664D1946353100341F0D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		14C6664F1946353B00341F0D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		14C666511946354A00341F0D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -337,8 +334,6 @@
 				E09829E119648B4E00E75625 /* MessageCVC.m */,
 				14315C5A1949297E00378EA5 /* MapVC.h */,
 				14315C5B1949297E00378EA5 /* MapVC.m */,
-				14AB33451942ECAB00B8E20D /* MessageVC.h */,
-				14AB33461942ECAB00B8E20D /* MessageVC.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -594,7 +589,6 @@
 				E0EFA3CC198D735500549487 /* LayerClientController.m in Sources */,
 				14AB330F1942816400B8E20D /* main.m in Sources */,
 				E0E560A41989625F001BF0E8 /* parseUser.m in Sources */,
-				14AB33471942ECAB00B8E20D /* MessageVC.m in Sources */,
 				14C6667A1947A60A00341F0D /* LocationManagerController.m in Sources */,
 				E0F091E21964F0A900E27499 /* APLViewController.m in Sources */,
 				E0B852EC199435E40061B0C1 /* LATabBarController.m in Sources */,

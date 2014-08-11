@@ -18,19 +18,17 @@
 #import "User.h"
 
 
-@interface HomepageTVC : UITableViewController <UITextFieldDelegate, LocationManagerControllerDelegate, ParseControllerDelegate, UITableViewDataSource>
+@interface HomepageTVC : UITableViewController <UITextFieldDelegate, UITableViewDataSource>
 {
     int number;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style me:(User *)me;
++(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me;
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
 @property (nonatomic, strong) LYRClient *layerClient;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
-
-@property (nonatomic, strong) PFUser *signedInUser;
 
 @property (nonatomic, strong) User *me;
 @property (nonatomic, strong) Contact *recipient;

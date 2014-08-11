@@ -130,32 +130,57 @@
     mapRegion.span.latitudeDelta = 0.2;
     mapRegion.span.longitudeDelta = 0.2;
     
-    
-    [self.map setRegion:mapRegion animated:YES];
-
+    [self zoomMapViewToFitAnnotations:self.map animated:YES];
+//    [self.map setRegion:mapRegion animated:YES];
     return self.map;
 }
 
-//- (void)zoomToLocation
-//{
-//    CLLocationCoordinate2D zoomLocation;
-//    zoomLocation.latitude = 13.03297;
-//    zoomLocation.longitude= 80.26518;
-//    
-//    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 7.5*METERS_PER_MILE,7.5*METERS_PER_MILE);
-//    [self.mapview setRegion:viewRegion animated:YES];
-//    
-//    [self.mapview regionThatFits:viewRegion];
-//}
+- (void)zoomMapViewToFitAnnotations:(MKMapView *)mapView animated:(BOOL)animated
+{
+    NSArray *annotations = mapView.annotations;
+    MKCoordinateRegion mapRegion; // structure that defines which map region to display
 
-//MKCoordinateRegion coordinateRegionForCoordinates(CLLocationCoordinate2D *coords, NSUInteger coordCount) {
-//    MKMapRect r = MKMapRectNull;
-//    for (NSUInteger i=0; i < coordCount; ++i) {
-//        MKMapPoint p = MKMapPointForCoordinate(coords[i]);
-//        r = MKMapRectUnion(r, MKMapRectMake(p.x, p.y, 0, 0));
-//    }
-//    return MKCoordinateRegionForMapRect(r);
-//}
+    NSUInteger count = [self.map.annotations count];
+    if ( count == 1) {
+        CLLocation *location = [self fetchCurrentLocation];
+        mapRegion.center = location.coordinate;
+    }
+    else{
+        double maxLat = 0;
+        double minLat = 0;
+        double maxLon = 0;
+        double minLon = 0;
+        
+        for (NSUInteger i = 1; i < count; i++) {
+            CLLocationCoordinate2D coord = ((MapViewAnnotation *)[annotations objectAtIndex:i]).coordinate;
+            if (coord.latitude > maxLat) {
+                maxLat = coord.latitude;
+            }
+            if (coord.latitude < minLat) {
+                minLat = coord.latitude;
+            }
+            if (coord.longitude > maxLon) {
+                maxLon = coord.longitude;
+            }
+            if (coord.longitude < minLon) {
+                minLon = coord.longitude;
+            }
+        }
+        
+        double centerLat = (minLat + maxLat)/2;
+        double centerLon = (minLon + maxLon)/2;
+
+        mapRegion.center.latitude = centerLat;
+        mapRegion.center.longitude = centerLon;
+    }
+    
+    mapRegion.span.latitudeDelta = 0.2;
+    mapRegion.span.longitudeDelta = 0.2;
+
+    [self.map setRegion:mapRegion animated:YES];
+
+}
+
 
 -(NSArray *)personFromMessage:(LYRMessage *)message forUserID:(NSString *)uid
 {
