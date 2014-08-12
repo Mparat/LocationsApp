@@ -28,9 +28,24 @@
 {
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
+        self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 46)
+                                                 collectionViewLayout:layout];
+
         self.collectionView.backgroundColor = [UIColor whiteColor];
         self.collectionView.backgroundView = [[UIView alloc] init];
         [self.collectionView.backgroundView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:withEvent:)]];
+        
+        
+        self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 20, 0);
+        self.collectionView.delegate = self;
+        self.collectionView.dataSource = self;
+        self.collectionView.alwaysBounceVertical = TRUE;
+        self.collectionView.bounces = TRUE;
+        self.collectionView.accessibilityLabel = @"collectionView";
+//        [self.view addSubview:self.collectionView];
+//        [self.collectionView registerClass:[LSMessageCell class] forCellWithReuseIdentifier:LSMessageCellIdentifier];
+//        [self.collectionView registerClass:[LSMessageCellHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:LSMessageHeaderIdentifier];
+        
     }
     return self;
 }
@@ -83,11 +98,12 @@
 //    send.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
     [send setTitleColor:[UIColor colorWithRed:74.0/255.0 green:144.0/255.0 blue:226.0/255.0 alpha:1.0] forState:UIControlStateNormal];
     [send addTarget:self action:@selector(sendText) forControlEvents:UIControlEventTouchUpInside];
+
 }
 
 -(void)sendText
 {
-    //
+    [self.apiManager sendTextMessage:self.textField.text inConversation:self.conversation];
 }
 
 - (void) animations
@@ -109,27 +125,6 @@
     }];
     
 }
-#pragma mark - Collection View Data Sources
-
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 20; // number of messages
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return 2; //number of message parts per message
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 1; // between sections horizontally?
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 0;
-}
 
 
 // The cell that is returned must be retrieved from a call to - dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -144,27 +139,44 @@
 
 - (CGSize)collectionViewContentSize
 {
-//    // Don't scroll horizontally
-//    CGFloat contentWidth = self.collectionView.bounds.size.width;
-//    
-//    // Scroll vertically to display a full day
-//    CGFloat contentHeight = self.collectionView.bounds.size.height;
-//    
-//    CGSize contentSize = CGSizeMake(contentWidth, contentHeight);
-//    return contentSize;
-
     return self.collectionViewLayout.collectionViewContentSize;
 }
 
--(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark – UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(100, 30);
+    LYRMessage *message = [self.messages objectAtIndex:indexPath.section];
+    LYRMessagePart *part = [message.parts objectAtIndex:indexPath.row];
+    return cellSizeForPart(part, self.view.frame.size.width);
 }
 
--(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+- (UIEdgeInsets)collectionView: (UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 0, 6, 0); // left/right alignment depends on if message is from user or from participant(s)
+    return UIEdgeInsetsMake(0, 0, 6, 0);
 }
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 1;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+//    return [[[self.messages objectAtIndex:section] parts] count];
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return self.messages.count;
+}
+
 
 #pragma mark - TextField Delegate methods
 
@@ -174,12 +186,19 @@
     return YES;
 }
 
+-(void)fetchMessages
+{
+    if (self.messages) self.messages = nil;
+    self.messages = [self.apiManager.layerClient messagesForConversation:self.conversation];
+}
+
 
 #pragma mark - Keyboard handling
 
 // Subscribe to keyboard show/hide notifications.
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self fetchMessages];
     [self initializeTextField];
     [self addNavBar];
 
@@ -253,6 +272,27 @@
     if ([self.textField isFirstResponder]) {
         [self.textField resignFirstResponder];
     }
+}
+
+CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
+{
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    CGSize itemSize;
+    
+    //If Message Part is plain text...
+    if ([part.MIMEType isEqualToString:@"text/plain"]) {
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, width * 0.70, 0)];
+        textView.text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
+        textView.font = [UIFont fontWithName:@"Helvetica" size:16];
+        [textView sizeToFit];
+        itemSize = CGSizeMake(rect.size.width, textView.frame.size.height);
+    }
+    
+    if (30 > itemSize.height) {
+        itemSize = CGSizeMake(rect.size.width, 30);
+    }
+    
+    return itemSize;
 }
 
 

@@ -26,6 +26,7 @@
 
 -(void)sendAskMessageToRecipients:(NSMutableDictionary *)recipients;
 -(void)sendTellMessageToRecipients:(NSMutableDictionary *)recipients;
+-(void)sendTextMessage:(NSString *)text inConversation:(LYRConversation *)conversation;
 
 -(NSMutableDictionary *)returnParticipantDictionary:(LYRConversation *)conversation;
 -(NSMutableArray *)recipientUserIDs:(LYRConversation *)conversation;

@@ -43,6 +43,7 @@
 
 - (void)setUpViewControllers
 {
+    [self loadParseUsers];
     User *me = [[User alloc] init];
     me.firstName = [self.parseController.signedInUser objectForKey:@"firstName"];
     me.lastName = [self.parseController.signedInUser objectForKey:@"lastName"];
@@ -57,7 +58,11 @@
     HomepageTVC *homepage = [HomepageTVC initWithParseController:self.parseController locationManager:self.locationManager apiManager:self.layerClientController.apiManager me:me];
     UINavigationController *controller1 = [[UINavigationController alloc] initWithRootViewController:homepage];
     
-    AddressBookTVC *contacts = [AddressBookTVC initWithParseController:self.parseController locationManager:self.locationManager apiManager:self.layerClientController.apiManager me:me];
+//    AddressBookTVC *contacts = [AddressBookTVC initWithParseController:self.parseController locationManager:self.locationManager apiManager:self.layerClientController.apiManager me:me];
+    AddressBookTVC *contacts = [[AddressBookTVC alloc] initWithStyle:UITableViewStylePlain me:me];
+    contacts.parseController = self.parseController;
+    contacts.locationManager = self.locationManager;
+    contacts.apiManager = self.layerClientController.apiManager;
     UINavigationController *controller2 = [[UINavigationController alloc] initWithRootViewController:contacts];
     
     NSArray *controllers = [NSArray arrayWithObjects:controller1, controller2, nil];

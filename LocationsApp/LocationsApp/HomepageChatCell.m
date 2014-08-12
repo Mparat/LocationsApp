@@ -55,34 +55,76 @@
             for (NSString *uid in conversation.participants) {
                 if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
                     if ([((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]).sentByUserID isEqualToString:uid]){
-                        self.message = ((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]);
+                        [self.theirLastMessages addObject:((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1])];
                         found = YES;
                     }
                     else if (i-1 == 0){
-                        self.message = [[client messagesForConversation:conversation]lastObject];
+                        [self.theirLastMessages addObject: [[client messagesForConversation:conversation]lastObject]];
                         found = YES;
                     }
                 }
             }
             i--;
         }
-    
-    
-    [self.theirLastMessages addObject:self.message];
 
-    LYRMessagePart *part2 = [self.message.parts objectAtIndex:1];
-    NSData *data = part2.data;
-    [self.locationManager returnLocationName:[self.locationManager getLocationFromData:data] completion:^(BOOL done, NSError *error) {
-        if (!error) {
-            NSString *locationText = self.locationManager.name;
-            
-            NSString *name = [NSString stringWithFormat:@"%@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
-            
-            NSDate *date = self.message.sentAt;
-            [self setContactInfoWithName:name Location:locationText Date:date];
-        }
-    }];
+    
+//    [self.theirLastMessages addObject:self.message];
+//
+//    LYRMessagePart *part2 = [self.message.parts objectAtIndex:1];
+//    NSData *data = part2.data;
+//    [self.locationManager returnLocationName:[self.locationManager getLocationFromData:data] completion:^(BOOL done, NSError *error) {
+//        if (!error) {
+//            NSString *locationText = self.locationManager.name;
+//            
+//            NSString *name = [NSString stringWithFormat:@"%@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
+//            
+//            NSDate *date = self.message.sentAt;
+//            [self setContactInfoWithName:name Location:locationText Date:date];
+//        }
+//    }];
+    NSString *name = [NSString stringWithFormat:@"%@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
+    NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject]).parts objectAtIndex:1]).data bytes]];
+    if (!location) {
+        NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] objectAtIndex:[[self.layerClient messagesForConversation:conversation] count]-2]).parts objectAtIndex:1]).data bytes]];
+        [self setContactInfoWithName:name Location:@"" Date:((LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject]).sentAt];
+    }
+    else {
+        [self setContactInfoWithName:name Location:location Date:((LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject]).sentAt];
+    }
 }
+
+-(void)configureExpandedCell:(LYRConversation *)conversation person:(NSArray *)person layerClient:(LYRClient *)client
+{
+    self.conversation = conversation;
+    self.layerClient = client;
+    LYRMessage *message = [[LYRMessage alloc] init];
+    BOOL found = NO;
+    NSUInteger i = [[client messagesForConversation:conversation]count];
+    while (found == NO) {
+        for (NSString *uid in conversation.participants) {
+            if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
+                if ([((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]).sentByUserID isEqualToString:uid]){
+                    message = ((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]);
+                    found = YES;
+                }
+                else if (i-1 == 0){
+                    message = [[client messagesForConversation:conversation]lastObject];
+                    found = YES;
+                }
+            }
+        }
+        i--;
+    }
+    
+    LYRMessagePart *part2 = [message.parts objectAtIndex:1];
+    NSData *data = part2.data;
+    NSString *locationText = [NSString stringWithUTF8String:[data bytes]];
+    NSString *name = [NSString stringWithFormat:@"%@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
+    NSDate *date = message.sentAt;
+    [self setContactInfoWithName:name Location:locationText Date:date];
+    
+}
+
 
 -(void)createGroupCellWithNames:(NSArray *)firstNames conversation:(LYRConversation *)conversation layerClient:(LYRClient *)client
 {
@@ -110,7 +152,14 @@
     for (int i = 1 ; i < [firstNames count]; i++) {
         names = [NSString stringWithFormat:@"%@, %@", names, [firstNames objectAtIndex:i]];
     }
-    [self setContactInfoWithName:names Location:@"" Date:nil];
+    NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject]).parts objectAtIndex:1]).data bytes]];
+    if (!location) {
+//        NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] objectAtIndex:[[self.layerClient messagesForConversation:conversation] count]-2]).parts objectAtIndex:1]).data bytes]];
+        [self setContactInfoWithName:names Location:@"" Date:nil];
+    }
+    else {
+        [self setContactInfoWithName:names Location:location Date:nil];
+    }
 }
 
 -(void)setContactInfoWithName:(NSString *)name Location:(NSString *)text Date:(NSDate *)date

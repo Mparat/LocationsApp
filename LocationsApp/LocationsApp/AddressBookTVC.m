@@ -8,7 +8,7 @@
 
 /*
  at login, do the comparison and store the array of phone numbers in a nsuserdefault, code it, keyed archive, etc.....
-*/
+ */
 
 
 #import "AddressBookTVC.h"
@@ -40,24 +40,12 @@
 
 #define contactCell @"contactCell"
 
-+(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me
+- (id)initWithStyle:(UITableViewStyle)style me:(User *)me
 {
-    NSParameterAssert(parseController);
-    NSParameterAssert(locationManager);
-    NSParameterAssert(apiManager);
-    NSParameterAssert(me);
-    return [[self alloc] initWithParseController:parseController locationManager:locationManager apiManager:apiManager me:me];
-}
-
-- (id)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me
-{
-    self = [super init];
+    self = [super initWithStyle:style];
     if (self) {
-        _parseController = parseController;
-        _locationManager = locationManager;
-        _apiManager = apiManager;
-        _me = me;
-        
+        // Custom initialization
+        self.me = me;
     }
     return self;
 }
@@ -66,10 +54,8 @@
 {
     [super viewDidLoad];
     [self addNavBar];
-    //    [self addSearchBar];
+    [self addSearchBar];
     [self addRecipientsView];
-    [self.tableView setDelegate:self];
-    self.tableView.dataSource = self;
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     selectedContacts = [NSMutableArray array];
     
@@ -84,8 +70,7 @@
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
-    [self addSearchBar];
-
+    
     self.clearsSelectionOnViewWillAppear = NO;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -115,10 +100,10 @@
     
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:view];
     self.navigationItem.leftBarButtonItem = settingsButton;
-
+    
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-
+    
     self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
 }
 
@@ -134,7 +119,7 @@
     self.searchController.delegate = self;
     
     CGPoint offset = CGPointMake(0, self.view.frame.size.height);
-//    CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
+    //    CGPoint offset = CGPointMake(0, 30); // height offset is the height of the navigationBar --> decided from the logout button height.
     self.tableView.contentOffset = offset;
     self.searchResults = [NSMutableArray array];
 }
@@ -150,7 +135,7 @@
         }
     }
     if (cancelButton) {
-//        [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
+        //        [cancelButton setTitle:@"Done" forState:UIControlStateNormal];
     }
 }
 
@@ -169,11 +154,11 @@
 {
     [self.searchResults removeAllObjects];
     [self.tableView reloadData];
-
+    
     NSPredicate *predicate1 = [NSPredicate predicateWithFormat:@"firstName beginswith[cd] %@", searchTerm];
     NSMutableArray *filter1 = [NSMutableArray arrayWithArray:self.me.friends];
     [filter1 filterUsingPredicate:predicate1]; // filtered Names
-
+    
     [self.searchResults addObjectsFromArray:filter1];
 }
 
@@ -189,7 +174,7 @@
     AddContacts *add = [[AddContacts alloc] init];
     add.parseController = self.parseController;
     add.me = self.me;
-
+    
     [self.navigationController pushViewController:add animated:YES];
 }
 
@@ -236,7 +221,7 @@
 {
     NSArray *paths = [NSArray arrayWithArray:[self.tableView indexPathsForSelectedRows]];
     int count = (int)[selectedContacts count];
-
+    
     for (int i = 0; i < count; i++) {
         [self.tableView deselectRowAtIndexPath:[paths objectAtIndex:i] animated:NO];
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[paths objectAtIndex:i]];
@@ -276,7 +261,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ContactCell *cell = [tableView dequeueReusableCellWithIdentifier:contactCell];
-    cell.delegate = self;
     cell = nil;
     if (cell == nil) {
         cell = [[ContactCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contactCell];
@@ -298,6 +282,7 @@
         friend = [self.me.friends objectAtIndex:path.row];
     }
     [(ContactCell *)cell initWithContact:friend];
+    cell.contact = friend;
     [self configureSwipeViews:cell];
 }
 
@@ -308,7 +293,7 @@
         Contact *temp = (Contact *)[contacts objectAtIndex:i];
         NSArray *arr = [NSArray arrayWithObjects:temp.userID, temp.firstName, temp.lastName, nil];
         [everyone setValue:arr forKey:(NSString *)temp.userID];
-        }
+    }
     
     return everyone;
 }
@@ -393,7 +378,7 @@
         }
     }
     
-//    NSIndexPath *path = [tableView indexPathForSelectedRow];
+    //    NSIndexPath *path = [tableView indexPathForSelectedRow];
     if ([selectedContacts count] == 0) { // if (path)
         NSLog(@"no cell is selected");
         [footer removeFromSuperview];
@@ -403,7 +388,7 @@
         
     }
     else{
-//        [self.view addSubview:footer];
+        //        [self.view addSubview:footer];
         [self.navigationController.view addSubview:footer];
         self.navigationItem.rightBarButtonItem = cancelSelectionButton;
     }

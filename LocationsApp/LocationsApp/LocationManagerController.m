@@ -130,57 +130,9 @@
     mapRegion.span.latitudeDelta = 0.2;
     mapRegion.span.longitudeDelta = 0.2;
     
-    [self zoomMapViewToFitAnnotations:self.map animated:YES];
-//    [self.map setRegion:mapRegion animated:YES];
+    [self.map setRegion:mapRegion animated:YES];
     return self.map;
 }
-
-- (void)zoomMapViewToFitAnnotations:(MKMapView *)mapView animated:(BOOL)animated
-{
-    NSArray *annotations = mapView.annotations;
-    MKCoordinateRegion mapRegion; // structure that defines which map region to display
-
-    NSUInteger count = [self.map.annotations count];
-    if ( count == 1) {
-        CLLocation *location = [self fetchCurrentLocation];
-        mapRegion.center = location.coordinate;
-    }
-    else{
-        double maxLat = 0;
-        double minLat = 0;
-        double maxLon = 0;
-        double minLon = 0;
-        
-        for (NSUInteger i = 1; i < count; i++) {
-            CLLocationCoordinate2D coord = ((MapViewAnnotation *)[annotations objectAtIndex:i]).coordinate;
-            if (coord.latitude > maxLat) {
-                maxLat = coord.latitude;
-            }
-            if (coord.latitude < minLat) {
-                minLat = coord.latitude;
-            }
-            if (coord.longitude > maxLon) {
-                maxLon = coord.longitude;
-            }
-            if (coord.longitude < minLon) {
-                minLon = coord.longitude;
-            }
-        }
-        
-        double centerLat = (minLat + maxLat)/2;
-        double centerLon = (minLon + maxLon)/2;
-
-        mapRegion.center.latitude = centerLat;
-        mapRegion.center.longitude = centerLon;
-    }
-    
-    mapRegion.span.latitudeDelta = 0.2;
-    mapRegion.span.longitudeDelta = 0.2;
-
-    [self.map setRegion:mapRegion animated:YES];
-
-}
-
 
 -(NSArray *)personFromMessage:(LYRMessage *)message forUserID:(NSString *)uid
 {

@@ -16,7 +16,7 @@
 #import "User.h"
 
 
-@interface AddressBookTVC : UITableViewController <UITableViewDataSource, UITableViewDelegate>
+@interface AddressBookTVC : UITableViewController
 {
     NSMutableArray *selectedContacts;
     UIView *footer;
@@ -26,9 +26,7 @@
     UIBarButtonItem *cancelSelectionButton;
     BOOL checked;
 }
-
-+(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me;
-
+-(id)initWithStyle:(UITableViewStyle)style me:(User *)me;
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;

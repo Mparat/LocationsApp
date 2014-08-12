@@ -12,6 +12,8 @@
 #import "ParseController.h"
 #import "User.h"
 #import "Contact.h"
+#import "LayerAPIManager.h"
+#import <LayerKit/LayerKit.h>
 
 
 @interface MessageCVC : UICollectionViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
@@ -20,9 +22,14 @@
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) ParseController *parseController;
+@property (nonatomic, strong) LayerAPIManager *apiManager;
+
+@property (nonatomic, strong) LYRConversation *conversation;
+@property (nonatomic, strong) NSOrderedSet *messages;
 @property (nonatomic, strong) Contact *recipient;
-@property (nonatomic, strong) PFUser *signedInUser;
 @property (nonatomic, strong) User *me;
+
+-(void)fetchMessages;
 
 //- (id)init;
 

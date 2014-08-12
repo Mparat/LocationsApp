@@ -225,7 +225,9 @@
     LYRConversation *conversation = [self.conversations objectAtIndex:path.section];
     if ((self.expandedIndexPath != nil) && (path.section == self.expandedIndexPath.section) && (path.row != 0)) { //expanded cells, start at path.row index 1
         NSArray *person = [self.apiManager personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:(path.row-1)]];
-        [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
+//        [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
+        [((HomepageChatCell *)cell) configureExpandedCell:conversation person:person layerClient:self.layerClient];
+        cell.userInteractionEnabled = NO;
         cell.backgroundColor = [UIColor colorWithRed:248.0/255.0 green:248.0/255.0 blue:248.0/255.0 alpha:1.0];
     }
     else{
@@ -301,19 +303,25 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    OptionsView *options = [[OptionsView alloc] init];
-    options.me = self.me;
-    options.apiManager = self.apiManager;
-    options.parseController = self.parseController;
-    options.locationManager = self.locationManager;
-    options.conversation = [self.conversations objectAtIndex:indexPath.section];
-    options.message = ((HomepageChatCell *)cell).message;
-    options.theirLastMessages = ((HomepageChatCell *)cell).theirLastMessages;
-    [self.navigationController pushViewController:options animated:NO];
-//    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
-//        //
-//    }];
+    if (indexPath == self.expandedIndexPath && indexPath.row != 0) {
+        return;
+    }
+    else
+    {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        OptionsView *options = [[OptionsView alloc] init];
+        options.me = self.me;
+        options.apiManager = self.apiManager;
+        options.parseController = self.parseController;
+        options.locationManager = self.locationManager;
+        options.conversation = [self.conversations objectAtIndex:indexPath.section];
+        options.message = ((HomepageChatCell *)cell).message;
+        options.theirLastMessages = ((HomepageChatCell *)cell).theirLastMessages;
+        [self.navigationController pushViewController:options animated:NO];
+        //    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
+        //        //
+        //    }];
+    }
 }
 
 

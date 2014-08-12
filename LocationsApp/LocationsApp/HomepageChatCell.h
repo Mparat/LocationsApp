@@ -26,6 +26,7 @@
 
 -(void)createCellWith:(LYRConversation *)conversation person:(NSArray *)person layerClient:(LYRClient *)client;
 -(void)createGroupCellWithNames:(NSArray *)firstNames conversation:(LYRConversation *)conversation layerClient:(LYRClient *)client;
+-(void)configureExpandedCell:(LYRConversation *)conversation person:(NSArray *)person layerClient:(LYRClient *)client;
 
 
 @end

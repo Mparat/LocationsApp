@@ -150,7 +150,9 @@
     MessageCVC *message = [[MessageCVC alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
     message.locationManager = self.locationManager;
     message.parseController = self.parseController;
-    message.signedInUser = self.signedInUser;
+    message.apiManager = self.apiManager;
+    message.conversation = self.conversation;
+    [message fetchMessages];
     [self.navigationController pushViewController:message animated:YES];
 
 //    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:message] animated:YES completion:^{

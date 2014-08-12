@@ -142,14 +142,14 @@
         [self.layerClientController.apiManager authenticateWithEmail:email password:password completion:^(PFUser *user, NSError *error) {
             if (!error) {
                 LATabBarController *tabBarController = [LATabBarController initWithParseController:self.parseController locationManager:self.locationManager clientController:self.layerClientController];
-                [tabBarController loadParseUsers];
+//                [tabBarController loadParseUsers];
                 [self.window setRootViewController:tabBarController];
             }
         }];
     }
     else {
         LATabBarController *tabBarController = [LATabBarController initWithParseController:self.parseController locationManager:self.locationManager clientController:self.layerClientController];
-        [tabBarController loadParseUsers];
+//        [tabBarController loadParseUsers];
         [self.window setRootViewController:tabBarController];
     }
 }
