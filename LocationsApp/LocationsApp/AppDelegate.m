@@ -39,7 +39,7 @@
             NSLog(@"Failed connection to Layer with error: %@", error);
         }
     }];
-//    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge];
     
     self.locationManager = [[LocationManagerController alloc] init];
     [self.locationManager launchLocationManager];
@@ -77,33 +77,33 @@
     FirstView *firstView = [[FirstView alloc] init];
     return [[UINavigationController alloc] initWithRootViewController:firstView];
 }
-//
-//- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-//{
-//    NSError *error;
-//    BOOL success = [self.layerClientController.layerClient updateRemoteNotificationDeviceToken:deviceToken error:&error];
-//    if (success) {
-//        NSLog(@"Application did register for remote notifications");
-//    } else {
-//        NSLog(@"Error updating Layer device token for push:%@", error);
-//    }
-//}
-//
-//- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-//{
-//    NSLog(@"Application failed to register for remote notifications with error %@", error);
-//}
-//
-//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-//{
-//    NSError *error;
-//    BOOL success = [self.layerClientController.layerClient synchronizeWithRemoteNotification:userInfo completion:^(UIBackgroundFetchResult fetchResult, NSError *error) {
-//        if (!error) {
-//            NSLog (@"Layer Client finished background sycn");
-//        }
-//        completionHandler(fetchResult);
-//    }];
-//}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSError *error;
+    BOOL success = [self.layerClientController.layerClient updateRemoteNotificationDeviceToken:deviceToken error:&error];
+    if (success) {
+        NSLog(@"Application did register for remote notifications");
+    } else {
+        NSLog(@"Error updating Layer device token for push:%@", error);
+    }
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSLog(@"Application failed to register for remote notifications with error %@", error);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSError *error;
+    BOOL success = [self.layerClientController.layerClient synchronizeWithRemoteNotification:userInfo completion:^(UIBackgroundFetchResult fetchResult, NSError *error) {
+        if (!error) {
+            NSLog (@"Layer Client finished background sycn");
+        }
+        completionHandler(fetchResult);
+    }];
+}
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
