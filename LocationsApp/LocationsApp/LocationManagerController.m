@@ -1,4 +1,4 @@
-    //
+//
 //  LocationManagerController.m
 //  LocationsApp
 //
@@ -86,8 +86,8 @@
             NSString *text = [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
                               self.placemark.subThoroughfare, self.placemark.thoroughfare,
                               self.placemark.postalCode, self.placemark.locality,
-                              self.placemark.administrativeArea,
-                              self.placemark.country];
+                              self.placemark.administrativeArea];
+//            self.placemark.country
             self.name = text;
             completion(YES, nil);
         }

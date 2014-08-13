@@ -24,16 +24,17 @@
 #define messageCell @"messageCell"
 
 
--(id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
+-(id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout apiManager:(LayerAPIManager *)apiManager
 {
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
+        self.apiManager = apiManager;
         self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 46)
                                                  collectionViewLayout:layout];
 
         self.collectionView.backgroundColor = [UIColor whiteColor];
         self.collectionView.backgroundView = [[UIView alloc] init];
-        [self.collectionView.backgroundView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:withEvent:)]];
+//        [self.collectionView.backgroundView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:withEvent:)]];
         
         
         self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 20, 0);
@@ -42,8 +43,8 @@
         self.collectionView.alwaysBounceVertical = TRUE;
         self.collectionView.bounces = TRUE;
         self.collectionView.accessibilityLabel = @"collectionView";
-//        [self.view addSubview:self.collectionView];
-//        [self.collectionView registerClass:[LSMessageCell class] forCellWithReuseIdentifier:LSMessageCellIdentifier];
+        [self.view addSubview:self.collectionView];
+        [self.collectionView registerClass:[MessageCell class] forCellWithReuseIdentifier:messageCell];
 //        [self.collectionView registerClass:[LSMessageCellHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:LSMessageHeaderIdentifier];
         
     }
@@ -69,7 +70,12 @@
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
-    self.navigationItem.title = [NSString stringWithFormat:@"%@", self.recipient.firstName];
+    NSArray *names = [self.apiManager groupNameFromConversation:self.conversation];
+    NSString *title = [NSString stringWithFormat:@"%@", [names objectAtIndex:0]];;
+    for (int i = 1 ; i < [names count]; i++) {
+        title = [NSString stringWithFormat:@"%@, %@", title, [names objectAtIndex:i]];
+    }
+    self.navigationItem.title = [NSString stringWithFormat:@"%@", title];
 }
 
 -(void)initializeTextField
@@ -101,37 +107,69 @@
 
 }
 
+
+CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
+{
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    CGSize itemSize;
+    
+    //If Message Part is plain text...
+    if ([part.MIMEType isEqualToString:@"text/plain"]) {
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, width * 0.70, 0)];
+        textView.text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
+        textView.font = [UIFont fontWithName:@"Helvetica" size:16];
+        [textView sizeToFit];
+        itemSize = CGSizeMake(textView.frame.size.width, textView.frame.size.height);
+    }
+    
+    if (30 > itemSize.height) {
+        itemSize = CGSizeMake(rect.size.width, 30);
+    }
+    
+    return itemSize;
+}
+
 -(void)sendText
 {
     [self.apiManager sendTextMessage:self.textField.text inConversation:self.conversation];
+    self.textField.text = nil;
+    [self fetchMessages];
+    [self.collectionView reloadData];
 }
 
-- (void) animations
-{
-    [UIView animateWithDuration:1.0f animations:^{
-        self.textField.frame = CGRectMake(100, 100, 100, 100);
-    }];
-    
-    [UIView animateWithDuration:1.0f animations:^{
-        //
-    } completion:^(BOOL finished) {
-        //
-    }];
-    
-    [UIView animateWithDuration:1.0f delay:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        //
-    } completion:^(BOOL finished) {
-        //
-    }];
-    
-}
+//- (void) animations
+//{
+//    [UIView animateWithDuration:1.0f animations:^{
+//        self.textField.frame = CGRectMake(100, 100, 100, 100);
+//    }];
+//    
+//    [UIView animateWithDuration:1.0f animations:^{
+//        //
+//    } completion:^(BOOL finished) {
+//        //
+//    }];
+//    
+//    [UIView animateWithDuration:1.0f delay:0.1f options:UIViewAnimationOptionCurveEaseOut animations:^{
+//        //
+//    } completion:^(BOOL finished) {
+//        //
+//    }];
+//    
+//}
 
 
 // The cell that is returned must be retrieved from a call to - dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MessageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:messageCell forIndexPath:indexPath];
+    [self configureCell:(MessageCell *)cell atIndexPath:(NSIndexPath *)indexPath];
     return cell;
+}
+
+-(void)configureCell:(MessageCell *)cell atIndexPath:(NSIndexPath *)path
+{
+    LYRMessage *message = [self.messages objectAtIndex:path.row];
+    [(MessageCell *)cell configureCell:message layerClient:self.apiManager.layerClient];
 }
 
 
@@ -146,14 +184,15 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    LYRMessage *message = [self.messages objectAtIndex:indexPath.section];
-    LYRMessagePart *part = [message.parts objectAtIndex:indexPath.row];
+    [self fetchMessages];
+    LYRMessage *message = [self.messages objectAtIndex:indexPath.row];
+    LYRMessagePart *part = [message.parts objectAtIndex:1];
     return cellSizeForPart(part, self.view.frame.size.width);
 }
 
 - (UIEdgeInsets)collectionView: (UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 0, 6, 0);
+    return UIEdgeInsetsMake(0, 8, 6, 0);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
@@ -168,7 +207,6 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-//    return [[[self.messages objectAtIndex:section] parts] count];
     return 1;
 }
 
@@ -192,15 +230,25 @@
     self.messages = [self.apiManager.layerClient messagesForConversation:self.conversation];
 }
 
+-(void)scrollToBottomofCollectionView
+{
+    NSInteger section = [self numberOfSectionsInCollectionView:self.collectionView] - 1;
+    NSInteger item = [self collectionView:self.collectionView numberOfItemsInSection:section] - 1;
+    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
+    [self.collectionView scrollToItemAtIndexPath:lastIndexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+}
 
 #pragma mark - Keyboard handling
 
 // Subscribe to keyboard show/hide notifications.
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:YES];
     [self fetchMessages];
+    [self.collectionView reloadData];
     [self initializeTextField];
     [self addNavBar];
+    [self scrollToBottomofCollectionView];
 
     [self.tabBarController.tabBar setHidden:YES];
     self.navigationController.navigationBarHidden = NO;
@@ -230,6 +278,7 @@
 - (void)keyboardWillShow:(NSNotification*)notification
 {
     [self moveView:[notification userInfo] up:YES];
+    [self scrollToBottomofCollectionView];
 }
 
 - (void)keyboardWillHide:(NSNotification*)notification
@@ -267,33 +316,13 @@
 // This method will be called when the user touches on the tableView, at
 // which point we will hide the keyboard (if open). This method is called
 // because UITouchTableView.m calls nextResponder in its touch handler.
-- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    if ([self.textField isFirstResponder]) {
-        [self.textField resignFirstResponder];
-    }
-}
+//- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+//{
+//    if ([self.textField isFirstResponder]) {
+//        [self.textField resignFirstResponder];
+//    }
+//}
 
-CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
-{
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    CGSize itemSize;
-    
-    //If Message Part is plain text...
-    if ([part.MIMEType isEqualToString:@"text/plain"]) {
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, width * 0.70, 0)];
-        textView.text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
-        textView.font = [UIFont fontWithName:@"Helvetica" size:16];
-        [textView sizeToFit];
-        itemSize = CGSizeMake(rect.size.width, textView.frame.size.height);
-    }
-    
-    if (30 > itemSize.height) {
-        itemSize = CGSizeMake(rect.size.width, 30);
-    }
-    
-    return itemSize;
-}
 
 
 @end

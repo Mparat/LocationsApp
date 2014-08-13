@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <LayerKit/LayerKit.h>
 
 @interface MessageCell : UICollectionViewCell
+
+
+-(void)configureCell:(LYRMessage *)message layerClient:(LYRClient *)client;
+
 
 @end

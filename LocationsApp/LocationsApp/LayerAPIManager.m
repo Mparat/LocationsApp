@@ -102,29 +102,30 @@
     
     
     // MIME type declaration
-    static NSString *const MIMETypeLocation = @"location";
-    CLLocation *current = [self.locationManager fetchCurrentLocation];
-    
-    // Creates a message part with latitude and longitude strings
-    NSDictionary *location = [NSMutableDictionary dictionary];
-    [location setValue:[NSNumber numberWithDouble:current.coordinate.latitude] forKey:@"lat"];
-    [location setValue:[NSNumber numberWithDouble:current.coordinate.longitude] forKey:@"lon"];
+//    static NSString *const MIMETypeLocation = @"location";
+//    CLLocation *current = [self.locationManager fetchCurrentLocation];
+//    
+//    // Creates a message part with latitude and longitude strings
+//    NSDictionary *location = [NSMutableDictionary dictionary];
+//    [location setValue:[NSNumber numberWithDouble:current.coordinate.latitude] forKey:@"lat"];
+//    [location setValue:[NSNumber numberWithDouble:current.coordinate.longitude] forKey:@"lon"];
    
-    [self.locationManager returnLocationName:current completion:^(BOOL done, NSError *error) {
-        if (!error) {
-            LYRMessagePart *location = [LYRMessagePart messagePartWithText:self.locationManager.name];
-            LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, location]];
+//    [self.locationManager returnLocationName:current completion:^(BOOL done, NSError *error) {
+//        if (!error) {
+            LYRMessagePart *emptyAskPart = [LYRMessagePart messagePartWithText:@"You asked"];
+            LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, emptyAskPart]];
             BOOL success = [self.layerClient sendMessage:message error:nil];
             if (success) {
                 NSLog(@"Message send succesfull");
-                NSString *notifText = [NSString stringWithFormat:@"from %@", message.sentByUserID];
+                NSArray *person = [recipients objectForKey:message.sentByUserID];
+                NSString *notifText = [NSString stringWithFormat:@"from %@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
                 [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
             } else {
                 NSLog(@"Message send failed");
             }
-        }
-    }];
-    
+//        }
+//    }];
+
 //    NSData *locationData = [NSJSONSerialization dataWithJSONObject:location options:nil error:nil];
 //    LYRMessagePart *locationPart = [LYRMessagePart messagePartWithMIMEType:MIMETypeLocation data:locationData];
 //    
@@ -145,7 +146,7 @@
     NSArray *uids = [recipients allKeys];
     
     LYRConversation *conversation = [[LYRConversation alloc] init];
-    if ([self.layerClient conversationForParticipants:uids] != nil) {
+    if ([self.layerClient conversationForParticipants:uids]) {
         conversation = [self.layerClient conversationForParticipants:uids];
     }
     else {
@@ -163,11 +164,11 @@
     CLLocation *current = [self.locationManager fetchCurrentLocation];
 
     // Creates a message part with latitude and longitude strings
-    NSDictionary *location = [NSMutableDictionary dictionary];
-    [location setValue:[NSNumber numberWithDouble:current.coordinate.latitude] forKey:@"lat"];
-    [location setValue:[NSNumber numberWithDouble:current.coordinate.longitude] forKey:@"lon"];
-    
-    NSData *locationData = [NSJSONSerialization dataWithJSONObject:location options:nil error:nil];
+//    NSDictionary *location = [NSMutableDictionary dictionary];
+//    [location setValue:[NSNumber numberWithDouble:current.coordinate.latitude] forKey:@"lat"];
+//    [location setValue:[NSNumber numberWithDouble:current.coordinate.longitude] forKey:@"lon"];
+//    
+//    NSData *locationData = [NSJSONSerialization dataWithJSONObject:location options:nil error:nil];
     
     [self.locationManager returnLocationName:current completion:^(BOOL done, NSError *error) {
         if (!error) {
@@ -176,7 +177,8 @@
             BOOL success = [self.layerClient sendMessage:message error:nil];
             if (success) {
                 NSLog(@"Message send succesfull");
-                NSString *notifText = [NSString stringWithFormat:@"%@\r%@", message.sentByUserID, self.locationManager.name];
+                NSArray *person = [recipients objectForKey:message.sentByUserID];
+                NSString *notifText = [NSString stringWithFormat:@"%@ %@\r%@", [person objectAtIndex:1], [person objectAtIndex:2], self.locationManager.name];
                 [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
             } else {
                 NSLog(@"Message send failed");
@@ -202,7 +204,20 @@
 
 -(void)sendTextMessage:(NSString *)text inConversation:(LYRConversation *)conversation
 {
-    
+    static NSString *const MIMETypeArray = @"participants";
+    NSDictionary *recipients = [self returnParticipantDictionary:conversation];
+    NSData *recipientData = [NSJSONSerialization dataWithJSONObject:recipients options:nil error:nil];
+    LYRMessagePart *recipientArr = [LYRMessagePart messagePartWithMIMEType:MIMETypeArray data:recipientData];
+
+    LYRMessagePart *textMessage = [LYRMessagePart messagePartWithText:text];
+    LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, textMessage]];
+    BOOL success = [self.layerClient sendMessage:message error:nil];
+    if (success) {
+        NSLog(@"Text message send successful");
+    }
+    else{
+        NSLog( @"Text message send failed");
+    }
 }
 
 -(NSMutableDictionary *)returnParticipantDictionary:(LYRConversation *)conversation

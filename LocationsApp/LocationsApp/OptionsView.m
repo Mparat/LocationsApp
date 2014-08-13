@@ -147,10 +147,10 @@
 
 -(void)sendText
 {
-    MessageCVC *message = [[MessageCVC alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+    MessageCVC *message = [[MessageCVC alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init] apiManager:(LayerAPIManager *)self.apiManager];
     message.locationManager = self.locationManager;
     message.parseController = self.parseController;
-    message.apiManager = self.apiManager;
+//    message.apiManager = self.apiManager;
     message.conversation = self.conversation;
     [message fetchMessages];
     [self.navigationController pushViewController:message animated:YES];

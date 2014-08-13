@@ -53,17 +53,23 @@
         _apiManager = apiManager;
         _me = me;
         self.layerClient = self.apiManager.layerClient;
-        [self fetchLayerConversations];
 
         [self uponLoad];
     }
     return self;
 }
 
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    [self.tableView reloadData];
+    [refreshControl endRefreshing];
+}
+
 -(void)uponLoad
 {
-    self.layerClient = self.apiManager.layerClient;
     [self fetchLayerConversations];
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc]init];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
 
     [self.tableView registerClass:[HomepageChatCell class] forCellReuseIdentifier:chatCell];
     [self addNavBar];
@@ -434,7 +440,8 @@
 -(void)editCellCircle:(UITableViewCell *)cell
 {
     [self fetchLayerConversations];
-    LYRMessage *lastMessageEver = [[self.layerClient messagesForConversation: [self.conversations lastObject]]lastObject];
+//    LYRMessage *lastMessageEver = [[self.layerClient messagesForConversation: [self.conversations lastObject]]lastObject];
+    LYRMessage *lastMessageEver = ((HomepageChatCell *)cell).message;
     if ([lastMessageEver.sentByUserID isEqual:self.layerClient.authenticatedUserID]) {
         UIImageView *read = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ReadCircle"]];
         read.frame = CGRectMake(15, 19.5, 29, 29);
@@ -474,11 +481,11 @@
     }
     NSSet *convos = (NSSet *)[self.layerClient conversationsForIdentifiers:nil];
     self.conversations = [[convos allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"lastMessage.sentAt" ascending:NO]]];
-    for (LYRConversation *conversation in self.conversations) {
-        [self updateFriends:conversation completion:^(BOOL *done, NSError *error) {
-            //
-        }];
-    }
+//    for (LYRConversation *conversation in self.conversations) {
+//        [self updateFriends:conversation completion:^(BOOL *done, NSError *error) {
+//            //
+//        }];
+//    }
 }
 
 
