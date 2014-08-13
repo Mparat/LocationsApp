@@ -26,12 +26,21 @@
 @synthesize me = _me;
 @synthesize signedInUser = _signedInUser;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//{
+//    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+//    if (self) {
+////
+//    
+//    }
+//    return self;
+//}
+
+-(id)initWithConversation:(LYRConversation *)conversation;
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
-//
-    
+        self.conversation = conversation;
     }
     return self;
 }

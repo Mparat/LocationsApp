@@ -53,6 +53,10 @@
         _apiManager = apiManager;
         _me = me;
         self.layerClient = self.apiManager.layerClient;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveLayerObjectsDidChangeNotification:)
+                                                     name:LYRClientObjectsDidChangeNotification object:self.layerClient];
 
         [self uponLoad];
     }
@@ -123,6 +127,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) didReceiveLayerObjectsDidChangeNotification:(NSNotification *)notification;
+{
+    [self fetchLayerConversations];
+    [self.tableView reloadData];
 }
 
 -(void)addNavBar
@@ -279,8 +289,8 @@
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendAskMessageToRecipients:convoContacts];
 //            [self fetchLayerConversations];
-            [self editCellCircle:cell];
-            [self.tableView reloadData];
+//            [self editCellCircle:cell];
+//            [self.tableView reloadData];
         }];
     }];
     
@@ -290,11 +300,11 @@
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendTellMessageToRecipients:convoContacts];
 //            [self fetchLayerConversations];
-            [self editCellCircle:cell];
-            [self.tableView reloadData];
+//            [self editCellCircle:cell];
+//            [self.tableView reloadData];
         }];
     }];
-    
+    [self editCellCircle:cell];
     cell.defaultColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
     cell.firstTrigger = 0.25;
 //    cell.secondTrigger = 0.6;    
@@ -315,7 +325,7 @@
     else
     {
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        OptionsView *options = [[OptionsView alloc] init];
+        OptionsView *options = [[OptionsView alloc] initWithConversation:[self.conversations objectAtIndex:indexPath.section]];
         options.me = self.me;
         options.apiManager = self.apiManager;
         options.parseController = self.parseController;
@@ -458,7 +468,7 @@
 -(void)downArrow:(UITableViewCell *)cell
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setFrame:CGRectMake(0, 0, 29, 29)];
+    [button setFrame:CGRectMake(0, 0, 58, 58)];
     [button setImage:[UIImage imageNamed:@"DownArrow"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
     cell.accessoryView = button;
@@ -467,7 +477,7 @@
 -(void)upArrow:(UITableViewCell *)cell
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setFrame:CGRectMake(0, 0, 29, 29)];
+    [button setFrame:CGRectMake(0, 0, 58, 58)];
     [button setImage:[UIImage imageNamed:@"UpArrow"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
     cell.accessoryView = button;

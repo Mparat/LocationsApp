@@ -49,23 +49,35 @@
 {
     self.conversation = conversation;
     self.layerClient = client;
-    BOOL found = NO;
-    NSUInteger i = [[client messagesForConversation:conversation]count];
-        while (found == NO) {
-            for (NSString *uid in conversation.participants) {
-                if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
-                    if ([((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]).sentByUserID isEqualToString:uid]){
-                        [self.theirLastMessages addObject:((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1])];
-                        found = YES;
-                    }
-                    else if (i-1 == 0){
-                        [self.theirLastMessages addObject: [[client messagesForConversation:conversation]lastObject]];
-                        found = YES;
-                    }
-                }
-            }
-            i--;
-        }
+    
+    NSString *name = [NSString stringWithFormat:@"%@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
+    self.message = (LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject];
+    NSString *displayText = [NSString stringWithUTF8String:[((LYRMessagePart *)[self.message.parts objectAtIndex:1]).data bytes]];
+    if (!displayText) {
+        //        NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] objectAtIndex:[[self.layerClient messagesForConversation:conversation] count]-2]).parts objectAtIndex:1]).data bytes]];
+        [self setContactInfoWithName:name Location:@"" Date:self.message.sentAt];
+    }
+    else {
+        [self setContactInfoWithName:name Location:displayText Date:self.message.sentAt];
+    }
+    
+//    BOOL found = NO;
+//    NSUInteger i = [[client messagesForConversation:conversation]count];
+//        while (found == NO) {
+//            for (NSString *uid in conversation.participants) {
+//                if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
+//                    if ([((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]).sentByUserID isEqualToString:uid]){
+//                        [self.theirLastMessages addObject:((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1])];
+//                        found = YES;
+//                    }
+//                    else if (i-1 == 0){
+//                        [self.theirLastMessages addObject: [[client messagesForConversation:conversation]lastObject]];
+//                        found = YES;
+//                    }
+//                }
+//            }
+//            i--;
+//        }
 
     
 //    [self.theirLastMessages addObject:self.message];
@@ -83,16 +95,6 @@
 //        }
 //    }];
     
-    NSString *name = [NSString stringWithFormat:@"%@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
-    self.message = (LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject];
-    NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[self.message.parts objectAtIndex:1]).data bytes]];
-    if (!location) {
-//        NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] objectAtIndex:[[self.layerClient messagesForConversation:conversation] count]-2]).parts objectAtIndex:1]).data bytes]];
-        [self setContactInfoWithName:name Location:@"" Date:((LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject]).sentAt];
-    }
-    else {
-        [self setContactInfoWithName:name Location:location Date:((LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject]).sentAt];
-    }
 }
 
 -(void)configureExpandedCell:(LYRConversation *)conversation person:(NSArray *)person layerClient:(LYRClient *)client
@@ -131,23 +133,23 @@
 {
     self.conversation = conversation;
     self.layerClient = client;
-    BOOL found = NO;
-    NSUInteger i = [[client messagesForConversation:conversation]count];
-        while (found == NO) {
-            for (NSString *uid in conversation.participants) {
-                if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
-                    if ([((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]).sentByUserID isEqualToString:uid]){
-                        [self.theirLastMessages addObject:((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1])];
-                        found = YES;
-                    }
-                    else if (i-1 == 0){
-                        [self.theirLastMessages addObject:[[client messagesForConversation:conversation]lastObject]];
-                        found = YES;
-                    }
-                }
-            }
-            i--;
-        }
+//    BOOL found = NO;
+//    NSUInteger i = [[client messagesForConversation:conversation]count];
+//        while (found == NO) {
+//            for (NSString *uid in conversation.participants) {
+//                if (![uid isEqualToString:self.layerClient.authenticatedUserID]) {
+//                    if ([((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1]).sentByUserID isEqualToString:uid]){
+//                        [self.theirLastMessages addObject:((LYRMessage *)[[client messagesForConversation:conversation] objectAtIndex:i-1])];
+//                        found = YES;
+//                    }
+//                    else if (i-1 == 0){
+//                        [self.theirLastMessages addObject:[[client messagesForConversation:conversation]lastObject]];
+//                        found = YES;
+//                    }
+//                }
+//            }
+//            i--;
+//        }
     
     NSString *names = [NSString stringWithFormat:@"%@", [firstNames objectAtIndex:0]];;
     for (int i = 1 ; i < [firstNames count]; i++) {

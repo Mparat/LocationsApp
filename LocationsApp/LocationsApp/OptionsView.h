@@ -18,6 +18,8 @@
 
 @interface OptionsView : UIViewController
 
+-(id)initWithConversation:(LYRConversation *)conversation;
+
 @property (nonatomic, strong) LYRClient *layerClient;
 @property (nonatomic, strong) LYRConversation *conversation;
 @property (nonatomic, strong) LYRMessage *message;

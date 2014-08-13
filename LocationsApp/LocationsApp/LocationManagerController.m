@@ -83,7 +83,7 @@
     [geo reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if ([placemarks count] > 0) {
             self.placemark = [placemarks lastObject];
-            NSString *text = [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
+            NSString *text = [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@",
                               self.placemark.subThoroughfare, self.placemark.thoroughfare,
                               self.placemark.postalCode, self.placemark.locality,
                               self.placemark.administrativeArea];

@@ -29,7 +29,7 @@
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         self.apiManager = apiManager;
-        self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 46)
+        self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-46)
                                                  collectionViewLayout:layout];
 
         self.collectionView.backgroundColor = [UIColor whiteColor];
@@ -44,8 +44,13 @@
         self.collectionView.bounces = TRUE;
         self.collectionView.accessibilityLabel = @"collectionView";
         [self.view addSubview:self.collectionView];
+//        self.clearsSelectionOnViewWillAppear = YES;
         [self.collectionView registerClass:[MessageCell class] forCellWithReuseIdentifier:messageCell];
 //        [self.collectionView registerClass:[LSMessageCellHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:LSMessageHeaderIdentifier];
+        // Adds the notification observer
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveLayerObjectsDidChangeNotification:)
+                                                     name:LYRClientObjectsDidChangeNotification object:self.apiManager.layerClient];
         
     }
     return self;
@@ -54,15 +59,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.clearsSelectionOnViewWillAppear = NO;
-    self.collectionView.delegate = self;
-    [self.collectionView registerClass:[MessageCell class] forCellWithReuseIdentifier:messageCell];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) didReceiveLayerObjectsDidChangeNotification:(NSNotification *)notification;
+{
+    [self fetchMessages];
+    [self.collectionView reloadData];
 }
 
 -(void)addNavBar
@@ -133,8 +141,11 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
 {
     [self.apiManager sendTextMessage:self.textField.text inConversation:self.conversation];
     self.textField.text = nil;
-    [self fetchMessages];
-    [self.collectionView reloadData];
+//    [self viewWillAppear:YES];
+//    [self fetchMessages];
+//    [self.collectionView reloadData];
+//    [self scrollToBottomofCollectionView];
+
 }
 
 //- (void) animations
@@ -168,7 +179,7 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
 
 -(void)configureCell:(MessageCell *)cell atIndexPath:(NSIndexPath *)path
 {
-    LYRMessage *message = [self.messages objectAtIndex:path.row];
+    LYRMessage *message = [self.messages objectAtIndex:path.section];
     [(MessageCell *)cell configureCell:message layerClient:self.apiManager.layerClient];
 }
 
@@ -184,8 +195,8 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self fetchMessages];
-    LYRMessage *message = [self.messages objectAtIndex:indexPath.row];
+//    [self fetchMessages];
+    LYRMessage *message = [self.messages objectAtIndex:indexPath.section];
     LYRMessagePart *part = [message.parts objectAtIndex:1];
     return cellSizeForPart(part, self.view.frame.size.width);
 }
@@ -214,6 +225,7 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
 {
     return self.messages.count;
 }
+
 
 
 #pragma mark - TextField Delegate methods

@@ -83,14 +83,14 @@
 -(void)sendAskMessageToRecipients:(NSMutableDictionary *)recipients //this actually is just a notification... not a messagePart in the convo.......
 {
     // filter recipients into new array with only other participants userIDs
-    NSArray *uids = [recipients allKeys];
-//    NSArray *temp = [recipients allKeys];
-//    NSMutableArray *uids = [NSMutableArray arrayWithArray:temp];
-//    [uids removeObject:self.layerClient.authenticatedUserID];
+//    NSArray *uids = [recipients allKeys];
+    NSArray *temp = [recipients allKeys];
+    NSMutableArray *uids = [NSMutableArray arrayWithArray:temp];
+    [uids removeObject:self.layerClient.authenticatedUserID];
     
     LYRConversation *conversation = [[LYRConversation alloc] init];
-    if ([self.layerClient conversationForParticipants:uids]) {
-        conversation = [self.layerClient conversationForParticipants:uids];
+    if ([self.layerClient conversationForParticipants:temp]) {
+        conversation = [self.layerClient conversationForParticipants:temp];
     } else {
         conversation = [LYRConversation conversationWithParticipants:uids];
     }
@@ -112,16 +112,19 @@
    
 //    [self.locationManager returnLocationName:current completion:^(BOOL done, NSError *error) {
 //        if (!error) {
-            LYRMessagePart *emptyAskPart = [LYRMessagePart messagePartWithText:@"You asked"];
+            NSArray *person = [recipients objectForKey:self.layerClient.authenticatedUserID];
+
+            LYRMessagePart *emptyAskPart = [LYRMessagePart messagePartWithText:[NSString stringWithFormat:@"%@ asked", [person objectAtIndex:1]]];
             LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, emptyAskPart]];
-            BOOL success = [self.layerClient sendMessage:message error:nil];
+            NSError *error;
+            BOOL success = [self.layerClient sendMessage:message error:&error];
             if (success) {
                 NSLog(@"Message send succesfull");
                 NSArray *person = [recipients objectForKey:message.sentByUserID];
                 NSString *notifText = [NSString stringWithFormat:@"from %@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
                 [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
             } else {
-                NSLog(@"Message send failed");
+                NSLog(@"Message send failed with error: %@", error);
             }
 //        }
 //    }];
@@ -143,13 +146,15 @@
 -(void)sendTellMessageToRecipients:(NSMutableDictionary *)recipients
 {
     // filter recipients into new array with only other participants userIDs
-    NSArray *uids = [recipients allKeys];
+//    NSArray *uids = [recipients allKeys];
+    NSArray *temp = [recipients allKeys];
+    NSMutableArray *uids = [NSMutableArray arrayWithArray:temp];
+    [uids removeObject:self.layerClient.authenticatedUserID];
     
     LYRConversation *conversation = [[LYRConversation alloc] init];
-    if ([self.layerClient conversationForParticipants:uids]) {
-        conversation = [self.layerClient conversationForParticipants:uids];
-    }
-    else {
+    if ([self.layerClient conversationForParticipants:temp]) {
+        conversation = [self.layerClient conversationForParticipants:temp];
+    } else {
         conversation = [LYRConversation conversationWithParticipants:uids];
     }
     
@@ -174,14 +179,15 @@
         if (!error) {
             LYRMessagePart *location = [LYRMessagePart messagePartWithText:self.locationManager.name];
             LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, location]];
-            BOOL success = [self.layerClient sendMessage:message error:nil];
+            NSError *error;
+            BOOL success = [self.layerClient sendMessage:message error:&error];
             if (success) {
                 NSLog(@"Message send succesfull");
                 NSArray *person = [recipients objectForKey:message.sentByUserID];
                 NSString *notifText = [NSString stringWithFormat:@"%@ %@\r%@", [person objectAtIndex:1], [person objectAtIndex:2], self.locationManager.name];
                 [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
             } else {
-                NSLog(@"Message send failed");
+                NSLog(@"Message send failed with error: %@", error);
             }
         }
     }];
@@ -211,12 +217,13 @@
 
     LYRMessagePart *textMessage = [LYRMessagePart messagePartWithText:text];
     LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, textMessage]];
-    BOOL success = [self.layerClient sendMessage:message error:nil];
+    NSError *error;
+    BOOL success = [self.layerClient sendMessage:message error:&error];
     if (success) {
         NSLog(@"Text message send successful");
     }
     else{
-        NSLog( @"Text message send failed");
+        NSLog( @"Text message send failed with error: %@", error);
     }
 }
 
