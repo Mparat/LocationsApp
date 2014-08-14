@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "14AB32FE1942816400B8E20D"
                BuildableName = "LocationsApp.app"
-               BlueprintName = "LocationsApp"
+               BlueprintName = "Marco Polo"
                ReferencedContainer = "container:LocationsApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "14AB32FE1942816400B8E20D"
             BuildableName = "LocationsApp.app"
-            BlueprintName = "LocationsApp"
+            BlueprintName = "Marco Polo"
             ReferencedContainer = "container:LocationsApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "14AB32FE1942816400B8E20D"
             BuildableName = "LocationsApp.app"
-            BlueprintName = "LocationsApp"
+            BlueprintName = "Marco Polo"
             ReferencedContainer = "container:LocationsApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,7 +81,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "14AB32FE1942816400B8E20D"
             BuildableName = "LocationsApp.app"
-            BlueprintName = "LocationsApp"
+            BlueprintName = "Marco Polo"
             ReferencedContainer = "container:LocationsApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

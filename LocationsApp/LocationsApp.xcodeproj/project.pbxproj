@@ -414,9 +414,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		14AB32FE1942816400B8E20D /* LocationsApp */ = {
+		14AB32FE1942816400B8E20D /* Marco Polo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 14AB33341942816400B8E20D /* Build configuration list for PBXNativeTarget "LocationsApp" */;
+			buildConfigurationList = 14AB33341942816400B8E20D /* Build configuration list for PBXNativeTarget "Marco Polo" */;
 			buildPhases = (
 				D8DD353706A042B69042799D /* Check Pods Manifest.lock */,
 				14AB32FB1942816400B8E20D /* Sources */,
@@ -429,7 +429,7 @@
 			);
 			dependencies = (
 			);
-			name = LocationsApp;
+			name = "Marco Polo";
 			productName = LocationsApp;
 			productReference = 14AB32FF1942816400B8E20D /* LocationsApp.app */;
 			productType = "com.apple.product-type.application";
@@ -496,7 +496,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				14AB32FE1942816400B8E20D /* LocationsApp */,
+				14AB32FE1942816400B8E20D /* Marco Polo */,
 				14AB33221942816400B8E20D /* LocationsAppTests */,
 			);
 		};
@@ -620,7 +620,7 @@
 /* Begin PBXTargetDependency section */
 		14AB33291942816400B8E20D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 14AB32FE1942816400B8E20D /* LocationsApp */;
+			target = 14AB32FE1942816400B8E20D /* Marco Polo */;
 			targetProxy = 14AB33281942816400B8E20D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -839,7 +839,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		14AB33341942816400B8E20D /* Build configuration list for PBXNativeTarget "LocationsApp" */ = {
+		14AB33341942816400B8E20D /* Build configuration list for PBXNativeTarget "Marco Polo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				14AB33351942816400B8E20D /* Debug */,
