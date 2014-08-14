@@ -114,14 +114,14 @@
 //        if (!error) {
             NSArray *person = [recipients objectForKey:self.layerClient.authenticatedUserID];
 
-            LYRMessagePart *emptyAskPart = [LYRMessagePart messagePartWithText:[NSString stringWithFormat:@"%@ asked", [person objectAtIndex:1]]];
+            LYRMessagePart *emptyAskPart = [LYRMessagePart messagePartWithText:[NSString stringWithFormat:@"*%@ asked*", [person objectAtIndex:1]]];
             LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, emptyAskPart]];
             NSError *error;
             BOOL success = [self.layerClient sendMessage:message error:&error];
             if (success) {
                 NSLog(@"Message send succesfull");
                 NSArray *person = [recipients objectForKey:message.sentByUserID];
-                NSString *notifText = [NSString stringWithFormat:@"from %@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
+                NSString *notifText = [NSString stringWithFormat:@"Marco from %@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
                 [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
             } else {
                 NSLog(@"Message send failed with error: %@", error);
@@ -184,7 +184,7 @@
             if (success) {
                 NSLog(@"Message send succesfull");
                 NSArray *person = [recipients objectForKey:message.sentByUserID];
-                NSString *notifText = [NSString stringWithFormat:@"%@ %@\r%@", [person objectAtIndex:1], [person objectAtIndex:2], self.locationManager.name];
+                NSString *notifText = [NSString stringWithFormat:@"Polo from %@ %@\r%@", [person objectAtIndex:1], [person objectAtIndex:2], self.locationManager.name];
                 [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
             } else {
                 NSLog(@"Message send failed with error: %@", error);
