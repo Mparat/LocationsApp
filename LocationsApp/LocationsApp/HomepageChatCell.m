@@ -181,7 +181,7 @@
                                  [self.time.text sizeWithAttributes:dict3].height);
     
     self.time.frame = CGRectMake(240, 14, self.time.frame.size.width, 18);
-    self.time.font = [UIFont fontWithName:@"Helvetica" size:15];
+    self.time.font = [UIFont fontWithName:@"AvenirNext" size:15];
     self.time.textColor = [UIColor grayColor];
     [self addSubview:self.time];
     
@@ -194,7 +194,7 @@
                                      [self.username.text sizeWithAttributes:dict].height);
     
     self.username.frame = CGRectMake(55, 14, 170, 20);
-    self.username.font = [UIFont fontWithName:@"Helvetica" size:17];
+    self.username.font = [UIFont fontWithName:@"AvenirNext" size:17];
     self.username.textColor = [UIColor blackColor];
     [self addSubview:self.username];
     
@@ -207,7 +207,7 @@
                                      [self.location.text sizeWithAttributes:dict2].height);
     
     self.location.frame = CGRectMake(self.username.frame.origin.x , 32, self.location.frame.size.width, 18);
-    self.location.font = [UIFont fontWithName:@"Helvetica" size:15];
+    self.location.font = [UIFont fontWithName:@"AvenirNext" size:15];
     self.location.textColor = [UIColor grayColor];
     [self addSubview:self.location];
 }

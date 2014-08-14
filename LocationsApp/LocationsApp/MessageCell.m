@@ -36,13 +36,13 @@
     if ([message.sentByUserID isEqualToString:client.authenticatedUserID]) {
         self.backgroundColor = [UIColor colorWithRed:249.0/255.0 green:173.0/255.0 blue:186.0/255.0 alpha:1.0];
         self.contentView.frame = CGRectMake(rect.size.width-width-8, 0, width, height);
-        self.backgroundView.frame = CGRectMake(rect.size.width-width-8, 0, width, height);
+//        self.backgroundView.frame = CGRectMake(rect.size.width-width-8, 0, width, height);
     }
     else
     {
         self.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1.0];
         self.contentView.frame = CGRectMake(0, 0, width, height);
-        self.backgroundView.frame = self.contentView.frame;
+//        self.backgroundView.frame = self.contentView.frame;
     }
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(7, 10, self.frame.size.width, self.frame.size.height)];

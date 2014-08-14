@@ -48,7 +48,7 @@
 -(void)initCell
 {
     self.textLabel.text = @"Logout";
-    self.textLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+    self.textLabel.font = [UIFont fontWithName:@"AvenirNext" size:17];
 
 //    self.label = [[UILabel alloc] init];
 //    self.label.text = @"Logout";

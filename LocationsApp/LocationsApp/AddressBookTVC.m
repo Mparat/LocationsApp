@@ -79,6 +79,7 @@
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
     [self.tableView reloadData];
+    [self placeButtonForEmptyController];
 }
 
 - (void)didReceiveMemoryWarning
@@ -86,6 +87,18 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreate
 }
+
+-(void)placeButtonForEmptyController
+{
+    if ([self.me.friends count] == 0) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setFrame:CGRectMake(self.tableView.frame.size.width/2 - 240/4, self.tableView.frame.size.height/2 - 74, 120, 120)];
+        [button setImage:[UIImage imageNamed:@"AddContacts"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
+        [self.tableView addSubview:button];
+    }
+}
+
 
 -(void)addNavBar
 {
@@ -102,8 +115,13 @@
     self.navigationItem.leftBarButtonItem = settingsButton;
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSForegroundColorAttributeName : [UIFont fontWithName:@"AvenirNext" size:20.0]};
     
+    NSDictionary *text = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [UIColor whiteColor], NSForegroundColorAttributeName,
+                          [UIFont fontWithName:@"AvenirNext" size:20.0], NSForegroundColorAttributeName,
+                          nil];
+    self.navigationController.navigationBar.titleTextAttributes = text;
     self.navigationItem.title = [NSString stringWithFormat:@"My Friends"];
 }
 
@@ -190,7 +208,7 @@
     [footer addSubview:send];
     
     selectedContactsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, 250, 20)];
-    selectedContactsLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+    selectedContactsLabel.font = [UIFont fontWithName:@"AvenirNext" size:17];
     selectedContactsLabel.textColor = [UIColor whiteColor];
     selectedContactsLabel.text = @"";
     [footer addSubview:selectedContactsLabel];
@@ -198,7 +216,7 @@
     UIButton *cancelSelection = [[UIButton alloc] initWithFrame:CGRectMake(253, 33, 53, 20)];
     [cancelSelection setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelSelection setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    cancelSelection.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:17];
+    cancelSelection.titleLabel.font = [UIFont fontWithName:@"AvenirNext" size:17];
     [cancelSelection addTarget:self action:@selector(cancelSelection) forControlEvents:UIControlEventTouchUpInside];
     
     cancelSelectionButton = [[UIBarButtonItem alloc] initWithCustomView:cancelSelection];

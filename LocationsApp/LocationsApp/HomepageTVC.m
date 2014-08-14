@@ -120,6 +120,18 @@
         cell.layer.shadowOffset = CGSizeMake(0, 2);
         [self upArrow:cell];
     }
+    [self placeButtonForEmptyController];
+}
+
+-(void)placeButtonForEmptyController
+{
+    if ([self.conversations count] == 0) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setFrame:CGRectMake(self.tableView.frame.size.width/2 - 240/4, self.tableView.frame.size.height/2 - 240/2, 120, 120)];
+        [button setImage:[UIImage imageNamed:@"AddConversation"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(createNewMessage) forControlEvents:UIControlEventTouchUpInside];
+        [self.tableView addSubview:button];
+    }
 }
 
 
@@ -148,11 +160,17 @@
     self.navigationItem.rightBarButtonItem = newMessageButton;
     
 //    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    self.editButtonItem.tintColor = [UIColor whiteColor];
+//    self.editButtonItem.tintColor = [UIColor whiteColor];
+    NSDictionary *text = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [UIColor whiteColor], NSForegroundColorAttributeName,
+                          [UIFont fontWithName:@"AvenirNext" size:20.0], NSForegroundColorAttributeName,
+                          nil];
+    self.navigationController.navigationBar.titleTextAttributes = text;
+    
     self.navigationItem.title = @"";
 
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:239.0/255.0 green:61.0/255.0 blue:91.0/255.0 alpha:1.0];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
 }
 
 -(void)createNewMessage

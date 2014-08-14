@@ -65,7 +65,7 @@
     [loginView.passwordForgottenButton setBackgroundImage:nil forState:UIControlStateHighlighted];
     [loginView.passwordForgottenButton setTitle:@"Forgot password?" forState:UIControlStateNormal];
     [loginView.passwordForgottenButton setTitle:@"Forgot password?" forState:UIControlStateHighlighted];
-    [loginView.passwordForgottenButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
+    [loginView.passwordForgottenButton.titleLabel setFont:[UIFont fontWithName:@"AvenirNext" size:12]];
 
     [loginView.dismissButton setImage:[UIImage imageNamed:@"CancelLoginSignup"] forState:UIControlStateNormal];
     [loginView.dismissButton setImage:[UIImage imageNamed:@"CancelLoginSignup"] forState:UIControlStateHighlighted];

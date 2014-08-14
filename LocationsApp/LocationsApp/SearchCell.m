@@ -47,6 +47,7 @@
 -(void)placeNames:(Contact *)user
 {
     [self.textLabel setText:[NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName]];
+    self.textLabel.font = [UIFont fontWithName:@"AvenirNext" size:17];
     UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedNewContact"]];
     unselected.frame = CGRectMake(256+20, 19, 29, 29);
     [self addSubview:unselected];

@@ -36,6 +36,7 @@
 
     [self.tableView reloadData];
     [self.tableView registerClass:[LogoutCell class] forCellReuseIdentifier:cellID];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -52,6 +53,11 @@
 
 -(void)addNavBar
 {
+    NSDictionary *text = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [UIColor whiteColor], NSForegroundColorAttributeName,
+                          [UIFont fontWithName:@"AvenirNext" size:20.0], NSForegroundColorAttributeName,
+                          nil];
+    self.navigationController.navigationBar.titleTextAttributes = text;
     self.navigationItem.title = [NSString stringWithFormat:@"Settings"];
     
 }
@@ -94,7 +100,7 @@
     header.backgroundColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
     UILabel *text = [[UILabel alloc] init];
     text.text = @"Account";
-    text.font = [UIFont fontWithName:@"Helvetica" size:17];
+    text.font = [UIFont fontWithName:@"AvenirNext" size:17];
     text.frame = CGRectMake(15, 0, 100, 25);
     text.textColor = [UIColor colorWithRed:151.0/255.0 green:151.0/255.0 blue:151.0/255.0 alpha:1.0];
     [header addSubview:text];

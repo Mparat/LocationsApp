@@ -71,6 +71,7 @@
 {
     [self fetchMessages];
     [self.collectionView reloadData];
+    [self.textField resignFirstResponder];
 }
 
 -(void)addNavBar
@@ -125,7 +126,7 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
     if ([part.MIMEType isEqualToString:@"text/plain"]) {
         UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, width * 0.70, 0)];
         textView.text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
-        textView.font = [UIFont fontWithName:@"Helvetica" size:16];
+        textView.font = [UIFont fontWithName:@"AvenirNext" size:16];
         [textView sizeToFit];
         itemSize = CGSizeMake(textView.frame.size.width, textView.frame.size.height);
     }

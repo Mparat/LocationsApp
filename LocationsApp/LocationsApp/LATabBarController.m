@@ -81,7 +81,21 @@
     controller2.tabBarController.tabBar.selectedImageTintColor = red;
     
     UITabBarItem *chats = [[UITabBarItem alloc] initWithTitle:@"Messages" image:unselectedMessages selectedImage:selectedMessages];
+   
     UITabBarItem *addNew = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:unselectedContacts selectedImage:selectedContacts];
+    
+    [[UITabBarItem appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor grayColor], NSForegroundColorAttributeName,
+      [UIFont fontWithName:@"AvenirNext" size:0.0], NSForegroundColorAttributeName,
+      nil] forState:UIControlStateNormal];
+    
+    [[UITabBarItem appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      red, NSForegroundColorAttributeName,
+      [UIFont fontWithName:@"AvenirNext" size:0.0], NSForegroundColorAttributeName,
+      nil] forState:UIControlStateSelected];
+    
     
     [controller1 setTabBarItem:chats];
     [controller2 setTabBarItem:addNew];

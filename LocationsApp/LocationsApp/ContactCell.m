@@ -41,6 +41,7 @@
 {
     self.contact = friend;
     [self.textLabel setText:[NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName]];
+    self.textLabel.font = [UIFont fontWithName:@"AvenirNext" size:17];
     UIImageView *unselected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"UnselectedCircle"]];
     unselected.frame = CGRectMake(256+20, 19.5, 29, 29);
     [self addSubview:unselected];
