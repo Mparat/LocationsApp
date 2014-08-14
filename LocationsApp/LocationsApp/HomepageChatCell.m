@@ -31,6 +31,11 @@
         [self addSubview:read];
         self.message = [[LYRMessage alloc] init]; // will determine the unread/read circle
         self.theirLastMessages = [[NSMutableArray alloc] init]; // will provide to-be mapView annotations
+        
+        self.time = [[UILabel alloc] init];
+        self.username = [[UILabel alloc] init];
+        self.location = [[UILabel alloc] init];
+
     }
     return self;
 }
@@ -54,12 +59,16 @@
     self.message = (LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject];
     NSString *displayText = [NSString stringWithUTF8String:[((LYRMessagePart *)[self.message.parts objectAtIndex:1]).data bytes]];
     if (!displayText) {
-        //        NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] objectAtIndex:[[self.layerClient messagesForConversation:conversation] count]-2]).parts objectAtIndex:1]).data bytes]];
         [self setContactInfoWithName:name Location:@"" Date:self.message.sentAt];
     }
     else {
         [self setContactInfoWithName:name Location:displayText Date:self.message.sentAt];
     }
+    
+    if (([self.message.parts count] == 3) && [self.message.sentByUserID isEqualToString:[person objectAtIndex:0]]) { //a told location
+        [self.theirLastMessages addObject:self.message];
+    }
+    
     
 //    BOOL found = NO;
 //    NSUInteger i = [[client messagesForConversation:conversation]count];
@@ -158,11 +167,19 @@
     self.message = (LYRMessage *)[[self.layerClient messagesForConversation:conversation] lastObject];
     NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[self.message.parts objectAtIndex:1]).data bytes]];
     if (!location) {
-//        NSString *location = [NSString stringWithUTF8String:[((LYRMessagePart *)[((LYRMessage *)[[self.layerClient messagesForConversation:conversation] objectAtIndex:[[self.layerClient messagesForConversation:conversation] count]-2]).parts objectAtIndex:1]).data bytes]];
         [self setContactInfoWithName:names Location:@"" Date:nil];
     }
     else {
         [self setContactInfoWithName:names Location:location Date:nil];
+    }
+    
+    NSMutableDictionary *participants = [self.apiManager returnParticipantDictionary:conversation];
+    NSArray *uids = [participants allKeys];
+    for (NSString *uid in uids) {
+        if (([self.message.parts count] == 3) && [self.message.sentByUserID isEqualToString:uid]) { //a told location
+            [self.theirLastMessages addObject:self.message];
+        }
+
     }
 }
 
@@ -172,7 +189,6 @@
     [timeFormat setTimeStyle:NSDateFormatterShortStyle];
     NSString *theTime = [timeFormat stringFromDate:date];
 
-    self.time = [[UILabel alloc] init];
     self.time.text = theTime;
     NSDictionary *dict3 = [NSDictionary dictionaryWithObjectsAndKeys:self.time.font, NSFontAttributeName, nil];
     self.time.frame = CGRectMake(self.time.frame.origin.x,
@@ -185,7 +201,6 @@
     self.time.textColor = [UIColor grayColor];
     [self addSubview:self.time];
     
-    self.username = [[UILabel alloc] init];
     self.username.text = name;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.username.font, NSFontAttributeName, nil];
     self.username.frame = CGRectMake(self.username.frame.origin.x,
@@ -198,7 +213,6 @@
     self.username.textColor = [UIColor blackColor];
     [self addSubview:self.username];
     
-    self.location = [[UILabel alloc] init];
     self.location.text = [NSString stringWithFormat:@"%@", text];
     NSDictionary *dict2 = [NSDictionary dictionaryWithObjectsAndKeys:self.location.font, NSFontAttributeName, nil];
     self.location.frame = CGRectMake(self.location.frame.origin.x,

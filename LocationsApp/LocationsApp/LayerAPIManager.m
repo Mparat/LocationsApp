@@ -80,20 +80,23 @@
     }];
 }
 
--(void)sendAskMessageToRecipients:(NSMutableDictionary *)recipients //this actually is just a notification... not a messagePart in the convo.......
+-(void)sendAskMessageToRecipients:(NSMutableDictionary *)recipients
 {
-    // filter recipients into new array with only other participants userIDs
-//    NSArray *uids = [recipients allKeys];
-    NSArray *temp = [recipients allKeys];
-    NSMutableArray *uids = [NSMutableArray arrayWithArray:temp];
-    [uids removeObject:self.layerClient.authenticatedUserID];
     
-    LYRConversation *conversation = [[LYRConversation alloc] init];
-    if ([self.layerClient conversationForParticipants:temp]) {
-        conversation = [self.layerClient conversationForParticipants:temp];
-    } else {
-        conversation = [LYRConversation conversationWithParticipants:uids];
+    if ([recipients objectForKey:self.layerClient.authenticatedUserID]) {
+        [recipients removeObjectForKey:self.layerClient.authenticatedUserID];
     }
+    
+    NSSet *temp;
+    LYRConversation *conversation;
+    NSSet *convos = [self.layerClient conversationsForParticipants:temp];
+    
+    if ([convos count] != 0) { // if conversations exist with this set of uids, then find the speicifc conversation whos participants are exactly this set of uids
+        conversation = [[convos allObjects] lastObject];
+    } else {
+        conversation = [LYRConversation conversationWithParticipants:temp];
+    }
+
     
     static NSString *const MIMETypeArray = @"participants";
     
@@ -147,15 +150,17 @@
 {
     // filter recipients into new array with only other participants userIDs
 //    NSArray *uids = [recipients allKeys];
-    NSArray *temp = [recipients allKeys];
-    NSMutableArray *uids = [NSMutableArray arrayWithArray:temp];
-    [uids removeObject:self.layerClient.authenticatedUserID];
+    NSMutableSet *temp = [NSMutableSet setWithArray:[recipients allKeys]];
+    [temp removeObject:self.layerClient.authenticatedUserID];
     
-    LYRConversation *conversation = [[LYRConversation alloc] init];
-    if ([self.layerClient conversationForParticipants:temp]) {
-        conversation = [self.layerClient conversationForParticipants:temp];
-    } else {
-        conversation = [LYRConversation conversationWithParticipants:uids];
+    LYRConversation *conversation;
+    NSSet *convos = [self.layerClient conversationsForParticipants:temp];
+    
+    if ([convos count] != 0) { // if conversations exist with this set of uids, then find the speicifc conversation whos participants are exactly this set of uids
+        conversation = [[convos allObjects] lastObject];
+    }
+    else {
+        conversation = [LYRConversation conversationWithParticipants:temp];
     }
     
     static NSString *const MIMETypeArray = @"participants";
@@ -165,7 +170,7 @@
   
 
     // MIME type declaration
-    static NSString *const MIMETypeLocation = @"location";
+//    static NSString *const MIMETypeLocation = @"location";
     CLLocation *current = [self.locationManager fetchCurrentLocation];
 
     // Creates a message part with latitude and longitude strings
@@ -178,7 +183,8 @@
     [self.locationManager returnLocationName:current completion:^(BOOL done, NSError *error) {
         if (!error) {
             LYRMessagePart *location = [LYRMessagePart messagePartWithText:self.locationManager.name];
-            LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, location]];
+            LYRMessagePart *part3 = [LYRMessagePart messagePartWithText:@""];
+            LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, location, part3]];
             NSError *error;
             BOOL success = [self.layerClient sendMessage:message error:&error];
             if (success) {

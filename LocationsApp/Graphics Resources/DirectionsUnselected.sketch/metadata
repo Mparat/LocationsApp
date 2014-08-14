@@ -10,10 +10,11 @@
 	<string>104f8b8798002207eebbbee810c02306c5ce85c9</string>
 	<key>fonts</key>
 	<array>
+		<string>AvenirNext-Regular</string>
 		<string>AvenirNext-UltraLight</string>
 	</array>
 	<key>length</key>
-	<integer>33021</integer>
+	<integer>33393</integer>
 	<key>version</key>
 	<integer>37</integer>
 </dict>

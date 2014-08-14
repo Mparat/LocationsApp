@@ -18,11 +18,11 @@
 
 /**
  @abstract Creates a new Conversation with the given set of participants.
- @param participants An array of participants with which to initialize the new Conversation.
- @discussion This method will create a new `LYRConversation` instance, creating new message instances with a new `LYRConversation` object instance and sending them will also result in creation of a new conversation for other participants. If you wish to ensure that only one Conversation exists for a set of participants then query for an existing Conversation using LYRClient's `conversationForParticipants:` first.
+ @param participants A set of participants with which to initialize the new Conversation.
+ @discussion This method will create a new `LYRConversation` instance, creating new message instances with a new `LYRConversation` object instance and sending them will also result in creation of a new conversation for other participants. If you wish to ensure that only one Conversation exists for a set of participants then query for an existing Conversation using LYRClient's `conversationsForParticipants:` first.
  @return The newly created Conversation.
  */
-+ (instancetype)conversationWithParticipants:(NSArray *)participants;
++ (instancetype)conversationWithParticipants:(NSSet *)participants;
 
 /**
  @abstract A unique identifier assigned to every conversation by Layer.

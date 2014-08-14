@@ -21,6 +21,7 @@
 @interface HomepageTVC : UITableViewController <UITextFieldDelegate, UITableViewDataSource>
 {
     int number;
+    UIButton *button;
 }
 
 +(instancetype)initWithParseController:(ParseController *)parseController locationManager:(LocationManagerController *)locationManager apiManager:(LayerAPIManager *)apiManager me:(User *)me;

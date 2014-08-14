@@ -29,12 +29,12 @@
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         self.apiManager = apiManager;
-        self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-46)
+        self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
                                                  collectionViewLayout:layout];
 
         self.collectionView.backgroundColor = [UIColor whiteColor];
         self.collectionView.backgroundView = [[UIView alloc] init];
-//        [self.collectionView.backgroundView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:withEvent:)]];
+        [self.collectionView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:withEvent:)]];
         
         
         self.collectionView.contentInset = UIEdgeInsetsMake(10, 0, 20, 0);
@@ -44,13 +44,14 @@
         self.collectionView.bounces = TRUE;
         self.collectionView.accessibilityLabel = @"collectionView";
         [self.view addSubview:self.collectionView];
-//        self.clearsSelectionOnViewWillAppear = YES;
+        self.clearsSelectionOnViewWillAppear = YES;
         [self.collectionView registerClass:[MessageCell class] forCellWithReuseIdentifier:messageCell];
-//        [self.collectionView registerClass:[LSMessageCellHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:LSMessageHeaderIdentifier];
-        // Adds the notification observer
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(didReceiveLayerObjectsDidChangeNotification:)
                                                      name:LYRClientObjectsDidChangeNotification object:self.apiManager.layerClient];
+        [self.collectionView reloadData];
+//        [self scrollToBottomofCollectionView];
         
     }
     return self;
@@ -72,6 +73,8 @@
     [self fetchMessages];
     [self.collectionView reloadData];
     [self.textField resignFirstResponder];
+    [self.tabBarController.tabBar setHidden:YES];
+    [self scrollToBottomofCollectionView];
 }
 
 -(void)addNavBar
@@ -128,7 +131,7 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
         textView.text = [[NSString alloc] initWithData:part.data encoding:NSUTF8StringEncoding];
         textView.font = [UIFont fontWithName:@"AvenirNext" size:16];
         [textView sizeToFit];
-        itemSize = CGSizeMake(textView.frame.size.width, textView.frame.size.height);
+        itemSize = CGSizeMake(textView.frame.size.width + 25, textView.frame.size.height + 10);
     }
     
     if (30 > itemSize.height) {
@@ -181,6 +184,13 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
 -(void)configureCell:(MessageCell *)cell atIndexPath:(NSIndexPath *)path
 {
     LYRMessage *message = [self.messages objectAtIndex:path.section];
+    if ([message.sentByUserID isEqual:self.apiManager.layerClient.authenticatedUserID]) {
+        cell.frame = CGRectMake(self.collectionView.frame.size.width - cell.frame.size.width - 8, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
+    }
+    else{
+        cell.frame = CGRectMake(8, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
+    }
+
     [(MessageCell *)cell configureCell:message layerClient:self.apiManager.layerClient];
 }
 
@@ -257,7 +267,7 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-    [self fetchMessages];
+//    [self fetchMessages];
     [self.collectionView reloadData];
     [self initializeTextField];
     [self addNavBar];
@@ -326,15 +336,22 @@ CGSize cellSizeForPart(LYRMessagePart *part, CGFloat width)
     [UIView commitAnimations];
 }
 
+-(void)viewTouched
+{
+    if ([self.textField isFirstResponder]) {
+        [self.textField resignFirstResponder];
+    }
+}
+
 // This method will be called when the user touches on the tableView, at
 // which point we will hide the keyboard (if open). This method is called
 // because UITouchTableView.m calls nextResponder in its touch handler.
-//- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
-//{
-//    if ([self.textField isFirstResponder]) {
-//        [self.textField resignFirstResponder];
-//    }
-//}
+- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+{
+    if ([self.textField isFirstResponder]) {
+        [self.textField resignFirstResponder];
+    }
+}
 
 
 

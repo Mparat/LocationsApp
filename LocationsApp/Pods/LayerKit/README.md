@@ -38,7 +38,7 @@ These instructions will setup your local CocoaPods environment for access to the
 
 #### Framework Installation
 
-If you wish to install LayerKit directly into your application via the binary framework, then download `LayerKit.framework` from this repository and add it to your application:
+If you wish to install LayerKit directly into your application via the binary framework, then download `LayerKit.embeddedframework` from this repository and add it to your application:
 
 1. Drag and drop the framework onto your project, instructing Xcode to copy items into your destination group's folder.
 2. Update your project settings to include the linker flags: `-ObjC -lz`

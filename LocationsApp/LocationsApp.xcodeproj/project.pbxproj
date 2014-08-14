@@ -43,7 +43,7 @@
 		14C66662194647C900341F0D /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14C66661194647C900341F0D /* FacebookSDK.framework */; };
 		14C66668194669FF00341F0D /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C66667194669FF00341F0D /* User.m */; };
 		14C6667A1947A60A00341F0D /* LocationManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C666791947A60A00341F0D /* LocationManagerController.m */; };
-		7A2B73C3108E4B03BA76408F /* libPods-LocationsApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D1535FBEDE949B4AA929E11 /* libPods-LocationsApp.a */; };
+		1C15E368551D4AA09366404A /* libPods-Marco Polo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C6D87DD16B41D59BE682D5 /* libPods-Marco Polo.a */; };
 		E0644B1E195A20590012CAF7 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0644B1C195A20590012CAF7 /* AddressBook.framework */; };
 		E0644B1F195A20590012CAF7 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0644B1D195A20590012CAF7 /* AddressBookUI.framework */; };
 		E0644B28195A3FC30012CAF7 /* OptionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0644B27195A3FC30012CAF7 /* OptionsView.m */; };
@@ -89,8 +89,7 @@
 		144BA0C3194F80A000977673 /* SearchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
 		1482D1FB1950C88200B8F957 /* AddressBookTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookTVC.h; sourceTree = "<group>"; };
 		1482D1FC1950C88200B8F957 /* AddressBookTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBookTVC.m; sourceTree = "<group>"; };
-		1482D1FE1952486000B8F957 /* libPods-LocationsApp-MCSwipeTableViewCell.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-LocationsApp-MCSwipeTableViewCell.a"; path = "Pods/build/Debug-iphoneos/libPods-LocationsApp-MCSwipeTableViewCell.a"; sourceTree = "<group>"; };
-		14AB32FF1942816400B8E20D /* LocationsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		14AB32FF1942816400B8E20D /* Marco Polo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Marco Polo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14AB33021942816400B8E20D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		14AB33041942816400B8E20D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		14AB33061942816400B8E20D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -127,7 +126,8 @@
 		14C666781947A60A00341F0D /* LocationManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManagerController.h; sourceTree = "<group>"; };
 		14C666791947A60A00341F0D /* LocationManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManagerController.m; sourceTree = "<group>"; };
 		1D1535FBEDE949B4AA929E11 /* libPods-LocationsApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LocationsApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		80A31E3896C1448999197265 /* Pods-LocationsApp.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocationsApp.xcconfig"; path = "Pods/Pods-LocationsApp.xcconfig"; sourceTree = "<group>"; };
+		A4C6D87DD16B41D59BE682D5 /* libPods-Marco Polo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Marco Polo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3F7D7B92F2A4FDAB2EA1D6A /* Pods-Marco Polo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marco Polo.xcconfig"; path = "Pods/Pods-Marco Polo.xcconfig"; sourceTree = "<group>"; };
 		E0644B1C195A20590012CAF7 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		E0644B1D195A20590012CAF7 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		E0644B26195A3FC30012CAF7 /* OptionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsView.h; sourceTree = "<group>"; };
@@ -187,7 +187,7 @@
 				14AB33071942816400B8E20D /* UIKit.framework in Frameworks */,
 				14AB33031942816400B8E20D /* Foundation.framework in Frameworks */,
 				14C66662194647C900341F0D /* FacebookSDK.framework in Frameworks */,
-				7A2B73C3108E4B03BA76408F /* libPods-LocationsApp.a in Frameworks */,
+				1C15E368551D4AA09366404A /* libPods-Marco Polo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,14 +211,14 @@
 				14AB332A1942816400B8E20D /* LocationsAppTests */,
 				14AB33011942816400B8E20D /* Frameworks */,
 				14AB33001942816400B8E20D /* Products */,
-				80A31E3896C1448999197265 /* Pods-LocationsApp.xcconfig */,
+				D3F7D7B92F2A4FDAB2EA1D6A /* Pods-Marco Polo.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
 		14AB33001942816400B8E20D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				14AB32FF1942816400B8E20D /* LocationsApp.app */,
+				14AB32FF1942816400B8E20D /* Marco Polo.app */,
 				14AB33231942816400B8E20D /* LocationsAppTests.xctest */,
 			);
 			name = Products;
@@ -229,7 +229,6 @@
 			children = (
 				E0644B1C195A20590012CAF7 /* AddressBook.framework */,
 				E0644B1D195A20590012CAF7 /* AddressBookUI.framework */,
-				1482D1FE1952486000B8F957 /* libPods-LocationsApp-MCSwipeTableViewCell.a */,
 				14035A36194A212200AEC543 /* Social.framework */,
 				14315C4E194923DE00378EA5 /* MapKit.framework */,
 				14C66661194647C900341F0D /* FacebookSDK.framework */,
@@ -247,6 +246,7 @@
 				14AB33061942816400B8E20D /* UIKit.framework */,
 				14AB33241942816400B8E20D /* XCTest.framework */,
 				1D1535FBEDE949B4AA929E11 /* libPods-LocationsApp.a */,
+				A4C6D87DD16B41D59BE682D5 /* libPods-Marco Polo.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -418,12 +418,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 14AB33341942816400B8E20D /* Build configuration list for PBXNativeTarget "Marco Polo" */;
 			buildPhases = (
-				D8DD353706A042B69042799D /* Check Pods Manifest.lock */,
+				E09472B2199D5D520014589A /* Check Pods Manifest.lock */,
 				14AB32FB1942816400B8E20D /* Sources */,
 				14AB32FC1942816400B8E20D /* Frameworks */,
 				E0B3C3BD19788B2800106D72 /* Export Sketch Assets */,
+				E09472B1199D5D020014589A /* Copy Pods Resources */,
 				14AB32FD1942816400B8E20D /* Resources */,
-				B68D7621ECA44312BAA36037 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -431,7 +431,7 @@
 			);
 			name = "Marco Polo";
 			productName = LocationsApp;
-			productReference = 14AB32FF1942816400B8E20D /* LocationsApp.app */;
+			productReference = 14AB32FF1942816400B8E20D /* Marco Polo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		14AB33221942816400B8E20D /* LocationsAppTests */ = {
@@ -525,7 +525,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B68D7621ECA44312BAA36037 /* Copy Pods Resources */ = {
+		E09472B1199D5D020014589A /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -537,10 +537,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-LocationsApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "\"${SRCROOT}/Pods/Pods-Marco Polo-resources.sh\"";
 		};
-		D8DD353706A042B69042799D /* Check Pods Manifest.lock */ = {
+		E09472B2199D5D520014589A /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -552,8 +551,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\ncat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\nexit 1\nfi";
 		};
 		E0B3C3BD19788B2800106D72 /* Export Sketch Assets */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -735,7 +733,7 @@
 		};
 		14AB33351942816400B8E20D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 80A31E3896C1448999197265 /* Pods-LocationsApp.xcconfig */;
+			baseConfigurationReference = D3F7D7B92F2A4FDAB2EA1D6A /* Pods-Marco Polo.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -747,6 +745,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LocationsApp/LocationsApp-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers\"",
+					"\"${PODS_ROOT}/Headers/LayerKit\"",
+					"\"${PODS_ROOT}/Headers/MCSwipeTableViewCell\"",
+				);
 				INFOPLIST_FILE = "LocationsApp/LocationsApp-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -762,7 +765,7 @@
 		};
 		14AB33361942816400B8E20D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 80A31E3896C1448999197265 /* Pods-LocationsApp.xcconfig */;
+			baseConfigurationReference = D3F7D7B92F2A4FDAB2EA1D6A /* Pods-Marco Polo.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -774,6 +777,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LocationsApp/LocationsApp-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers\"",
+					"\"${PODS_ROOT}/Headers/LayerKit\"",
+					"\"${PODS_ROOT}/Headers/MCSwipeTableViewCell\"",
+				);
 				INFOPLIST_FILE = "LocationsApp/LocationsApp-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -20,9 +20,10 @@
 @property (nonatomic, strong) LYRClient *layerClient;
 @property (nonatomic, strong) LYRConversation *conversation;
 @property (nonatomic, strong) LYRMessage *message;
+@property (nonatomic, strong) NSMutableArray *theirLastMessages;
+
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
-@property (nonatomic, strong) NSMutableArray *theirLastMessages;
 
 -(void)createCellWith:(LYRConversation *)conversation person:(NSArray *)person layerClient:(LYRClient *)client;
 -(void)createGroupCellWithNames:(NSArray *)firstNames conversation:(LYRConversation *)conversation layerClient:(LYRClient *)client;

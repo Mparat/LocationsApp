@@ -8,6 +8,12 @@
 
 #import "MessageCell.h"
 
+@interface MessageCell ()
+
+@property (nonatomic, strong) UILabel *label;
+
+@end
+
 @implementation MessageCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -16,6 +22,10 @@
     if (self) {
         self.layer.cornerRadius = 10;
         self.layer.shadowPath = [[UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.layer.cornerRadius] CGPath];
+        
+        self.label = [[UILabel alloc] initWithFrame:CGRectMake(self.contentView.frame.origin.x + 10, 11, self.frame.size.width, self.frame.size.height)];
+        [self.label setFont:[UIFont fontWithName:@"Helvetica" size:14.0]];
+        [self.contentView addSubview:self.label];
     }
     return self;
 }
@@ -28,32 +38,27 @@
 
 -(void)configureCell:(LYRMessage *)message layerClient:(LYRClient *)client
 {
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    CGFloat width =  self.contentView.frame.size.width;
-    CGFloat height =  self.contentView.frame.size.height;
+//    CGRect rect = [[UIScreen mainScreen] bounds];
+//    CGFloat width =  self.contentView.frame.size.width;
+//    CGFloat height =  self.contentView.frame.size.height;
 
+    UIView *view = [UIView new];
+    view.layer.cornerRadius = 10;
+    view.layer.shadowPath = [[UIBezierPath bezierPathWithRoundedRect:view.bounds cornerRadius:view.layer.cornerRadius] CGPath];
+    
     LYRMessagePart *part = [message.parts objectAtIndex:1];
     if ([message.sentByUserID isEqualToString:client.authenticatedUserID]) {
-        self.backgroundColor = [UIColor colorWithRed:249.0/255.0 green:173.0/255.0 blue:186.0/255.0 alpha:1.0];
-        self.contentView.frame = CGRectMake(rect.size.width-width-8, 0, width, height);
-//        self.backgroundView.frame = CGRectMake(rect.size.width-width-8, 0, width, height);
+        view.backgroundColor = [UIColor colorWithRed:249.0/255.0 green:173.0/255.0 blue:186.0/255.0 alpha:1.0];
     }
     else
     {
-        self.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1.0];
-        self.contentView.frame = CGRectMake(0, 0, width, height);
-//        self.backgroundView.frame = self.contentView.frame;
+        view.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1.0];
     }
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(7, 10, self.frame.size.width, self.frame.size.height)];
-    label.numberOfLines = 0;
-    
-    NSString *text = [NSString stringWithUTF8String:[part.data bytes]];
-    [label setText:text];
-    [label setFont:[UIFont fontWithName:@"Helvetica" size:14.0]];
-    [label sizeToFit];
-    [self.contentView addSubview:label];
-    
+    [self.label setText:[NSString stringWithUTF8String:[part.data bytes]]];
+    [self.label sizeToFit];
+    self.backgroundView = view;
+
 
 }
 

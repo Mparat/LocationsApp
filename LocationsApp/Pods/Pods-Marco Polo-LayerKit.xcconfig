@@ -1,0 +1,3 @@
+PODS_MARCO_POLO_LAYERKIT_ENABLE_NS_ASSERTIONS = YES
+PODS_MARCO_POLO_LAYERKIT_FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/LayerKit/LayerKit.embeddedframework"
+PODS_MARCO_POLO_LAYERKIT_OTHER_LDFLAGS = -lz -framework CFNetwork -framework LayerKit -framework MobileCoreServices -framework Security -framework SystemConfiguration

@@ -1,5 +1,5 @@
 PODS:
-  - LayerKit (0.7.11)
+  - LayerKit (0.7.12)
   - MCSwipeTableViewCell (2.1.0)
 
 DEPENDENCIES:
@@ -7,7 +7,7 @@ DEPENDENCIES:
   - MCSwipeTableViewCell (~> 2.1)
 
 SPEC CHECKSUMS:
-  LayerKit: 1ba95abb89514f42868edfc27fab7e3e02c08aad
+  LayerKit: 612349f4d9bdcb292388988ac076adef50878f7e
   MCSwipeTableViewCell: 713086e29ce3c2171a0102fc594bf583fa7dd323
 
 COCOAPODS: 0.33.1

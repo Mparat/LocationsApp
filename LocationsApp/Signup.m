@@ -148,8 +148,8 @@
     }
     
     PFQuery *query = [PFUser query];
-    [query whereKeyExists:@"email"];
-    [query whereKey:@"email" equalTo:email.text];
+    [query whereKeyExists:@"username"];
+    [query whereKey:@"username" equalTo:email.text];
     NSArray *array = [query findObjects];
     if ([array count] > 1) {
         [[[UIAlertView alloc] initWithTitle:@"Account Exists"

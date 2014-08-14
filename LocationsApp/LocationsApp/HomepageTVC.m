@@ -57,6 +57,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(didReceiveLayerObjectsDidChangeNotification:)
                                                      name:LYRClientObjectsDidChangeNotification object:self.layerClient];
+        [self fetchLayerConversations];
 
         [self uponLoad];
     }
@@ -64,13 +65,14 @@
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
-    [self.tableView reloadData];
+    [self viewWillAppear:YES];
+//    [self.tableView reloadData];
     [refreshControl endRefreshing];
 }
 
 -(void)uponLoad
 {
-    [self fetchLayerConversations];
+//    [self fetchLayerConversations];
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc]init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
@@ -86,8 +88,9 @@
     if ([self.me.friends count] != 0) {
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
-    
+    button = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.tableView reloadData];
+    [self placeButtonForEmptyController];
 }
 
 - (void)viewDidLoad
@@ -100,7 +103,7 @@
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
     self.layerClient = self.apiManager.layerClient;
-    [self fetchLayerConversations];
+//    [self fetchLayerConversations];
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [defaults objectForKey: self.layerClient.authenticatedUserID];
@@ -112,6 +115,8 @@
     if (self.tableView.editing) {
         [self setEditing:NO animated:NO];
     }
+    [self placeButtonForEmptyController];
+
     [self.tableView reloadData];
     if (self.expandedIndexPath != nil) {
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:self.expandedIndexPath]; //self.expandedIndexPath
@@ -120,17 +125,18 @@
         cell.layer.shadowOffset = CGSizeMake(0, 2);
         [self upArrow:cell];
     }
-    [self placeButtonForEmptyController];
 }
 
 -(void)placeButtonForEmptyController
 {
+    [button setFrame:CGRectMake(self.tableView.frame.size.width/2 - 240/4, self.tableView.frame.size.height/2 - 240/2, 120, 120)];
+    [button setImage:[UIImage imageNamed:@"AddConversation"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(createNewMessage) forControlEvents:UIControlEventTouchUpInside];
     if ([self.conversations count] == 0) {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setFrame:CGRectMake(self.tableView.frame.size.width/2 - 240/4, self.tableView.frame.size.height/2 - 240/2, 120, 120)];
-        [button setImage:[UIImage imageNamed:@"AddConversation"] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(createNewMessage) forControlEvents:UIControlEventTouchUpInside];
         [self.tableView addSubview:button];
+    }
+    else{
+        [button removeFromSuperview];
     }
 }
 
@@ -143,6 +149,7 @@
 
 - (void) didReceiveLayerObjectsDidChangeNotification:(NSNotification *)notification;
 {
+//    [self viewWillAppear:YES];
     [self fetchLayerConversations];
     [self.tableView reloadData];
 }
@@ -220,7 +227,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    [self fetchLayerConversations];
+//    [self fetchLayerConversations];
     return [self.conversations count];
 }
 
@@ -306,9 +313,6 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendAskMessageToRecipients:convoContacts];
-//            [self fetchLayerConversations];
-//            [self editCellCircle:cell];
-//            [self.tableView reloadData];
         }];
     }];
     
@@ -317,15 +321,12 @@
         [cell swipeToOriginWithCompletion:^{
             NSMutableDictionary *convoContacts = [self.apiManager returnParticipantDictionary:((HomepageChatCell *)cell).conversation];
             [self.apiManager sendTellMessageToRecipients:convoContacts];
-//            [self fetchLayerConversations];
-//            [self editCellCircle:cell];
-//            [self.tableView reloadData];
         }];
     }];
+
     [self editCellCircle:cell];
     cell.defaultColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1.0];
     cell.firstTrigger = 0.25;
-//    cell.secondTrigger = 0.6;    
 }
 
 - (UIView *)viewWithImageName:(NSString *)imageName {
@@ -467,7 +468,7 @@
 
 -(void)editCellCircle:(UITableViewCell *)cell
 {
-    [self fetchLayerConversations];
+//    [self fetchLayerConversations];
 //    LYRMessage *lastMessageEver = [[self.layerClient messagesForConversation: [self.conversations lastObject]]lastObject];
     LYRMessage *lastMessageEver = ((HomepageChatCell *)cell).message;
     if ([lastMessageEver.sentByUserID isEqual:self.layerClient.authenticatedUserID]) {
@@ -485,19 +486,19 @@
 
 -(void)downArrow:(UITableViewCell *)cell
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setFrame:CGRectMake(0, 0, 58, 58)];
-    [button setImage:[UIImage imageNamed:@"DownArrow"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *down = [UIButton buttonWithType:UIButtonTypeCustom];
+    [down setFrame:CGRectMake(0, 0, 58, 58)];
+    [down setImage:[UIImage imageNamed:@"DownArrow"] forState:UIControlStateNormal];
+    [down addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
     cell.accessoryView = button;
 }
 
 -(void)upArrow:(UITableViewCell *)cell
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setFrame:CGRectMake(0, 0, 58, 58)];
-    [button setImage:[UIImage imageNamed:@"UpArrow"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *up = [UIButton buttonWithType:UIButtonTypeCustom];
+    [up setFrame:CGRectMake(0, 0, 58, 58)];
+    [up setImage:[UIImage imageNamed:@"UpArrow"] forState:UIControlStateNormal];
+    [up addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
     cell.accessoryView = button;
 }
 

@@ -24,6 +24,7 @@
     UIButton *send;
     UIButton *addNew;
     UIBarButtonItem *cancelSelectionButton;
+    UIButton *button;
     BOOL checked;
 }
 -(id)initWithStyle:(UITableViewStyle)style me:(User *)me;

@@ -210,6 +210,7 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
  @param userInfo The user info dictionary received from the UIApplicaton delegate method application:didReceiveRemoteNotification:fetchCompletionHandler:'s `userInfo` parameter.
  @param completion The block that will be called once Layer has successfully downloaded new data associated with the `userInfo` dictionary passed in. It is your responsibility to call the UIApplication delegate method's fetch completion handler with the given `fetchResult`.
  @return A Boolean value that determines whether the push was handled. Will be `NO` if this was not a push notification meant for Layer.
+ @note The receiver must be authenticated else a warning will be logged and `NO` will be returned.
  */
 - (BOOL)synchronizeWithRemoteNotification:(NSDictionary *)userInfo completion:(void(^)(UIBackgroundFetchResult fetchResult, NSError *error))completion;
 
@@ -221,34 +222,35 @@ extern NSString *const LYRClientObjectChangesUserInfoKey;
  @abstract Returns an existing conversation with a given identifier or `nil` if none could be found.
  @param identifier The identifier for an existing conversation.
  @return The conversation with the given identifier or `nil` if none could be found.
+ @note The receiver must be authenticated else a warning will be logged and `nil` will be returned.
  */
 - (LYRConversation *)conversationForIdentifier:(NSURL *)identifier;
 
 /**
- @abstract Returns an existing conversation with the given set of participants or `nil` if none could be found.
- @discussion This method returns the first conversation with the given set of participants. Note that it is possible to create more than one Conversation with a given set of participants.
- @param participants An array of participants for which to query for a corresponding Conversation. Each element in the array is a string that corresponds to the user ID of the desired participant.
- @return The conversation with the given set of participants or `nil` if none could be found.
+ @abstract Returns existing conversations with the given set of participants or `nil` if none could be found.
+ @param participants A set of participants for which to query for a corresponding Conversation. Each element in the array is a string that corresponds to the user ID of the desired participant.
+ @return A set of conversations with the given set of participants or `nil` if none could be found.
+ @note The receiver must be authenticated else a warning will be logged and `nil` will be returned.
  */
-- (LYRConversation *)conversationForParticipants:(NSArray *)participants;
+- (NSSet *)conversationsForParticipants:(NSSet *)participants;
 
 /**
  @abstract Adds participants to a given conversation.
- @param participants An array of `providerUserID` in a form of `NSString` objects.
+ @param participants A set of `providerUserID` in a form of `NSString` objects.
  @param conversation The conversation which to add the participants. Cannot be `nil`.
  @param error A pointer to an error object that, upon failure, will be set to an error describing why the participants could not be added to the conversation.
  @return A Boolean value indicating if the operation of adding participants was successful.
  */
-- (BOOL)addParticipants:(NSArray *)participants toConversation:(LYRConversation *)conversation error:(NSError **)error;
+- (BOOL)addParticipants:(NSSet *)participants toConversation:(LYRConversation *)conversation error:(NSError **)error;
 
 /**
  @abstract Removes participants from a given conversation.
- @param participants An array of `providerUserID` in a form of `NSString` objects.
+ @param participants A set of `providerUserID` in a form of `NSString` objects.
  @param conversation The conversation from which to remove the participants. Cannot be `nil`.
  @param error A pointer to an error object that, upon failure, will be set to an error describing why the participants could not be removed from the conversation.
  @return A Boolean value indicating if the operation of removing participants was successful.
  */
-- (BOOL)removeParticipants:(NSArray *)participants fromConversation:(LYRConversation *)conversation error:(NSError **)error;
+- (BOOL)removeParticipants:(NSSet *)participants fromConversation:(LYRConversation *)conversation error:(NSError **)error;
 
 /**
  @abstract Sends the specified message.

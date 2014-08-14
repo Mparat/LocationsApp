@@ -58,7 +58,8 @@
     [self addRecipientsView];
     [self.tableView registerClass:[ContactCell class] forCellReuseIdentifier:contactCell];
     selectedContacts = [NSMutableArray array];
-    
+    button = [UIButton buttonWithType:UIButtonTypeCustom];
+
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.clearsSelectionOnViewWillAppear = NO;
@@ -70,7 +71,8 @@
 {
     [self.tabBarController.tabBar setHidden:NO];
     [self addNavBar];
-    
+    [self placeButtonForEmptyController];
+
     self.clearsSelectionOnViewWillAppear = NO;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -79,7 +81,6 @@
         self.me.friends = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     }
     [self.tableView reloadData];
-    [self placeButtonForEmptyController];
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,12 +91,14 @@
 
 -(void)placeButtonForEmptyController
 {
+    [button setFrame:CGRectMake(self.tableView.frame.size.width/2 - 240/4, self.tableView.frame.size.height/2 - 74, 120, 120)];
+    [button setImage:[UIImage imageNamed:@"AddContacts"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
     if ([self.me.friends count] == 0) {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setFrame:CGRectMake(self.tableView.frame.size.width/2 - 240/4, self.tableView.frame.size.height/2 - 74, 120, 120)];
-        [button setImage:[UIImage imageNamed:@"AddContacts"] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(addFriends) forControlEvents:UIControlEventTouchUpInside];
         [self.tableView addSubview:button];
+    }
+    else{
+        [button removeFromSuperview];
     }
 }
 
@@ -213,7 +216,7 @@
     selectedContactsLabel.text = @"";
     [footer addSubview:selectedContactsLabel];
     
-    UIButton *cancelSelection = [[UIButton alloc] initWithFrame:CGRectMake(253, 33, 53, 20)];
+    UIButton *cancelSelection = [[UIButton alloc] initWithFrame:CGRectMake(253, 33, 60, 20)];
     [cancelSelection setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelSelection setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     cancelSelection.titleLabel.font = [UIFont fontWithName:@"AvenirNext" size:17];
