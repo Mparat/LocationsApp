@@ -279,10 +279,10 @@
 
         }
         else{ //single person cell
+#warning Meera, you need to fix this method to guard against non-sync'd conversations!
             NSArray *person = [self.apiManager personFromConversation:conversation forUserID:[[self.apiManager recipientUserIDs:conversation] objectAtIndex:0]];
             [(HomepageChatCell *)cell createCellWith:conversation person:person layerClient:self.layerClient];
             [self configureSwipeViews:cell];
-
         }
     }
     [self editCellCircle:cell];

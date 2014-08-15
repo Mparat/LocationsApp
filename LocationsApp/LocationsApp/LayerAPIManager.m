@@ -30,7 +30,7 @@
         if (!nonce) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(nil, error);
-                NSLog(@"No nonce");
+                NSLog(@"No nonce: %@", error);
             });
             completion(nil, error);
             return;
@@ -82,21 +82,20 @@
 
 -(void)sendAskMessageToRecipients:(NSMutableDictionary *)recipients
 {
-    
-    if ([recipients objectForKey:self.layerClient.authenticatedUserID]) {
-        [recipients removeObjectForKey:self.layerClient.authenticatedUserID];
+    NSMutableArray *recipientIDs = [[recipients allKeys] mutableCopy];
+    if ([recipientIDs containsObject:self.layerClient.authenticatedUserID]) {
+        [recipientIDs removeObject:self.layerClient.authenticatedUserID];
     }
     
-    NSSet *temp;
-    LYRConversation *conversation;
-    NSSet *convos = [self.layerClient conversationsForParticipants:temp];
+    NSSet *recipientSet = [NSSet setWithArray:recipientIDs];
+    NSSet *convos = [self.layerClient conversationsForParticipants:recipientSet];
     
+    LYRConversation *conversation;
     if ([convos count] != 0) { // if conversations exist with this set of uids, then find the speicifc conversation whos participants are exactly this set of uids
         conversation = [[convos allObjects] lastObject];
     } else {
-        conversation = [LYRConversation conversationWithParticipants:temp];
+        conversation = [LYRConversation conversationWithParticipants:[NSSet setWithArray:[recipients allKeys]]];
     }
-
     
     static NSString *const MIMETypeArray = @"participants";
     
