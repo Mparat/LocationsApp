@@ -46,6 +46,7 @@
     if (self) {
         // Custom initialization
         self.me = me;
+        footer = [[UIView alloc] init];
     }
     return self;
 }
@@ -201,8 +202,7 @@
 
 -(void)addRecipientsView
 {
-    footer = [[UIView alloc] init];
-    footer.frame = CGRectMake(0, 460, self.view.frame.size.width, 60);
+    footer.frame = CGRectMake(0, self.view.frame.size.height-100+11, self.view.frame.size.width, 60);
     footer.backgroundColor = [UIColor colorWithRed:42.0/255.0 green:192.0/255.0 blue:124.0/255.0 alpha:1.0];
     send = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     send.frame = CGRectMake(251, 0, 58, 58);

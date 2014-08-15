@@ -101,54 +101,25 @@
     
     NSData *recipientData = [NSJSONSerialization dataWithJSONObject:recipients options:nil error:nil];
     LYRMessagePart *recipientArr = [LYRMessagePart messagePartWithMIMEType:MIMETypeArray data:recipientData];
-    
-    
-    // MIME type declaration
-//    static NSString *const MIMETypeLocation = @"location";
-//    CLLocation *current = [self.locationManager fetchCurrentLocation];
-//    
-//    // Creates a message part with latitude and longitude strings
-//    NSDictionary *location = [NSMutableDictionary dictionary];
-//    [location setValue:[NSNumber numberWithDouble:current.coordinate.latitude] forKey:@"lat"];
-//    [location setValue:[NSNumber numberWithDouble:current.coordinate.longitude] forKey:@"lon"];
-   
-//    [self.locationManager returnLocationName:current completion:^(BOOL done, NSError *error) {
-//        if (!error) {
-            NSArray *person = [recipients objectForKey:self.layerClient.authenticatedUserID];
 
-            LYRMessagePart *emptyAskPart = [LYRMessagePart messagePartWithText:[NSString stringWithFormat:@"*%@ asked*", [person objectAtIndex:1]]];
-            LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, emptyAskPart]];
-            NSError *error;
-            BOOL success = [self.layerClient sendMessage:message error:&error];
-            if (success) {
-                NSLog(@"Message send succesfull");
-                NSArray *person = [recipients objectForKey:message.sentByUserID];
-                NSString *notifText = [NSString stringWithFormat:@"Marco from %@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
-                [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
-            } else {
-                NSLog(@"Message send failed with error: %@", error);
-            }
-//        }
-//    }];
+    NSArray *person = [recipients objectForKey:self.layerClient.authenticatedUserID];
 
-//    NSData *locationData = [NSJSONSerialization dataWithJSONObject:location options:nil error:nil];
-//    LYRMessagePart *locationPart = [LYRMessagePart messagePartWithMIMEType:MIMETypeLocation data:locationData];
-//    
-//    LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, locationPart]];
-//    [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: @"Someone asked you for your location!"} onObject:message];
-//
-//    BOOL success = [self.layerClient sendMessage:message error:nil];
-//    if (success) {
-//        NSLog(@"Message send succesfull");
-//    } else {
-//        NSLog(@"Message send failed");
-//    }
+    LYRMessagePart *emptyAskPart = [LYRMessagePart messagePartWithText:[NSString stringWithFormat:@"*%@ asked*", [person objectAtIndex:1]]];
+    LYRMessage *message = [LYRMessage messageWithConversation:conversation parts:@[recipientArr, emptyAskPart]];
+    NSError *error;
+    BOOL success = [self.layerClient sendMessage:message error:&error];
+    if (success) {
+        NSLog(@"Message send succesfull");
+        NSArray *person = [recipients objectForKey:message.sentByUserID];
+        NSString *notifText = [NSString stringWithFormat:@"Marco from %@ %@", [person objectAtIndex:1], [person objectAtIndex:2]];
+        [self.layerClient setMetadata:@{LYRMessagePushNotificationAlertMessageKey: notifText} onObject:message];
+    } else {
+        NSLog(@"Message send failed with error: %@", error);
+    }
 }
 
 -(void)sendTellMessageToRecipients:(NSMutableDictionary *)recipients
 {
-    // filter recipients into new array with only other participants userIDs
-//    NSArray *uids = [recipients allKeys];
     NSMutableSet *temp = [NSMutableSet setWithArray:[recipients allKeys]];
     [temp removeObject:self.layerClient.authenticatedUserID];
     

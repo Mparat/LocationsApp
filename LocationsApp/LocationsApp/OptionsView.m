@@ -127,7 +127,7 @@
 //    NSURL *URL = [NSURL URLWithString:@"http://maps.apple.com/?q"];
 //    [[UIApplication sharedApplication] openURL:URL];
     
-    LYRMessagePart *part = [((LYRMessage *)[self.theirLastMessages lastObject]).parts objectAtIndex:1];
+    LYRMessagePart *part = [self.theirLastMessage.parts objectAtIndex:1];
     NSData *data = part.data;
     CLLocation *theirLastLocation = [self.locationManager getLocationFromData:data];
     CLLocation *myLocation = [self.locationManager fetchCurrentLocation];
@@ -176,7 +176,7 @@
     mapView.parseController = self.parseController;
     mapView.signedInUser = self.signedInUser;
     mapView.conversation = self.conversation;
-    mapView.theirLastMessages = self.theirLastMessages;
+    mapView.theirLastMessage = self.theirLastMessage;
     mapView.apiManager = self.apiManager;
     [self.navigationController pushViewController:mapView animated:YES];
 }

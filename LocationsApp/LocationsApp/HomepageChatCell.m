@@ -29,8 +29,8 @@
         UIImageView *read = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ReadCircle"]];
         read.frame = CGRectMake(15, 19.5, 29, 29);
         [self addSubview:read];
-        self.message = [[LYRMessage alloc] init]; // will determine the unread/read circle
-        self.theirLastMessages = [[NSMutableArray alloc] init]; // will provide to-be mapView annotations
+//        self.message; // will determine the unread/read circle
+//        self.theirLastMessage; // will provide to-be mapView annotations
         
         self.time = [[UILabel alloc] init];
         self.username = [[UILabel alloc] init];
@@ -66,7 +66,7 @@
     }
     
     if (([self.message.parts count] == 3) && [self.message.sentByUserID isEqualToString:[person objectAtIndex:0]]) { //a told location
-        [self.theirLastMessages addObject:self.message];
+        self.theirLastMessage = self.message;
     }
     
     
@@ -173,13 +173,8 @@
         [self setContactInfoWithName:names Location:location Date:nil];
     }
     
-    NSMutableDictionary *participants = [self.apiManager returnParticipantDictionary:conversation];
-    NSArray *uids = [participants allKeys];
-    for (NSString *uid in uids) {
-        if (([self.message.parts count] == 3) && [self.message.sentByUserID isEqualToString:uid]) { //a told location
-            [self.theirLastMessages addObject:self.message];
-        }
-
+    if ([self.message.parts count]==3 && ![self.message.sentByUserID isEqualToString:self.layerClient.authenticatedUserID]) {
+        self.theirLastMessage = self.message;
     }
 }
 

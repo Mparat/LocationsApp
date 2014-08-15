@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) LYRConversation *conversation;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
-@property (nonatomic, strong) NSMutableArray *theirLastMessages;
+@property (nonatomic, strong) LYRMessage *theirLastMessage;
 
 
 @end

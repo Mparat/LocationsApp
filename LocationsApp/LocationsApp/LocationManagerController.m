@@ -92,13 +92,6 @@
             completion(YES, nil);
         }
     }];
-//    NSString *urlString = [NSString stringWithFormat:@"http://maps.google.com/maps/geo?q=%f,%f&output=csv",location.coordinate.latitude, location.coordinate.longitude];
-//    NSError* error;
-//    NSString *locationString = [NSString stringWithContentsOfURL:[NSURL URLWithString:urlString] encoding:NSASCIIStringEncoding error:&error];
-//    // NSLog(@"%@",locationString);
-//    
-//    locationString = [locationString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-//    return [locationString substringFromIndex:6];
 }
 
 
@@ -113,19 +106,34 @@
 
 #pragma mark - MKMapView delegate methods
 
--(MKMapView *)displayMap:(UIView *)view withAnnotations:(NSMutableArray *)annotations
+-(MKMapView *)displayMap:(UIView *)view withAnnotation:(MapViewAnnotation *)annotation
 {
     self.map = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)];
     [self.map setDelegate:self];
 
     self.map.showsUserLocation = YES;
-    [self.map addAnnotations:annotations];
+    if (annotation) {
+        [self.map addAnnotation:annotation];
+    }
+    else{
+        [self.map addAnnotation:self.map.userLocation];
+    }
     
-    [annotations addObject:self.map.userLocation];
-    [self.map showAnnotations:annotations animated:YES];
+//    [annotations addObject:self.map.userLocation];
+    [self.map showAnnotations:[NSArray arrayWithObject:self.map.annotations] animated:YES];
+//    [self.map showAnnotations:annotations animated:YES];
     
     MKCoordinateRegion mapRegion; // structure that defines which map region to display
-    CLLocation *location = [self fetchCurrentLocation];
+    
+    CLLocation *location;
+    if ([self.map.annotations lastObject] == self.map.userLocation) {
+        location = [[CLLocation alloc]init];
+        location = [self fetchCurrentLocation];
+    }
+    else{
+        location = [[CLLocation alloc] initWithLatitude:((MapViewAnnotation *)[self.map.annotations lastObject]).coordinate.latitude longitude:((MapViewAnnotation *)[self.map.annotations lastObject]).coordinate.longitude];
+    }
+    
     mapRegion.center = location.coordinate;
     mapRegion.span.latitudeDelta = 0.2;
     mapRegion.span.longitudeDelta = 0.2;
@@ -165,6 +173,27 @@
         }];
     }
     return retVal;
+}
+
+-(MapViewAnnotation *)annotationFromMessage:(LYRMessage *)message
+{
+//    NSString *target = [[[message.parts objectAtIndex:1] componentsSeparatedByString:@"\n"] objectAtIndex:0];
+    NSString *address = [message.parts objectAtIndex:1];
+    CLGeocoder *geo = [[CLGeocoder alloc] init];
+    
+    NSArray *person = [self personFromMessage:message forUserID:message.sentByUserID];
+    NSString *title = [person objectAtIndex:1];
+    NSMutableArray *retVal = [NSMutableArray array];
+
+    [geo geocodeAddressString:address completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (placemarks.count > 0) {
+            CLPlacemark *placemark = [placemarks lastObject];
+            CLLocation *location = placemark.location;
+            MapViewAnnotation *annotation = [[MapViewAnnotation alloc] initWithTitle:title subtitle:address andCoordinate:location.coordinate];
+            [retVal addObject:annotation];
+        }
+    }];
+    return [retVal lastObject];
 }
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation

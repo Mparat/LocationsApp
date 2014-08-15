@@ -20,7 +20,7 @@
 @property (nonatomic, strong) LYRClient *layerClient;
 @property (nonatomic, strong) LYRConversation *conversation;
 @property (nonatomic, strong) LYRMessage *message;
-@property (nonatomic, strong) NSMutableArray *theirLastMessages;
+@property (nonatomic, strong) LYRMessage *theirLastMessage;
 
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) LayerAPIManager *apiManager;

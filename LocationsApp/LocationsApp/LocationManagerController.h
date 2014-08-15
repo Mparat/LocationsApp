@@ -12,6 +12,7 @@
 #import <Parse/Parse.h>
 #import <LayerKit/LayerKit.h>
 #import "LayerAPIManager.h"
+#import "MapViewAnnotation.h"
 
 @class LocationManagerController;
 
@@ -39,9 +40,11 @@
 -(void)returnLocationName:(CLLocation *)location completion:(void(^)(BOOL done, NSError *error))completion;
 -(CLLocation *)getLocationFromData:(NSData *)data;
 -(NSArray *)createAnnotationsFromMessages:(NSMutableArray *)array;
+-(MapViewAnnotation *)annotationFromMessage:(LYRMessage *)message;
 
 
--(MKMapView *)displayMap:(UIView *)view withAnnotations:(NSArray *)annotations;
+
+-(MKMapView *)displayMap:(UIView *)view withAnnotation:(MapViewAnnotation *)annotation;
 
 
 

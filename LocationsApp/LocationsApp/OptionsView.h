@@ -25,7 +25,7 @@
 @property (nonatomic, strong) LYRMessage *message;
 @property (nonatomic, strong) LocationManagerController *locationManager;
 @property (nonatomic, strong) LayerAPIManager *apiManager;
-@property (nonatomic, strong) NSMutableArray *theirLastMessages;
+@property (nonatomic, strong) LYRMessage *theirLastMessage;
 
 @property (nonatomic, strong) ParseController *parseController;
 

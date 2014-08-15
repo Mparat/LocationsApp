@@ -35,7 +35,7 @@
     [super viewDidLoad];
     [self addNavBar];
 
-    [self.view addSubview:[self.locationManager displayMap:self.view withAnnotations:[self.locationManager createAnnotationsFromMessages:self.theirLastMessages]]];
+    [self.view addSubview:[self.locationManager displayMap:self.view withAnnotation:[self.locationManager annotationFromMessage:self.theirLastMessage]]];
 
     self.navigationController.navigationBarHidden = NO;
     

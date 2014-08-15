@@ -351,7 +351,7 @@
         options.locationManager = self.locationManager;
         options.conversation = [self.conversations objectAtIndex:indexPath.section];
         options.message = ((HomepageChatCell *)cell).message;
-        options.theirLastMessages = ((HomepageChatCell *)cell).theirLastMessages;
+        options.theirLastMessage = ((HomepageChatCell *)cell).theirLastMessage;
         [self.navigationController pushViewController:options animated:NO];
         //    [self.navigationController presentViewController:[[UINavigationController alloc] initWithRootViewController:options] animated:YES completion:^{
         //        //
